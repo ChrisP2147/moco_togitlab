@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>    
+    <meta charset="UTF-8">    
+    <title>Rechte vergeben</title>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
+ 
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+
+    <link rel="stylesheet" href="design.css">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
+
+  </head>
+  <body>
+{% set SELF = 'start.php' %}
+{# {% set test = 'das klappt' %} #}
+{# {{test| md5}}
+<br>
+{{test}}
+<br>
+{{ heute | date("m/d/Y") }}
+<br> #}
+{# <header>Project to GitLabs</header> #}
+
+{% if state == 'not_loggedIn' %}
+    <div class="frame frame_not_loggedIn">
+        <h1 class="h1_not_loggedIn">Projekte verschieben</h1>
+            <form action={{SELF}} method='post'>
+            <h4>Benutzer:</h4> 
+                <div class="labelTextFields labelTextFields_not_loggedIn">
+                    {# <label for="user">Benutzer:</label> #}        
+                    <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
+                </div>
+            <h4>Passwort:</h4>
+                <div class="labelTextFields labelTextFields_not_loggedIn">          
+                {# <label for="passwd">Passwort:</label> #}
+                    <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
+                </div>
+            
+            <div class="btnContainer btnContainer_not_LoggedIn">
+            <input type="submit" class="button btn_notloggedIn" name="login" value="Einloggen" />
+            </div> 
+        </form>
+    </div>
+{% endif %}
+
+{% if state == 'logged_in' %}
+
+                    <div class="div_tmp2">
+                        <input type="submit" class="button btn_choose_API_logged_in" name="btn_chooseAPI" value="wählen" />
+                    </div>
+                </div>
+
+            {% if API_check == true %}
+                {{API_response}}
+            {% endif %}
+
+            <div class="btnContainer btnContainer_loogged_in">   
+            {% if superUser == true %}
+                <input type="submit" class="btnSuperUser btn_logged_in btn_logged_in1" name="manageUser" value="Benutzer Verwalten" />
+                <input type="submit" class="button btn_logged_in" name="logout" value="Ausloggen" />
+            {% else %}
+                <input type="submit" class="button btn_logged_in" name="logout" value="Ausloggen" />  
+            {% endif %}
+            </div>
+        </form>
+    </div> 
+            
+{% endif %}
+
+{% if state == 'API_chosen' %}        
+                    
+                        </tbody>
+                </table>
+
+                <script>
+                        $(document).ready( function (){
+                            $('#table_id').DataTable();
+                        });
+                        $('#table_id').DataTable( {
+                            scrollY: 400
+                        } );
+                </script>
+            </div>
+        </form>
+    </div>         
+{% endif %}
+
+{% if state == 'ticket_sent' %}
+
+    <div class='frame frame_ticket_sent'>
+        <form action={{SELF}} method='post'>
+
+            <h2>Du hast folgende Tickets selektiert:</h2>
+            {% for ticket in selected_tickets %}
+                {{ticket}}
+                <br>
+            {% endfor %}
+
+            <br><br>
+            <h2>Die Tickets werden in folgendes Projekt übertragen:</h2>
+            <p>{{selected_project}}</p>
+            <br>
+
+            <div class="btnContainer btnContainer_ticket_sent">
+                <input type='submit' class='button btn_ticket_sent' name='back' value='Zurück'/>
+                <input type='submit' class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
+            </div>
+        </form>
+
+    </div>
+
+{% endif %}
+
+{% if state == 'ticket_sent_noTickets' %}
+
+    <div class='frame ticket_sent_success'>
+        <form action={{SELF}} method='post'>
+
+            <h2>{{message}}</h2>
+ 
+            <div class="btnContainer btnContainer_ticket_sent_success">
+                <input type='submit' class='button btn_ticket_sent_success' name='back' value='Zurück'/>
+            </div>
+        </form>
+
+    </div>
+
+{% endif %}
+
+{% if state == 'ticket_sent_success' %}
+
+    <div class='frame ticket_sent_success'>
+        <form action={{SELF}} method='post'>
+
+            <h2>{{message}}</h2>
+ 
+            <div class="btnContainer btnContainer_ticket_sent_success">
+                <input type='submit' class='button btn_ticket_sent_success' name='back' value='Zurück'/>
+            </div>
+        </form>
+
+    </div>
+
+{% endif %}
+
+{% if state == 'manage' %}
+    <script>
+            $(document).ready( function (){
+                $('#table_id').DataTable();
+            });
+            $('#table_id').DataTable( {
+                scrollY: 400
+            } );
+    </script>      
+{% endif %}
+
+{% if (state == 'editUser') or (state == 'editUserWrongPasswd') or (state == 'editUserWrongInvalidUser') %}
+    <div class="frame frame_create">
+            <h1>Neuen Benutzer anlegen</h1> 
+            <form action={{SELF}} method='post'>
+                <div class= "container_create_1">
+                    <div class="div_create"><h4>Nachname:</h4> <input type="text" class="input_create" name="lastname" value={{lastname}} size="20" autocomplete="off" /></div>
+                    <div class="div_create"><h4>Vorname:</h4> <input type='text' class="input_create" name='firstname' value={{firstname}} size='20' autocomplete="off" /></div>
+                    <div class="div_create"><h4>Benutzername:</h4> <input type='text' class="input_create" name='username' value={{username}} size='20' autocomplete="off" /></div>
+                    <div class="div_create div_create_last"><h4>Moco Token:</h4><input type='text' class="input_create" name='moco_token' value={{moco_token}} size='20' autocomplete="off" /></div>
+                </div>
+                <div class= "container_create_2">
+                    <div class="div_create"><h4>GitLab Token</h4> <input type='text' class="input_create" name='gitlab_token' value={{gitlab_token}} size='20' autocomplete="off" /></div>
+                    <div class="div_create"><h4>Passwort:</h4> <input type='password' class="input_create" name='passwd' placeholder="Passwort..." size='20' autocomplete="off" /></div>
+                    <div class="div_create"><h4>Passwort wiederholen:</h4> <input type='password' class="input_create" name='passwdRepeat' placeholder="Passwort wiederholen..." size='20' autocomplete="off" /></div>
+                    <div class="div_create div_create_last"><h4>Rechte wählen:</h4>    
+                    <select name="admin" class="input_create">
+                        <option {% if admin == '0'%} selected {% endif %} value="0">keine Adminrechte</option>
+                        <option {% if admin == '1'%} selected {% endif %} value="1">Adminrechte</option>
+                    </select>
+                    </div>
+                </div>                    
+
+            <div class="btnContainer btnContainer_createUser">
+                    <input type="submit" class="btnSuperUser btnManage" name="back2" value="Zurück" />
+                    <input type="submit" class="btnSuperUser btnManage" name="saveUser" value="Speichern" />
+                    <input type="submit" class="btnSuperUser btnManage" name="deleteUser" value="Löschen" />
+                    <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+{% if state == 'editUserWrongPasswd' %}
+    <h3>Passwort stimmt nicht überein</h3>      
+{% endif %}
+
+{% if state == 'editUserWrongInvalidUser' %}
+    <h3>Der Benutzername existiert bereits</h3>      
+{% endif %}
+
+{% if state == 'createUser' %}
+    <div class="frame frame_create">
+        <h1>Neuen Benutzer anlegen</h1> 
+        <form action={{SELF}} method='post'>
+            <div class= "container_create_1">
+                <div class="div_create"><h4>Nachname:</h4> <input type="text" class="input_create" name="lastname" placeholder="Nachname..." size="20" autocomplete="off" /></div>
+                <div class="div_create"><h4>Vorname:</h4> <input type='text' class="input_create" name='firstname' placeholder="Vorname..." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Benutzername:</h4> <input type='text' class="input_create" name='username' placeholder="Benutzername..." size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Moco Token:</h4> <input type='text' class="input_create" name='moco_token' placeholder="Moco Token..." size='20' autocomplete="off" /></div>
+            </div>
+            <div class= "container_create_2">
+                <div class="div_create"><h4>GitLab Token:</h4> <input type='text' class="input_create" name='gitlab_token' placeholder="GitLab Token...." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort:</h4> <input type='password' class="input_create" name='passwd' placeholder="Passwort..." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort wiederholen:</h4> <input type='password' class="input_create" name='passwdRepeat' placeholder="Passwort wiederholen..." size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Rechte wählen:</h4>    
+                <select name="admin" class="input_create">
+                    <option value="0">keine Adminrechte</option>
+                    <option value="1">Adminrechte</option>
+                </select>
+                </div>
+            </div>                    
+            <div class="btnContainer btnContainer_createUser">
+                <input type="submit" class="btnSuperUser btnManage" name="back2" value="Zurück" />
+                <input type="submit" class="btnSuperUser btnManage" name="saveNewUser" value="Speichern" />
+                <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+{% if (state == 'UserWrongPasswd') or (state == 'UserWrongInvalidUser') %}
+<div class="frame frame_create">
+        <h1>Neuen Benutzer anlegen</h1> 
+        <form action={{SELF}} method='post'>
+            <div class= "container_create_1">
+                <div class="div_create"><h4>Nachname:</h4> <input type="text" class="input_create" name="lastname" value={{lastname}} size="20" autocomplete="off" /></div>
+                <div class="div_create"><h4>Vorname:</h4> <input type='text' class="input_create" name='firstname' value={{firstname}} size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Benutzername:</h4> <input type='text' class="input_create" name='username' value={{username}} size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Moco Token:</h4><input type='text' class="input_create" name='moco_token' value={{moco_token}} size='20' autocomplete="off" /></div>
+            </div>
+            <div class= "container_create_2">
+                <div class="div_create"><h4>GitLab Token</h4> <input type='text' class="input_create" name='gitlab_token' value={{gitlab_token}} size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort:</h4> <input type='password' class="input_create" name='passwd' placeholder="Passwort..." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort wiederholen:</h4> <input type='password' class="input_create" name='passwdRepeat' placeholder="Passwort wiederholen..." size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Rechte wählen:</h4>    
+                <select name="admin" class="input_create">
+                    <option value="0">keine Adminrechte</option>
+                    <option value="1">Adminrechte</option>
+                </select>
+                </div>
+            </div>                    
+
+        <div class="btnContainer btnContainer_createUser">
+                <input type="submit" class="btnSuperUser btnManage" name="back2" value="Zurück" />
+                <input type="submit" class="btnSuperUser btnManage" name="saveNewUser" value="Speichern" />
+                <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+        </div>
+    </form>
+</div>
+{% endif %}
+
+{% if state == 'UserWrongPasswd' %}
+    <h3>Passwort stimmt nicht überein</h3>      
+{% endif %}
+
+{% if state == 'UserWrongInvalidUser' %}
+    <h3>Der Benutzername existiert bereits</h3>      
+{% endif %}
+
+{% if state == 'wrongUser' %}
+<div class="frame frame_not_loggedIn">
+    <h1 class="h1_not_loggedIn">Projekte verschieben</h1>
+        <form action={{SELF}} method='post'>
+        <h4>Benutzer:</h4> 
+            <div class="labelTextFields labelTextFields_not_loggedIn">      
+                <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
+            </div>
+        <h4>Passwort:</h4>
+            <div class="labelTextFields labelTextFields_not_loggedIn">          
+                <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
+            </div>
+        
+        <div class="btnContainer btnContainer_not_LoggedIn">
+        <input type="submit" class="button btn_notloggedIn" name="login" value="Einloggen" />
+        </div> 
+    </form>
+</div>
+        <h3>Benutzername / Passwort falsch</h3>
+{% endif %}
+
+{% if state == 'dataSaved' %}
+    <div class="frame frame_save_del">   
+            <h1 class="h1_save_del">Der Benutzer {{firstname}} {{lastname}} wurde erfolgreich gespeichert</h1>  
+            <form action={{SELF}} method='post'>
+                <div class="btnContainer btnContainer_save_del">
+                <input type="submit" class="btnSuperUser btnManage btn_save_del" name="back2" value="Zurück" />
+                <input type="submit" class="btnSuperUser btnManage btn_save_del" name="createUser" value="Benutzer anlegen" />
+                <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+                </div>
+            </form>
+    </div>
+{% endif %}
+
+{% if state == 'userDeleted' %}
+    <div class="frame frame_save_del">   
+        <h1 class="h1_save_del">Nutzer {{firstname}} {{lastname}} wurde erfolgreich gelöscht</h1>  
+        <form action={{SELF}} method='post'>
+            <div class="btnContainer btnContainer_save_del">
+            <input type="submit" class="btnSuperUser btnManage btn_save_del" name="back2" value="Zurück" />
+            <input type="submit" class="btnSuperUser btnManage btn_save_del" name="createUser" value="Benutzer anlegen" />
+            <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+            </div>
+        </form> 
+    </div>
+{% endif %}
+
+</body>
+</html>

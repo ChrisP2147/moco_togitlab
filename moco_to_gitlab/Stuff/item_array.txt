@@ -1,0 +1,67 @@
+Array (
+
+[0] => Array ( [id] => 967164 [type] =>
+item
+[title] => Design
+[description] =>
+[quantity] => 3
+[unit] => PT
+[unit_price] => 50
+[net_total] => 150
+[optional] =>
+)
+
+[1] => Array ( [id] => 967165 [type] =>
+description
+[title] =>
+[description] => Das ist die Description zu Design
+[quantity] => 0
+[unit] =>
+[unit_price] => 0
+[net_total] => 0
+[optional] =>
+)
+
+[2] => Array ( [id] => 967166 [type] =>
+item
+[title] => Artikel einpflegen
+[description] =>
+[quantity] => 50
+[unit] => H
+[unit_price] => 50
+[net_total] => 2500
+[optional] =>
+)
+
+[3] => Array ( [id] => 967167 [type] =>
+description
+[title] =>
+[description] => Das ist die Description zu Artikel einpflegen
+[quantity] => 0
+[unit] =>
+[unit_price] => 0
+[net_total] => 0
+[optional] =>
+)
+
+[4] => Array ( [id] => 967194 [type] =>
+item
+[title] => Optional Webseite für Bekante
+[description] =>
+[quantity] => 5
+[unit] => PT
+[unit_price] => 50
+[net_total] => 250
+[optional] => 1 
+)
+
+[5] => Array ( [id] => 967990 [type] =>
+item
+[title] => Dokumentation zum selbst Pflegen
+[description] =>
+[quantity] => 6
+[unit] => H
+[unit_price] => 50
+[net_total] => 300
+[optional] =>
+) )
