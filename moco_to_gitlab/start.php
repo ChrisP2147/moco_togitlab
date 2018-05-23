@@ -82,30 +82,7 @@ if (isset($_POST["btn_chooseAPI"])){
 
         $_SESSION['chosen_offer'] = $offer;
 
-        $url = 'https://cp.mocoapp.com/api/v1/offers/'.$_SESSION['chosen_offer_id'];
-        $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
-        $offer_array = (array)json_decode($response, true);
-        // check if offer is already accepted - only then show data
-        foreach ($offer_array as $value) {
-            if ($offer_array['status'] == 'accepted'){
-                $offer_status = 'accepted';
-            }
-        }
-
-        if ($offer_status == "accepted"){
-            for ($i = 0; $i < count($offer_array['items']); $i++)
-            {   
-                if ($offer_array['items'][$i]["description"] == null && $offer_array['items'][$i+1]["description"] == null){
-                    $data[] = $offer_array['items'][$i]["title"];
-                }
-                elseif ($offer_array['items'][$i]["description"] != null){
-                    $data[] = $offer_array['items'][$i-1]["title"].$offer_array['items'][$i]["description"];
-                }
-            }
-        }
-        else{
-            $data[] = "Kein bestätigtes Angebot vorhanden";
-        }
+        $_SESSION['offer_data'] = load_selected_offer_array($moco_token, $_SESSION['chosen_offer']);
 
         echo "<div class='frame frame_API_chosen'>";
             // echo "<h1 class='h1_API_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";            
@@ -153,8 +130,7 @@ if (isset($_POST["btn_chooseAPI"])){
                     echo "</thead>";
                         echo "<tbody>";
                         
-                    load_offer($data);
-                    $_SESSION['offer_data'] = $data;
+                    load_offer($_SESSION['offer_data']);
 
         echo $twig->render('index.html', array(
             'state' => 'API_chosen',          
@@ -179,11 +155,17 @@ if (isset($_POST["sent_tickets"])){
     }
     // array of all selected Tickets ////////////////////////////////////////////////
     $_SESSION["submitNumber_ticket"] = $submitNumber_ticket;
-    load_tickets();
 
-    foreach ($_SESSION["submitNumber_ticket"] as $value){
-        $tmp_array[] = $sel_data_array[$value];
-    }
+    // load_tickets($_SESSION['offer_data']);
+
+    /// ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+    // foreach ($_SESSION["submitNumber_ticket"] as $value){
+    //     $tmp_array['id'][] = $_SESSION['offer_data']['id'][$value];
+    //     $tmp_array['title'][] = $_SESSION['offer_data']['title'][$value];
+    //     $tmp_array['description'][] = $_SESSION['offer_data']['description'][$value];
+    // }
+
     $_SESSION["selected_tickets"] = $tmp_array;
     // remove all <divs> from array //////////////////////////////////////////////////
     foreach ($tmp_array as $value) {
@@ -286,32 +268,9 @@ if (isset($_POST["back"])){
             }
         }
 
-        $_SESSION['chosen_offer'] = $offer;
+        // $_SESSION['chosen_offer'] = $offer;
 
-        $url = 'https://cp.mocoapp.com/api/v1/offers/'.$_SESSION['chosen_offer_id'];
-        $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
-        $offer_array = (array)json_decode($response, true);
-        // check if offer is already accepted - only then show data
-        foreach ($offer_array as $value) {
-            if ($offer_array['status'] == 'accepted'){
-                $offer_status = 'accepted';
-            }
-        }
-
-        if ($offer_status == "accepted"){
-            for ($i = 0; $i < count($offer_array['items']); $i++)
-            {   
-                if ($offer_array['items'][$i]["description"] == null && $offer_array['items'][$i+1]["description"] == null){
-                    $data[] = $offer_array['items'][$i]["title"];
-                }
-                elseif ($offer_array['items'][$i]["description"] != null){
-                    $data[] = $offer_array['items'][$i-1]["title"].$offer_array['items'][$i]["description"];
-                }
-            }
-        }
-        else{
-            $data[] = "Kein bestätigtes Angebot vorhanden";
-        }
+        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
 
         echo "<div class='frame frame_API_chosen'>";            
             echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>"; 
@@ -469,7 +428,28 @@ if (isset($_POST["saveNewUser"])){
         }
     }
 
-    if ($_POST["passwdRepeat"] != $_POST["passwd"]){
+    $textFiel_lastname = $_POST["lastname"];
+    $textFiel_firstname = $_POST["firstname"];
+    $textFiel_username = $_POST["username"];
+    $textFiel_moco_token = $_POST["moco_token"];
+    $textFiel_gitlab_token = $_POST["gitlab_token"];
+    $textFiel_passwd = $_POST["passwd"];
+    $textFiel_passwdRepeat = $_POST["passwdRepeat"];
+
+    if (empty($textFiel_lastname) || empty($textFiel_firstname) || empty($textFiel_username) || empty($textFiel_moco_token) || empty($textFiel_gitlab_token) || empty($textFiel_passwd) || empty($textFiel_passwdRepeat)){
+        echo $twig->render('index.html', array(
+            'state' => 'UserEmptyField',
+            'lastname' => $_POST["lastname"],
+            'firstname' => $_POST["firstname"],
+            'username' => $_POST["username"],
+            'moco_token' => $_POST['moco_token'],
+            'gitlab_token' => $_POST['gitlab_token'],
+            'passwd' => $_POST["passwd"],
+            'admin' => $_POST["admin"],
+            'button_check' => true,
+        ));
+    }
+    elseif ($_POST["passwdRepeat"] != $_POST["passwd"]){
         echo $twig->render('index.html', array(
             'state' => 'UserWrongPasswd',
             'lastname' => $_POST["lastname"],
@@ -551,7 +531,28 @@ if (isset($_POST["saveUser"])){
         }
     }
 
-    if ($_POST["passwdRepeat"] != $_POST["passwd"]){
+    $textFiel_lastname = $_POST["lastname"];
+    $textFiel_firstname = $_POST["firstname"];
+    $textFiel_username = $_POST["username"];
+    $textFiel_moco_token = $_POST["moco_token"];
+    $textFiel_gitlab_token = $_POST["gitlab_token"];
+    $textFiel_passwd = $_POST["passwd"];
+    $textFiel_passwdRepeat = $_POST["passwdRepeat"];
+
+    if (empty($textFiel_lastname) || empty($textFiel_firstname) || empty($textFiel_username) || empty($textFiel_moco_token) || empty($textFiel_gitlab_token) || empty($textFiel_passwd) || empty($textFiel_passwdRepeat)){
+        echo $twig->render('index.html', array(
+            'state' => 'editUserEmptyField',
+            'lastname' => $_POST["lastname"],
+            'firstname' => $_POST["firstname"],
+            'username' => $_POST["username"],
+            'moco_token' => $_POST['moco_token'],
+            'gitlab_token' => $_POST['gitlab_token'],
+            'passwd' => $_POST["passwd"],
+            'admin' => $_POST["admin"],
+            'button_check' => true,
+        ));
+    }
+    elseif ($_POST["passwdRepeat"] != $_POST["passwd"]){
         echo $twig->render('index.html', array(
             'state' => 'editUserWrongPasswd',
             'lastname' => $_POST["lastname"],

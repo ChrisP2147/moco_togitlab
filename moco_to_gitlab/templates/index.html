@@ -95,21 +95,17 @@
     <div class='frame frame_ticket_sent'>
         <form action={{SELF}} method='post'>
 
-            <h2>Du hast folgende Tickets selektiert:</h2>
+            <h2 class="h2_chosen_ticket_overview">Du überträgst folgende Tickets in Projekt: <b>&#8680;</b> {{selected_project}}</h2>
+
+                <div class="btnContainer btnContainer_ticket_sent">
+                        <input type='submit' class='button btn_ticket_sent' name='back' value='Zurück'/>
+                        <input type='submit' class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
+                </div>
+
             {% for ticket in selected_tickets %}
-                {{ticket}}
-                <br>
+                <div class="chosen_ticket_overview">{{ticket}}</div>
             {% endfor %}
 
-            <br><br>
-            <h2>Die Tickets werden in folgendes Projekt übertragen:</h2>
-            <p>{{selected_project}}</p>
-            <br>
-
-            <div class="btnContainer btnContainer_ticket_sent">
-                <input type='submit' class='button btn_ticket_sent' name='back' value='Zurück'/>
-                <input type='submit' class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
-            </div>
         </form>
 
     </div>
@@ -159,7 +155,7 @@
     </script>      
 {% endif %}
 
-{% if (state == 'editUser') or (state == 'editUserWrongPasswd') or (state == 'editUserWrongInvalidUser') %}
+{% if (state == 'editUser') or (state == 'editUserWrongPasswd') or (state == 'editUserWrongInvalidUser') or (state == 'editUserEmptyField') %}
     <div class="frame frame_create">
             <h1>Neuen Benutzer anlegen</h1> 
             <form action={{SELF}} method='post'>
@@ -189,6 +185,10 @@
             </div>
         </form>
     </div>
+{% endif %}
+
+{% if state == 'editUserEmptyField' %}
+    <h3>Alle Felder müssen ausgefüllt sein</h3>      
 {% endif %}
 
 {% if state == 'editUserWrongPasswd' %}
@@ -229,7 +229,7 @@
     </div>
 {% endif %}
 
-{% if (state == 'UserWrongPasswd') or (state == 'UserWrongInvalidUser') %}
+{% if (state == 'UserWrongPasswd') or (state == 'UserWrongInvalidUser') or (state == 'UserEmptyField') %}
 <div class="frame frame_create">
         <h1>Neuen Benutzer anlegen</h1> 
         <form action={{SELF}} method='post'>
@@ -258,6 +258,10 @@
         </div>
     </form>
 </div>
+{% endif %}
+
+{% if state == 'UserEmptyField' %}
+    <h3>Alle Felder müssen ausgefüllt sein</h3>      
 {% endif %}
 
 {% if state == 'UserWrongPasswd' %}

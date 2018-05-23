@@ -4,15 +4,16 @@ require_once('conn.inc.php');
 
 $moco_token = "53a856de73a8b8b0a82aa7a604026747";
 $gitlab_token = "Vb23WYp2KmxvPG4xVRhB";
+$all_items_array = array();
 
-// delete_ticket_check_db();
+delete_ticket_check_db();
 $array = load_all_offers_data_array();
 var_dump($array);
 insert_offer_into_db();
 
 function load_all_offers_data_array()
 {
-    global $moco_token, $all_item_ids;
+    global $moco_token, $all_items_array;
     $all_item_ids = array();
     $url = 'https://cp.mocoapp.com/api/v1/offers';
     $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
@@ -38,30 +39,69 @@ function load_all_offers_data_array()
     {
         for ($j = 0; $j < count($tmp_array[$i]['items']); $j++)
         {
-            $all_item_ids['id'][] = $tmp_array[$i]['items'][$j]["id"];
+
             if ($tmp_array[$i]['items'][$j]["title"] == null){
-                $tmp_array[$i]['items'][$j]["description"] = str_replace("&nbsp;", '', $tmp_array[$i]['items'][$j]["description"]);
-                $all_item_ids['title'][] = strip_tags($tmp_array[$i]['items'][$j]["description"]);
+                $tmp_array[$i]['items'][$j]["title"] = "";
             }
             else{
                 $tmp_array[$i]['items'][$j]["title"] = str_replace("&nbsp;", '', $tmp_array[$i]['items'][$j]["title"]);
-                $all_item_ids['title'][] = strip_tags($tmp_array[$i]['items'][$j]["title"]);
+                $tmp_array[$i]['items'][$j]["title"] = strip_tags($tmp_array[$i]['items'][$j]["title"]);
             }
+            if ($tmp_array[$i]['items'][$j]["description"] == null){
+                $tmp_array[$i]['items'][$j]["description"] = "";
+            }
+            else{
+                $tmp_array[$i]['items'][$j]["description"] = str_replace("&nbsp;", '', $tmp_array[$i]['items'][$j]["description"]);
+                $tmp_array[$i]['items'][$j]["description"] = strip_tags($tmp_array[$i]['items'][$j]["description"]);            
+            }
+            $all_items_array['id'][] = $tmp_array[$i]['items'][$j]["id"];
+            $all_items_array['title'][] = $tmp_array[$i]['items'][$j]["title"];
+            $all_items_array['description'][] = $tmp_array[$i]['items'][$j]["description"];
         }
     }
-    return $all_item_ids;
+    return  $all_items_array;
 }
+
+
+
+
+
+
+
+function load_tickets()
+{
+    global $sel_data_array, $moco_token;
+    $url = 'https://cp.mocoapp.com/api/v1/offers/'.$_SESSION['chosen_offer_id'];
+    $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
+    $offer_array = (array)json_decode($response, true);
+
+        for ($i = 0; $i < count($offer_array['items']); $i++)
+        {  
+            if ($offer_array['items'][$i]["description"] == null && $offer_array['items'][$i+1]["description"] == null){
+                $sel_data_array[] = $offer_array['items'][$i]["title"];
+            }
+            elseif ($offer_array['items'][$i]["description"] != null){
+                $sel_data_array[] = $offer_array['items'][$i-1]["title"].$offer_array['items'][$i]["description"];
+            }
+        }
+}
+
+
+
+
+
+
 
 function insert_offer_into_db()
 {
-    global $all_item_ids;
+    global $all_items_array;
     $pdo = connect_DB_pdo();
-    for ($i = 0; $i < count($all_item_ids['id']); $i++)
+    for ($i = 0; $i < count($all_items_array['id']); $i++)
     {
     // insert all Offer Positions und IDs into database
-    $sql = 'INSERT INTO tickets_check(ticket_id, ticket_title) values(?, ?)';
+    $sql = 'INSERT INTO tickets_check(ticket_id, title, description) values(?, ?, ?)';
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$all_item_ids['id'][$i], $all_item_ids['title'][$i]]);
+    $stmt->execute([$all_items_array['id'][$i], $all_items_array['title'][$i], $all_items_array['description'][$i]]);
     }
 
 }
@@ -82,33 +122,3 @@ function connect_DB_pdo()
     return $pdo;
 }
 
-// array(30){
-//     [0]=> string(22) "Design CSS erstellen -"
-//     [1]=> NULL [2]=> string(30) "Artikel in Web-Shop einpflegen"
-//     [3]=> NULL [4]=> string(46) "Optional Bildbearbeitung der einzelnen Artikel"
-//     [5]=> string(25) "Dokumentation erstellen -"
-//     [6]=> NULL
-//     [7]=> string(8) "Beratung"
-//     [8]=> string(11) "Logo Design"
-//     [9]=> string(18) "Flasch Animationen"
-//     [10]=> string(10) "URL-Design"
-//     [11]=> string(13) "URL-Redirects"
-//     [12]=> string(6) "Design"
-//     [13]=> string(13) "CSS erstellen"
-//     [14]=> string(19) "Programm entwickeln"
-//     [15]=> string(15) "Dokumentation -"
-//     [16]=> NULL
-//     [17]=> string(11) "Logo Design"
-//     [18]=> string(11) "Android App"
-//     [19]=> NULL
-//     [20]=> string(16) "Webseite zur App"
-//     [21]=> string(29) "Dokumentation für den Kunden"
-//     [22]=> string(8) "Beratung"
-//     [23]=> string(23) "Anwendungsentwicklung -"
-//     [24]=> NULL
-//     [25]=> string(9) "IOS App -"
-//     [26]=> NULL
-//     [27]=> string(13) "Dokumentation"
-//     [28]=> string(21) "Anwendungsentwicklung"
-//     [29]=> string(8) "Beratung"
-// }

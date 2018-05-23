@@ -371,11 +371,22 @@ hr {
 .ticket_sent_success {
 	width: 10%;
 }
+.h2_chosen_ticket_overview {
+	margin: 0 0 0.5em 0;
+}
+.chosen_ticket_overview {
+	border: 1.5px solid #425e7c;
+	border-radius: 4px;
+	padding: 10px;
+	font-size: 0.9em;
+	margin: 0 0 0.4em 0;
+
+}
 .btnContainer_ticket_sent {
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	margin-bottom: 0;
+	margin: 0 0 1em 0;
 }
 .btn_ticket_sent {
 	margin: 0 0 0 0;
@@ -458,14 +469,15 @@ hr {
 
 /* frame save / delete */
 .frame_save_del {
-	width: 25%;
+	width: 18%;
 }
 .h1_save_del {
 	font-size: 0.8em;
 }
 .btnContainer_save_del {
 	display: flex;
-	margin: 0;
+	justify-content: center;
+	margin: 0.5em 0 0 0;
 }
 @media screen and ( max-width: 1460px ) {
 	.h1_save_del {
