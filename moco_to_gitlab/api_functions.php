@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 300);
 // Rest API functions MOCO ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 function load_offer_options($moco_token)
@@ -55,7 +56,7 @@ function insert_project($string, $ticket_array, $gitlab_token)
     }
 }
 
-function insert_project_tickets($string, $ticket_array, $gitlab_token)
+function insert_project_tickets($string, $ticket_array, $description_array, $gitlab_token)
 {
     $project_exists = false;
     $tmp_project_name_array = array();
@@ -86,7 +87,14 @@ function insert_project_tickets($string, $ticket_array, $gitlab_token)
         {
             // $ticket_array[$i] = preg_replace('/\s+/', '%20', $ticket_array[$i]);
             $ticket_array[$i] = urlencode($ticket_array[$i]);
-            $url = "https://gitlab.com/api/v3/projects/". $project_id. "/issues?title=".$ticket_array[$i];
+            $description_array[$i] = urlencode($description_array[$i]);
+            
+            if (empty($description_array[$i])){
+                $url = "https://gitlab.com/api/v3/projects/". $project_id. "/issues?title=".$ticket_array[$i]; 
+            }
+            else{
+                $url = "https://gitlab.com/api/v3/projects/". $project_id. "/issues?title=".$ticket_array[$i]."&description=".$description_array[$i];
+            }
             $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
         }
     }
@@ -112,42 +120,6 @@ function load_projects()
     }
     $_SESSION['project_name_array'] = $project_name_array;
 }
-
-// function load_tickets()
-// {
-//     global $sel_data_array, $moco_token;
-//     $url = 'https://cp.mocoapp.com/api/v1/offers/'.$_SESSION['chosen_offer_id'];
-//     $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
-//     $offer_array = (array)json_decode($response, true);
-
-//         for ($i = 0; $i < count($offer_array['items']); $i++)
-//         {  
-//             if ($offer_array['items'][$i]["description"] == null && $offer_array['items'][$i+1]["description"] == null){
-//                 $sel_data_array[] = $offer_array['items'][$i]["title"];
-//             }
-//             elseif ($offer_array['items'][$i]["description"] != null){
-//                 $sel_data_array[] = $offer_array['items'][$i-1]["title"].$offer_array['items'][$i]["description"];
-//             }
-//         }
-// }
-
-
-// function load_tickets($array)
-// {
-//     global $sel_data_array; 
-
-//     for ($i = 1; $i < count($array['id']); $i++)
-//     {
-//         if (empty($array['description'][$i]) && empty($array['description'][$i+1])){
-//             $sel_data_array['id'] = $array['tid'][$i];
-//             $sel_data_array['title'] = $array['title'][$i];
-//             $sel_data_array['description'] = $array['description'][$i];
-//         }
-//         if ($array['description'][$i] != ""){
-//             $sel_data_array[] = $array['title'][$i-1].$array['description'][$i];
-//         }
-//     }
-// }
 
 function load_selected_offer_array($moco_token, $chosen_offer_id)
 {
@@ -194,20 +166,16 @@ function load_selected_offer_array($moco_token, $chosen_offer_id)
 
 function load_offer($array)
 {
+    $_SESSION['ticket_ordered_array'] = array();
     if ($array != null){
-        for ($i = 1; $i < count($array['id']); $i++)
+
+        for ($i = 0; $i < count($array['id']); $i++)
         {
-            if (empty($array['description'][$i]) && empty($array['description'][$i+1])){
+            if ($array['title'][$i] != ""){
                 echo "<tr>";
                 echo "<td>".$array['title'][$i]."</td>";
-                echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' ></td>";
-                echo "</tr>"; 
-            }
-            if ($array['description'][$i] != ""){
-                echo "<tr>";
-                echo "<td>".$array['title'][$i-1]."<br>".$array['description'][$i]."</td>";
-                echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' ></td>";
-                echo "</tr>"; 
+                echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked></td>";
+                echo "</tr>";
             }
         }
     }
@@ -217,5 +185,39 @@ function load_offer($array)
         echo "<td></td>";
         echo "</tr>"; 
     }
-
 }
+
+// function load_tickets()
+// {
+//     global $sel_data_array, $moco_token;
+//     $url = 'https://cp.mocoapp.com/api/v1/offers/'.$_SESSION['chosen_offer_id'];
+//     $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
+//     $offer_array = (array)json_decode($response, true);
+
+//         for ($i = 0; $i < count($offer_array['items']); $i++)
+//         {  
+//             if ($offer_array['items'][$i]["description"] == null && $offer_array['items'][$i+1]["description"] == null){
+//                 $sel_data_array[] = $offer_array['items'][$i]["title"];
+//             }
+//             elseif ($offer_array['items'][$i]["description"] != null){
+//                 $sel_data_array[] = $offer_array['items'][$i-1]["title"].$offer_array['items'][$i]["description"];
+//             }
+//         }
+// }
+
+// function load_tickets($array)
+// {
+//     global $sel_data_array; 
+
+//     for ($i = 1; $i < count($array['id']); $i++)
+//     {
+//         if (empty($array['description'][$i]) && empty($array['description'][$i+1])){
+//             // $sel_data_array['id'] = $array['tid'][$i];
+//             $sel_data_array[] = $array['title'][$i];
+//             // $sel_data_array['description'] = $array['description'][$i];
+//         }
+//         if ($array['description'][$i] != ""){
+//             $sel_data_array[] = $array['title'][$i-1].$array['description'][$i];
+//         }
+//     }
+// }

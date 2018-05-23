@@ -149,30 +149,25 @@ if (isset($_POST["sent_tickets"])){
 
     // array of all selected checkboxes //////////////////////////////////////////////  
     if(isset($_POST['select_ticket'])){
-        foreach($_POST['select_ticket'] as $key => $checked) {
+        foreach($_POST['select_ticket'] as $key => $checked) {            
             $submitNumber_ticket[] = $key;
         }
     }
     // array of all selected Tickets ////////////////////////////////////////////////
     $_SESSION["submitNumber_ticket"] = $submitNumber_ticket;
 
-    // load_tickets($_SESSION['offer_data']);
-
-    /// ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-    // foreach ($_SESSION["submitNumber_ticket"] as $value){
-    //     $tmp_array['id'][] = $_SESSION['offer_data']['id'][$value];
-    //     $tmp_array['title'][] = $_SESSION['offer_data']['title'][$value];
-    //     $tmp_array['description'][] = $_SESSION['offer_data']['description'][$value];
-    // }
+    foreach ($_SESSION["submitNumber_ticket"] as $value){
+        $tmp_array[] = $_SESSION['offer_data']['title'][$value];
+    }
 
     $_SESSION["selected_tickets"] = $tmp_array;
+    
     // remove all <divs> from array //////////////////////////////////////////////////
-    foreach ($tmp_array as $value) {
-        $value = preg_replace("/<\/?div[^>]*\>/i", " ", $value);
-        $tmp_array_nice[] = $value;
-    }
-    $_SESSION['selected_tickets_array_nice'] = $tmp_array_nice;
+    // foreach ($tmp_array as $value) {
+    //     $value = preg_replace("/<\/?div[^>]*\>/i", " ", $value);
+    //     $tmp_array_nice[] = $value;
+    // }
+    // $_SESSION['selected_tickets_array_nice'] = $tmp_array_nice;
     // selected Project //////////////////////////////////////////////////////////////
     $_SESSION['select_project'] = $_POST['select_project'];
 
@@ -184,13 +179,29 @@ if (isset($_POST["sent_tickets"])){
         ));
     }
     else{
+        var_dump($_SESSION['offer_data']);
+        echo "<br><br>";
+        var_dump($_SESSION["selected_tickets"]);
+        echo "<br><br>";
+        $ticket_array = $_SESSION["selected_tickets"];
 
-        $_SESSION['selected_tickets_array_nice'] = str_replace("&nbsp;", '', $_SESSION['selected_tickets_array_nice']);
+        for ($i = 0; $i < count($ticket_array); $i++)
+        {
+            for ($j = 0; $j < count($_SESSION['offer_data']['id']); $j++)
+            {
+                if ($_SESSION['offer_data']['title'][$j] == $ticket_array[$i]){
+                    $description_array[] = $_SESSION['offer_data']['description'][$j+1];
+                }
+            }
+        }
+        $_SESSION['description_array'] = $description_array;
+        // var_dump($_SESSION['description_array']);
+
         $_SESSION['select_project'] = str_replace("&nbsp;", '', $_SESSION['select_project']);
 
         echo $twig->render('index.html', array(
             'state' => 'ticket_sent',
-            'selected_tickets' => $_SESSION['selected_tickets_array_nice'],
+            'selected_tickets' => $_SESSION["selected_tickets"],
             'selected_project' => $_SESSION['select_project'],
         ));
     }
@@ -200,8 +211,8 @@ if (isset($_POST["sent_tickets"])){
 if (isset($_POST["transfer"])){
 
     try {
-        insert_project($_SESSION['select_project'], $_SESSION['selected_tickets_array_nice'], $gitlab_token);
-        insert_project_tickets($_SESSION['select_project'], $_SESSION['selected_tickets_array_nice'], $gitlab_token);
+        insert_project($_SESSION['select_project'], $_SESSION["selected_tickets"], $gitlab_token);
+        insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"], $_SESSION['description_array'], $gitlab_token);
     } catch (Exception $e) {
         echo 'Caught exception: ',  $e->getMessage(), "\n";
         echo 'da ist was schief gelaufen... :(';
