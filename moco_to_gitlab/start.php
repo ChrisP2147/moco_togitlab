@@ -49,7 +49,6 @@ if (isset($_POST["login"])){
                             load_offer_options($moco_token);
                                 echo "</select>";
                         echo "</div>";
-
         echo $twig->render('index.html', array(
             //'API_response' =>  $json->avatar_url,
             'state' => 'logged_in',          
@@ -129,9 +128,10 @@ if (isset($_POST["btn_chooseAPI"])){
                         echo "</tr>";
                     echo "</thead>";
                         echo "<tbody>";
-                        
-                    load_offer($_SESSION['offer_data']);
 
+                    select_ticketIDs_from_DB();
+                    load_offer($_SESSION['offer_data']);
+    
         echo $twig->render('index.html', array(
             'state' => 'API_chosen',          
         ));
@@ -157,17 +157,13 @@ if (isset($_POST["sent_tickets"])){
     $_SESSION["submitNumber_ticket"] = $submitNumber_ticket;
 
     foreach ($_SESSION["submitNumber_ticket"] as $value){
-        $tmp_array[] = $_SESSION['offer_data']['title'][$value];
+        $tmp_array['id'][] = $_SESSION['offer_data']['id'][$value];
+        $tmp_array['title'][] = $_SESSION['offer_data']['title'][$value];
+        $tmp_array['description'][] = $_SESSION['offer_data']['description'][$value];
     }
 
     $_SESSION["selected_tickets"] = $tmp_array;
     
-    // remove all <divs> from array //////////////////////////////////////////////////
-    // foreach ($tmp_array as $value) {
-    //     $value = preg_replace("/<\/?div[^>]*\>/i", " ", $value);
-    //     $tmp_array_nice[] = $value;
-    // }
-    // $_SESSION['selected_tickets_array_nice'] = $tmp_array_nice;
     // selected Project //////////////////////////////////////////////////////////////
     $_SESSION['select_project'] = $_POST['select_project'];
 
@@ -179,40 +175,37 @@ if (isset($_POST["sent_tickets"])){
         ));
     }
     else{
-        var_dump($_SESSION['offer_data']);
-        echo "<br><br>";
-        var_dump($_SESSION["selected_tickets"]);
-        echo "<br><br>";
         $ticket_array = $_SESSION["selected_tickets"];
 
         for ($i = 0; $i < count($ticket_array); $i++)
         {
             for ($j = 0; $j < count($_SESSION['offer_data']['id']); $j++)
             {
-                if ($_SESSION['offer_data']['title'][$j] == $ticket_array[$i]){
+                if ($_SESSION['offer_data']['title'][$j] == $ticket_array['title'][$i]){
                     $description_array[] = $_SESSION['offer_data']['description'][$j+1];
                 }
             }
         }
         $_SESSION['description_array'] = $description_array;
-        // var_dump($_SESSION['description_array']);
 
         $_SESSION['select_project'] = str_replace("&nbsp;", '', $_SESSION['select_project']);
 
         echo $twig->render('index.html', array(
             'state' => 'ticket_sent',
-            'selected_tickets' => $_SESSION["selected_tickets"],
+            'selected_tickets' => $_SESSION["selected_tickets"]['title'],
             'selected_project' => $_SESSION['select_project'],
         ));
     }
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+// transfer tickets to GitLab ///////////////////////////////////////////////////////////////////////
 if (isset($_POST["transfer"])){
 
     try {
-        insert_project($_SESSION['select_project'], $_SESSION["selected_tickets"], $gitlab_token);
-        insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"], $_SESSION['description_array'], $gitlab_token);
+        insert_project($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $gitlab_token);
+        insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $_SESSION['description_array'], $gitlab_token);
+        write_ticketIDs_in_DB($_SESSION["selected_tickets"]);
     } catch (Exception $e) {
         echo 'Caught exception: ',  $e->getMessage(), "\n";
         echo 'da ist was schief gelaufen... :(';
@@ -225,7 +218,6 @@ if (isset($_POST["transfer"])){
         'message' => 'Tickets wurden übertragen',
     ));
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -268,9 +260,6 @@ if (isset($_POST["back"])){
     get_data_pdo();
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
-        // $offer = $_POST['sel_chosenOffer'];
-        // // Session data of which offer was chosen 
-        // $_SESSION['chosen_offer_id'] = $offer;
         // /////////////////////////////////////////
         for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
         {
@@ -278,8 +267,6 @@ if (isset($_POST["back"])){
                 $offer_title = $_SESSION['offer_title'][$i];
             }
         }
-
-        // $_SESSION['chosen_offer'] = $offer;
 
         $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
 
@@ -327,7 +314,8 @@ if (isset($_POST["back"])){
                     echo "</tr>";
                 echo "</thead>";
                     echo "<tbody>";
-                    
+                
+                select_ticketIDs_from_DB();
                 load_offer($data);
 
         echo $twig->render('index.html', array(

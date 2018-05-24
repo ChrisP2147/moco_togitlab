@@ -7,9 +7,9 @@ $gitlab_token = "Vb23WYp2KmxvPG4xVRhB";
 $all_items_array = array();
 
 delete_ticket_check_db();
-$array = load_all_offers_data_array();
-var_dump($array);
-insert_offer_into_db();
+// $array = load_all_offers_data_array();
+// var_dump($array);
+// insert_offer_into_db();
 
 function load_all_offers_data_array()
 {

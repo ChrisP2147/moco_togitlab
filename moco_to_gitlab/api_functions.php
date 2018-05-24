@@ -11,10 +11,12 @@ function load_offer_options($moco_token)
 
     for ($i = 0; $i < count($offer_array_raw); $i++)
     {
-        $_SESSION['offer_id'][] = $offer_array_raw[$i]['id'];
-        $_SESSION['offer_title'][] = $offer_array_raw[$i]['title'];
-        echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . ">" . $offer_array_raw[$i]['title'] . "</option>";
-    }  
+        if ($offer_array_raw[$i]['status'] == 'accepted'){
+            $_SESSION['offer_id'][] = $offer_array_raw[$i]['id'];
+            $_SESSION['offer_title'][] = $offer_array_raw[$i]['title'];
+            echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . ">" . $offer_array_raw[$i]['title'] . "</option>";
+        }
+    }
 }
 
 // Rest API functions GITLAB ///////////////////////////////////////////////////////
@@ -81,6 +83,7 @@ function insert_project_tickets($string, $ticket_array, $description_array, $git
             $project_id = $tmp_project_id_array[$i];
         }
     }
+
 // create issue in project ///////////////////////////////
     if ($project_exists == true){
         for ($i = 0; $i < count($ticket_array); $i++)
@@ -103,7 +106,7 @@ function insert_project_tickets($string, $ticket_array, $description_array, $git
     }
 }
 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 function load_projects()
 {
     global $project_name_array, $moco_token;
@@ -126,55 +129,56 @@ function load_selected_offer_array($moco_token, $chosen_offer_id)
     $url = 'https://cp.mocoapp.com/api/v1/offers/'.$chosen_offer_id;
     $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
     $offer_array = (array)json_decode($response, true);
-    // check if offer is already accepted - only then show data
-    foreach ($offer_array as $value) {
-        if ($offer_array['status'] == 'accepted'){
-            $offer_status = 'accepted';
+
+    for ($i = 0; $i < count($offer_array['items']); $i++)
+    {
+        if (empty($offer_array['items'][$i]["title"])){
+            $offer_array['items'][$i]["title"] = "";
         }
-    }
-
-    if ($offer_status == "accepted"){
-
-        for ($i = 0; $i < count($offer_array['items']); $i++)
-        {
-            if (empty($offer_array['items'][$i]["title"])){
-                $offer_array['items'][$i]["title"] = "";
-            }
-            else{
-                $offer_array['items'][$i]["title"] = str_replace("&nbsp;", '', $offer_array['items'][$i]["title"]);
-                $offer_array['items'][$i]["title"] = strip_tags($offer_array['items'][$i]["title"]);
-            }
-
-            if (empty($offer_array['items'][$i]["description"])){
-                $offer_array['items'][$i]["description"] = "";
-            }
-            else{
-                $offer_array['items'][$i]["description"] = str_replace("&nbsp;", '', $offer_array['items'][$i]["description"]);
-                $offer_array['items'][$i]["description"] = strip_tags($offer_array['items'][$i]["description"]);            
-            }
-
-            $all_items_array['id'][] = $offer_array['items'][$i]["id"];
-            $all_items_array['title'][] = $offer_array['items'][$i]["title"];
-            $all_items_array['description'][] = $offer_array['items'][$i]["description"];
+        else{
+            $offer_array['items'][$i]["title"] = str_replace("&nbsp;", '', $offer_array['items'][$i]["title"]);
+            $offer_array['items'][$i]["title"] = strip_tags($offer_array['items'][$i]["title"]);
         }
+
+        if (empty($offer_array['items'][$i]["description"])){
+            $offer_array['items'][$i]["description"] = "";
+        }
+        else{
+            $offer_array['items'][$i]["description"] = str_replace("&nbsp;", '', $offer_array['items'][$i]["description"]);
+            $offer_array['items'][$i]["description"] = strip_tags($offer_array['items'][$i]["description"]);            
+        }
+
+        $all_items_array['id'][] = $offer_array['items'][$i]["id"];
+        $all_items_array['title'][] = $offer_array['items'][$i]["title"];
+        $all_items_array['description'][] = $offer_array['items'][$i]["description"];
     }
-    else{
-        $all_items_array = array();
-    }
+
     return $all_items_array;
 }
 
 function load_offer($array)
 {
-    $_SESSION['ticket_ordered_array'] = array();
+    // $_SESSION['ticket_ordered_array'] = array();
+
+    for ($i = 0; $i < count($_SESSION['id_array_db']); $i++)
+    {
+        $db_array[] = (int)$_SESSION['id_array_db'][$i];
+    }
+
     if ($array != null){
 
         for ($i = 0; $i < count($array['id']); $i++)
         {
             if ($array['title'][$i] != ""){
                 echo "<tr>";
-                echo "<td>".$array['title'][$i]."</td>";
-                echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked></td>";
+                if (in_array($array['id'][$i], $db_array, TRUE)){
+                    echo "<td class='ticket_in_db_font-color'>".$array['title'][$i]. "  <br><sub><i>(bereits übertragen)</i></sub></td>";
+                    echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."'></td>";
+                }
+                else{
+                    echo "<td>".$array['title'][$i]."</td>";
+                    echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked></td>";
+                }
                 echo "</tr>";
             }
         }

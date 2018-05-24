@@ -531,3 +531,7 @@ td:last-of-type	{
 option:first {
     color: #999;
 }
+.ticket_in_db_font-color {
+	color: green;
+	/* font-weight: bold; */
+}

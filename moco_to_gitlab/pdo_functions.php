@@ -180,3 +180,44 @@ function delete_user_pdo()
 
     $pdo = null;
 }
+
+// write all transferred ticket IDs in DataBase ////////////////
+function write_ticketIDs_in_DB($ticket_array)
+{
+    $pdo = connect_DB_pdo();
+
+    for ($i = 0; $i < count($ticket_array['id']); $i++)
+    {
+        // insert all Offer Positions und IDs into database
+        $sql = 'INSERT INTO tickets_check(ticket_id, title) values(?, ?)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$ticket_array['id'][$i], $ticket_array['title'][$i]]);
+    }
+
+    $pdo = null;
+}
+
+// select all transferred ticket IDs in DataBase ////////////////
+function select_ticketIDs_from_DB()
+{
+    $_SESSION['id_array_db'] = array();
+
+    $pdo = connect_DB_pdo();
+
+    $sql = 'SELECT * from tickets_check';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $row_count = $stmt->rowCount();
+
+    if ($row_count > 0){
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach($results as $res)
+        {
+            $id_array[] = $res['ticket_id'];
+        }    
+    }
+
+    $_SESSION['id_array_db'] = $id_array;
+
+    $pdo = null; 
+}
