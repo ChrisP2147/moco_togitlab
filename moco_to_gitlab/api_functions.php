@@ -14,7 +14,13 @@ function load_offer_options($moco_token)
         if ($offer_array_raw[$i]['status'] == 'accepted'){
             $_SESSION['offer_id'][] = $offer_array_raw[$i]['id'];
             $_SESSION['offer_title'][] = $offer_array_raw[$i]['title'];
-            echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . ">" . $offer_array_raw[$i]['title'] . "</option>";
+            // selects the value which was previously selected //////////////////////////////////////
+            if ($_SESSION['chosen_offer_id'] == $offer_array_raw[$i]['id']){
+                echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . " selected>" . $offer_array_raw[$i]['title'] . "</option>";
+            }
+            else{
+                echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . ">" . $offer_array_raw[$i]['title'] . "</option>";
+            }
         }
     }
 }
@@ -119,7 +125,12 @@ function load_projects()
     for ($i = 0; $i < count($projekt_array); $i++)
     { 
         $project_name_array[] = $projekt_array[$i]['name'];
-        echo "<option class='optionCenter' value='" . $projekt_array[$i]['name'] . "'>" . $projekt_array[$i]['name'] . "</option>";
+        if ($projekt_array[$i]['name'] == $_SESSION['select_project']){
+            echo "<option class='optionCenter' value='" . $projekt_array[$i]['name'] . "' selected>" . $projekt_array[$i]['name'] . "</option>";
+        }
+        else{
+            echo "<option class='optionCenter' value='" . $projekt_array[$i]['name'] . "'>" . $projekt_array[$i]['name'] . "</option>";
+        }
     }
     $_SESSION['project_name_array'] = $project_name_array;
 }
@@ -191,37 +202,3 @@ function load_offer($array)
     }
 }
 
-// function load_tickets()
-// {
-//     global $sel_data_array, $moco_token;
-//     $url = 'https://cp.mocoapp.com/api/v1/offers/'.$_SESSION['chosen_offer_id'];
-//     $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
-//     $offer_array = (array)json_decode($response, true);
-
-//         for ($i = 0; $i < count($offer_array['items']); $i++)
-//         {  
-//             if ($offer_array['items'][$i]["description"] == null && $offer_array['items'][$i+1]["description"] == null){
-//                 $sel_data_array[] = $offer_array['items'][$i]["title"];
-//             }
-//             elseif ($offer_array['items'][$i]["description"] != null){
-//                 $sel_data_array[] = $offer_array['items'][$i-1]["title"].$offer_array['items'][$i]["description"];
-//             }
-//         }
-// }
-
-// function load_tickets($array)
-// {
-//     global $sel_data_array; 
-
-//     for ($i = 1; $i < count($array['id']); $i++)
-//     {
-//         if (empty($array['description'][$i]) && empty($array['description'][$i+1])){
-//             // $sel_data_array['id'] = $array['tid'][$i];
-//             $sel_data_array[] = $array['title'][$i];
-//             // $sel_data_array['description'] = $array['description'][$i];
-//         }
-//         if ($array['description'][$i] != ""){
-//             $sel_data_array[] = $array['title'][$i-1].$array['description'][$i];
-//         }
-//     }
-// }
