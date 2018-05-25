@@ -184,11 +184,13 @@ function load_offer($array)
                 echo "<tr>";
                 if (in_array($array['id'][$i], $db_array, TRUE)){
                     echo "<td class='ticket_in_db_font-color'>".$array['title'][$i]. "  <br><sub><i>(bereits übertragen)</i></sub></td>";
-                    echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."'></td>";
+                    // echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."'></td>";
+                    echo "<td><label class='container'><input type='checkbox' name='select_ticket[".$i."]' value='".$i."'><span class='checkmark'></span></label></td>";
                 }
                 else{
                     echo "<td>".$array['title'][$i]."</td>";
-                    echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked></td>";
+                    // echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked></td>";
+                    echo "<td><label class='container'><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked><span class='checkmark'></span></label></td>";
                 }
                 echo "</tr>";
             }

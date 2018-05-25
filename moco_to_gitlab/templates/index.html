@@ -97,9 +97,9 @@
 
             <h2 class="h2_chosen_ticket_overview">Du überträgst folgende Tickets in Projekt: <b>&#8680;</b> {{selected_project}}</h2>
 
-                <div class="btnContainer btnContainer_ticket_sent">
+                <div id='loadingContainer' class="btnContainer btnContainer_ticket_sent">
                         <input type='submit' class='button btn_ticket_sent' name='back' value='Zurück'/>
-                        <input type='submit' class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
+                        <input type='submit' onclick="setTimeout(loadingFunction, 1)" class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
                 </div>
 
             {% for ticket in selected_tickets %}
@@ -108,6 +108,12 @@
 
             {% endfor %}
 
+                <script>   
+                    function loadingFunction() {
+                        document.getElementById("loadingContainer").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
+                    }
+                </script>
+                
         </form>
 
     </div>
