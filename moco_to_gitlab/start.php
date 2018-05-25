@@ -42,7 +42,7 @@ if (isset($_POST["login"])){
         echo "<h1 class='h1_logged_in >Wilkommen '". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";   
       
             echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";    
-                echo "<h4 class='lbl_choose_api'>API auswählen:</h4>";
+                echo "<h4 class='lbl_choose_api'>Angebot auswählen:</h4>";
                     echo "<div class='projectContainer projectContainer_logged_in'>";
                         echo "<div class='div_tmp1'>";
                             echo "<select class='selectOffer_logged_in' name='sel_chosenOffer'>";                          
@@ -212,11 +212,83 @@ if (isset($_POST["transfer"])){
         echo "<input type='submit' class='btnSuperUser btnManage' name='back' value='Zurück' />";
     }
 
-    $_SESSION['send_tickts'] = null;
-    echo $twig->render('index.html', array(
-        'state' => 'ticket_sent_success',
-        'message' => 'Tickets wurden übertragen',
-    ));
+    // load frame_API_chosen ///////////////////////////////////////////////////////////////////////
+    get_data_pdo();
+    global $moco_token;
+    if ($_SESSION["state"] == "loggedIn"){
+        // /////////////////////////////////////////
+        for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
+        {
+            if ($_SESSION['offer_id'][$i] == $_SESSION['chosen_offer_id']){
+                $offer_title = $_SESSION['offer_title'][$i];
+            }
+        }
+
+        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
+
+        echo "<div class='frame frame_API_chosen'>";            
+            echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>"; 
+            echo "<div class='sel_btn_container'>";
+                echo "<h1 class='h1_API_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
+                if ($superUser == true){
+                    echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzer Verwalten'/>";
+                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
+                }
+                else{
+                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
+                }
+            echo "</div>";
+         
+        echo "<div class='spacer'><hr></div>";
+
+        echo "<div class='projectContainer'>";
+
+            // transfer Tickts ///////////////////////////////////////////////////////////////////////////////////////////
+            echo "<div class='sent_ticketsContainer'>";
+                echo "<div class='tmp_div1'>";
+                    echo "<select class='selectAPI selectAPI_chosen' name='sel_chosenOffer'>";
+                    load_offer_options($moco_token);
+                    echo "</select>";
+                    echo "<input type='submit' class='button btn_chosen_offer' name='btn_chooseAPI' value='wählen' />";
+                echo "</div>";
+
+                echo "<div class='tmp_div2'>";
+                    echo "<select class='selectAPI select_project' name='select_project'>";
+                        load_projects();
+                    echo "</select>";
+                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets &nbsp &#10004'/>";
+                echo "</div>";
+            echo "</div>";
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            echo "<table id='table_id' class='display'>";
+                echo "<thead>";
+                echo "<div class='h2_offer_title'><h2>Angebot: ". $offer_title . "</h2>";
+                    echo "<tr>";
+                        echo "<th>Angebots-Positionen</th>";
+                        echo "<th>als Ticket einfügen</th>";
+                    echo "</tr>";
+                echo "</thead>";
+                    echo "<tbody>";
+                
+                select_ticketIDs_from_DB();
+                load_offer($data);
+
+        echo $twig->render('index.html', array(
+            'state' => 'API_chosen',          
+        ));
+    }
+    else{
+        echo $twig->render('index.html', array(
+            'state' => 'wrongUser',
+        ));
+    }       
+
+    // $_SESSION['send_tickts'] = null;
+    // echo $twig->render('index.html', array(
+    //     // 'state' => 'ticket_sent_success',
+    //     // 'message' => 'Tickets wurden übertragen',
+    // ));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////

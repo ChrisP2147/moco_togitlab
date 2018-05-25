@@ -17,27 +17,17 @@
   </head>
   <body>
 {% set SELF = 'start.php' %}
-{# {% set test = 'das klappt' %} #}
-{# {{test| md5}}
-<br>
-{{test}}
-<br>
-{{ heute | date("m/d/Y") }}
-<br> #}
-{# <header>Project to GitLabs</header> #}
 
 {% if state == 'not_loggedIn' %}
     <div class="frame frame_not_loggedIn">
         <h1 class="h1_not_loggedIn">Projekte verschieben</h1>
             <form action={{SELF}} method='post'>
             <h4>Benutzer:</h4> 
-                <div class="labelTextFields labelTextFields_not_loggedIn">
-                    {# <label for="user">Benutzer:</label> #}        
+                <div class="labelTextFields labelTextFields_not_loggedIn">      
                     <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
                 </div>
             <h4>Passwort:</h4>
                 <div class="labelTextFields labelTextFields_not_loggedIn">          
-                {# <label for="passwd">Passwort:</label> #}
                     <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
                 </div>
             
@@ -120,6 +110,7 @@
 
 {% endif %}
 
+{#
 {% if state == 'ticket_sent_noTickets' %}
 
     <div class='frame ticket_sent_success'>
@@ -135,6 +126,7 @@
     </div>
 
 {% endif %}
+#}
 
 {% if state == 'ticket_sent_success' %}
 
