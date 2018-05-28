@@ -20,7 +20,7 @@
 
 {% if state == 'not_loggedIn' %}
     <div class="frame frame_not_loggedIn">
-        <h1 class="h1_not_loggedIn">Projekte verschieben</h1>
+        <h1 class="h1_not_loggedIn">Ticket zu GitLab</h1>
             <form action={{SELF}} method='post'>
             <h4>Benutzer:</h4> 
                 <div class="labelTextFields labelTextFields_not_loggedIn">      
@@ -41,7 +41,7 @@
 {% if state == 'logged_in' %}
 
                     <div class="div_tmp2">
-                        <input type="submit" class="button btn_choose_API_logged_in" name="btn_chooseAPI" value="wählen" />
+                        <input type="submit" class="button btn_choose_offer_logged_in" name="btn_choose_offer" value="wählen" />
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@
             
 {% endif %}
 
-{% if state == 'API_chosen' %}        
+{% if state == 'offer_chosen' %}        
                     
                         </tbody>
                 </table>
@@ -110,8 +110,24 @@
 
 {% endif %}
 
-{#
 {% if state == 'ticket_sent_noTickets' %}
+
+    <div class='frame ticket_sent_success'>
+        <form action={{SELF}} method='post'>
+
+            <h2>{{message}}</h2>
+ 
+            <div class="btnContainer btnContainer_ticket_sent_success">
+                <input type='submit' class='button btn_ticket_sent_success' name='back' value='Zurück'/>
+            </div>
+        </form>
+
+    </div>
+
+{% endif %}
+
+{#
+{% if state == 'ticket_sent_success' %}
 
     <div class='frame ticket_sent_success'>
         <form action={{SELF}} method='post'>
@@ -128,22 +144,6 @@
 {% endif %}
 #}
 
-{% if state == 'ticket_sent_success' %}
-
-    <div class='frame ticket_sent_success'>
-        <form action={{SELF}} method='post'>
-
-            <h2>{{message}}</h2>
- 
-            <div class="btnContainer btnContainer_ticket_sent_success">
-                <input type='submit' class='button btn_ticket_sent_success' name='back' value='Zurück'/>
-            </div>
-        </form>
-
-    </div>
-
-{% endif %}
-
 {% if state == 'manage' %}
     <script>
             $(document).ready( function (){
@@ -157,7 +157,7 @@
 
 {% if (state == 'editUser') or (state == 'editUserWrongPasswd') or (state == 'editUserWrongInvalidUser') or (state == 'editUserEmptyField') %}
     <div class="frame frame_create">
-            <h1>Neuen Benutzer anlegen</h1> 
+            <h1>Benutzerdaten bearbeiten</h1> 
             <form action={{SELF}} method='post'>
                 <div class= "container_create_1">
                     <div class="div_create"><h4>Nachname:</h4> <input type="text" class="input_create" name="lastname" value={{lastname}} size="20" autocomplete="off" /></div>

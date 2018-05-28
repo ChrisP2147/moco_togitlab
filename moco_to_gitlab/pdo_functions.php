@@ -1,10 +1,16 @@
 <?php
-require_once('conn.inc.php');
-$superUser=false;
+// in here located are all functions concerning the database "moco_to_gitlabdb"
+///////////////////////////////////////////////////////////////////////////////
+
+require_once('conn.inc.php'); // in "conn.inc.php" is stored the connection data
+$superUser=false; // a superuser is the one with admin permissions
+
+// global variables
 $id=$active=$moco_token=$gitlab_token=$username=$passwd_hash=$firstname=$lastname=$admin = "";
 $id_array=$active_array=$moco_token_array=$gitlab_token_array=$project_name_array=$username_array=$passwd_hash_array=$firstname_array=$lastname_array=$permission_array=$sel_data_array = array();
 $userCount = $submitNumber_user = 0;
 $username_invalid = false;
+// the Moco-Token is stored in Session variable when user is logged in
 $moco_token = $_SESSION['moco_token'];
 // Connect to DB /////////////////////////////////////////////
 function connect_DB_pdo()
@@ -37,7 +43,6 @@ function get_data_pdo()
         {
             $id = $res['id'];
             $active = $res['active'];
-            // $api_id = $res['api_id'];
             $moco_token = $res['moco_token'];
             $gitlab_token = $res['gitlab_token'];
             $username = $res['username'];
@@ -54,8 +59,10 @@ function get_data_pdo()
         // verify password hash
         if (password_verify($_SESSION["passwd"], $passwd_hash)) {
             $_SESSION["state"] = "loggedIn";
+            // admin is value 1 (stored in DB)
             if ($admin == 1){
                 $superUser = true;
+                $_SESSION['superUser'] = $superUser;
             }
         } else {
             $_SESSION["state"] = "wrongUser";
@@ -116,9 +123,7 @@ function load_user_pdo()
             $firstname_array[] = $res['firstname'];
             $lastname_array[] = $res['lastname'];
             $permission_array[] = $res['admin'];
-        }
-        // $_SESSION["name"] = $firstname;
-        // $_SESSION["surname"] = $name;    
+        }    
     }
     else{
         echo "no data found in table staff";

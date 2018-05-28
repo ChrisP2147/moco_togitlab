@@ -6,25 +6,30 @@ require_once('api_functions.php');
 session_start();
 $_SESSION["state"] = "not_loggedIn";
 $offer_status = 'created';
+$_SESSION['saveNewUser'] = $_SESSION['saveUser'] = false;
 // $moco_token = "53a856de73a8b8b0a82aa7a604026747";
 // $gitlab_token = "Vb23WYp2KmxvPG4xVRhB";
+
+// the Moco & GitLab-Token is stored in Session variable when user is logged in
 $moco_token = $_SESSION["moco_token"];
 $gitlab_token = $_SESSION["gitlab_token"];
 // Twig ///////////////////////////////////////////////////////////
-$loader = new Twig_Loader_Filesystem('templates');
+$loader = new Twig_Loader_Filesystem('templates'); // the file beein rendered lies is called index.html and is located in folder "templates"
 $twig = new Twig_Environment($loader);
 ///////////////////////////////////////////////////////////////////
 
-// set the different states = ... ->
+// set the different states of the program the states are rendered in index.html depending on which $_POST was set= ... ->
 // "not_loggegIn", "logged_in", "manage", "createUser", "editUser", "editUserWrong", "dataSaved", "userDeleted"
-////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 
+// state when not logged in
 if (empty($_POST)){
     echo $twig->render('index.html', array(
         'state' => 'not_loggedIn',
     ));
 }
 
+// state when user is logged out
 if (isset($_POST["logout"])){
     echo $twig->render('index.html', array(
         'state' => 'not_loggedIn',
@@ -34,6 +39,7 @@ if (isset($_POST["logout"])){
     unset($_POST);
 }
 
+// state when user is logged in
 if (isset($_POST["login"])){
     get_data_pdo();
     if ($_SESSION["state"] == "loggedIn"){
@@ -50,18 +56,20 @@ if (isset($_POST["login"])){
                                 echo "</select>";
                         echo "</div>";
         echo $twig->render('index.html', array(
-            'state' => 'logged_in',          
+            'state' => 'logged_in',         
             'superUser' => $superUser,
         ));
     }
     else{
+        // state when login-data is not correct
         echo $twig->render('index.html', array(
             'state' => 'wrongUser',
         ));
     }                 
 }
 
-if (isset($_POST["btn_chooseAPI"])){
+if (isset($_POST["btn_choose_offer"])){
+    $_SESSION['select_project'] = $_POST['select_project'];
     get_data_pdo();
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
@@ -80,57 +88,16 @@ if (isset($_POST["btn_chooseAPI"])){
 
         $_SESSION['offer_data'] = load_selected_offer_array($moco_token, $_SESSION['chosen_offer']);
 
-        echo "<div class='frame frame_API_chosen'>";
-            // echo "<h1 class='h1_API_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";            
-                echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>"; 
-                echo "<div class='sel_btn_container'>";
-                    echo "<h1 class='h1_API_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>"; 
-                    if ($superUser == true){
-                        echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzer Verwalten'/>";
-                        echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
-                    }
-                    else{
-                        echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
-                    }
-                echo "</div>";
-             
-            echo "<div class='spacer'><hr></div>";
-
-            echo "<div class='projectContainer'>";
-
-                // transfer Tickts ///////////////////////////////////////////////////////////////////////////////////////////
-                echo "<div class='sent_ticketsContainer'>";
-                    echo "<div class='tmp_div1'>";
-                        echo "<select class='selectAPI selectAPI_chosen' name='sel_chosenOffer'>";
-                        load_offer_options($moco_token);
-                        echo "</select>";
-                        echo "<input type='submit' class='button btn_chosen_offer' name='btn_chooseAPI' value='wählen' />";
-                    echo "</div>";
-
-                    echo "<div class='tmp_div2'>";
-                        echo "<select class='selectAPI select_project' name='select_project'>";
-                            load_projects();
-                        echo "</select>";
-                        echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
-                    echo "</div>";
-                echo "</div>";
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                echo "<table id='table_id' class='display'>";
-                    echo "<thead>";
-                    echo "<div class='h2_offer_title'><h2>Angebot: ". $offer_title . "</h2>";
-                        echo "<tr>";
-                            echo "<th>Angebots-Positionen</th>";
-                            echo "<th>als Ticket einfügen</th>";
-                        echo "</tr>";
-                    echo "</thead>";
-                        echo "<tbody>";
+        //////////////////////////////////
+        // renders the main frame
+        load_frame_offer_chosen();
+        //////////////////////////////////
 
                     select_ticketIDs_from_DB();
                     load_offer($_SESSION['offer_data']);
     
         echo $twig->render('index.html', array(
-            'state' => 'API_chosen',          
+            'state' => 'offer_chosen',          
         ));
     }
     else{
@@ -223,56 +190,16 @@ if (isset($_POST["transfer"])){
 
         $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
 
-        echo "<div class='frame frame_API_chosen'>";            
-            echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>"; 
-            echo "<div class='sel_btn_container'>";
-                echo "<h1 class='h1_API_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
-                if ($superUser == true){
-                    echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzer Verwalten'/>";
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
-                }
-                else{
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
-                }
-            echo "</div>";
-         
-        echo "<div class='spacer'><hr></div>";
-
-        echo "<div class='projectContainer'>";
-
-            // transfer Tickts ///////////////////////////////////////////////////////////////////////////////////////////
-            echo "<div class='sent_ticketsContainer'>";
-                echo "<div class='tmp_div1'>";
-                    echo "<select class='selectAPI selectAPI_chosen' name='sel_chosenOffer'>";
-                    load_offer_options($moco_token);
-                    echo "</select>";
-                    echo "<input type='submit' class='button btn_chosen_offer' name='btn_chooseAPI' value='wählen' />";
-                echo "</div>";
-
-                echo "<div class='tmp_div2'>";
-                    echo "<select class='selectAPI select_project' name='select_project'>";
-                        load_projects();
-                    echo "</select>";
-                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
-                echo "</div>";
-            echo "</div>";
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            echo "<table id='table_id' class='display'>";
-                echo "<thead>";
-                echo "<div class='h2_offer_title'><h2>Angebot: ". $offer_title . "</h2>";
-                    echo "<tr>";
-                        echo "<th>Angebots-Positionen</th>";
-                        echo "<th>als Ticket einfügen</th>";
-                    echo "</tr>";
-                echo "</thead>";
-                    echo "<tbody>";
+        //////////////////////////////////
+        // renders the main frame
+        load_frame_offer_chosen();
+        //////////////////////////////////
                 
                 select_ticketIDs_from_DB();
                 load_offer($data);
 
         echo $twig->render('index.html', array(
-            'state' => 'API_chosen',          
+            'state' => 'offer_chosen',          
         ));
     }
     else{
@@ -339,56 +266,16 @@ if (isset($_POST["back"])){
 
         $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
 
-        echo "<div class='frame frame_API_chosen'>";            
-            echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>"; 
-            echo "<div class='sel_btn_container'>";
-                echo "<h1 class='h1_API_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
-                if ($superUser == true){
-                    echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzer Verwalten'/>";
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
-                }
-                else{
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
-                }
-            echo "</div>";
-         
-        echo "<div class='spacer'><hr></div>";
-
-        echo "<div class='projectContainer'>";
-
-            // transfer Tickts ///////////////////////////////////////////////////////////////////////////////////////////
-            echo "<div class='sent_ticketsContainer'>";
-                echo "<div class='tmp_div1'>";
-                    echo "<select class='selectAPI selectAPI_chosen' name='sel_chosenOffer'>";
-                    load_offer_options($moco_token);
-                    echo "</select>";
-                    echo "<input type='submit' class='button btn_chosen_offer' name='btn_chooseAPI' value='wählen' />";
-                echo "</div>";
-
-                echo "<div class='tmp_div2'>";
-                    echo "<select class='selectAPI select_project' name='select_project'>";
-                        load_projects();
-                    echo "</select>";
-                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
-                echo "</div>";
-            echo "</div>";
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            echo "<table id='table_id' class='display'>";
-                echo "<thead>";
-                echo "<div class='h2_offer_title'><h2>Angebot: ". $offer_title . "</h2>";
-                    echo "<tr>";
-                        echo "<th>Angebots-Positionen</th>";
-                        echo "<th>als Ticket einfügen</th>";
-                    echo "</tr>";
-                echo "</thead>";
-                    echo "<tbody>";
+        //////////////////////////////////
+        // renders the main frame
+        load_frame_offer_chosen();
+        //////////////////////////////////
                 
                 select_ticketIDs_from_DB();
                 load_offer($data);
 
         echo $twig->render('index.html', array(
-            'state' => 'API_chosen',          
+            'state' => 'offer_chosen',          
         ));
     }
     else{
@@ -456,6 +343,7 @@ if (isset($_REQUEST["edit"])){
 }
     
 if (isset($_POST["saveNewUser"])){
+    $_SESSION['saveNewUser'] = true;
     global $id, $active, $moco_token, $gitlab_token, $username, $passwd_hash, $firstname, $lastname, $admin, $superUser, $username_invalid;
 
     $lastname = $_POST["lastname"];
@@ -559,6 +447,7 @@ if (isset($_POST["saveNewUser"])){
 }
     
 if (isset($_POST["saveUser"])){
+    $_SESSION['saveUser'] = true;
     global $id, $active, $moco_token, $gitlab_token, $username, $passwd_hash, $firstname, $lastname, $admin, $superUser, $username_invalid;
 
     $lastname = $_POST["lastname"];
