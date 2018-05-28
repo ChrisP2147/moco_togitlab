@@ -389,16 +389,16 @@ hr {
 	border-radius: 4px; */
 	padding: 10px;
 	font-size: 0.9em;
-	color: #425e7c;
+	/* color: #425e7c; */
 	font-weight: bold;
 	margin: 0 0 0.4em 0;
 
 	-moz-box-shadow: inset 0 0 15px 5px #425e7c;
-	-webkit-box-shadow: inset 0 0 15px 5px #DDDDE5;
+	-webkit-box-shadow: inset 0 0 15px 5px #ffffff;
 	box-shadow: inset 0 0 15px 5px #425e7c;
-	border-radius: 8px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .btnContainer_ticket_sent {
 	width: 100%;
