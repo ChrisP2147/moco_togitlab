@@ -192,7 +192,7 @@ function load_offer($array)
                     echo "<td><label class='container'><input type='checkbox' name='select_ticket[".$i."]' value='".$i."'><span class='checkmark'></span></label></td>";
                 }
                 else{
-                    echo "<td>".$array['title'][$i]."</td>";
+                    echo "<td class='ticket_in_db_font-size'>".$array['title'][$i]."</td>";
                     // echo "<td><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked></td>";
                     echo "<td><label class='container'><input type='checkbox' name='select_ticket[".$i."]' value='".$i."' checked><span class='checkmark'></span></label></td>";
                 }

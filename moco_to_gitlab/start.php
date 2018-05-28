@@ -42,30 +42,66 @@ if (isset($_POST["logout"])){
 // state when user is logged in
 if (isset($_POST["login"])){
     get_data_pdo();
-    if ($_SESSION["state"] == "loggedIn"){
 
-        echo "<div class='frame frame_logged_in'>"; 
-        echo "<h1 class='h1_logged_in >Wilkommen '". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";   
-      
-            echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";    
-                echo "<h4 class='lbl_choose_api'>Angebot auswählen:</h4>";
-                    echo "<div class='projectContainer projectContainer_logged_in'>";
-                        echo "<div class='div_tmp1'>";
-                            echo "<select class='selectOffer_logged_in' name='sel_chosenOffer'>";                          
-                            load_offer_options($moco_token);
-                                echo "</select>";
-                        echo "</div>";
+    global $moco_token;
+    if ($_SESSION["state"] == "loggedIn"){
+        $offer = $_POST['sel_chosenOffer'];
+        // Session data of which offer was chosen 
+        $_SESSION['chosen_offer_id'] = $offer;
+        /////////////////////////////////////////
+        for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
+        {
+            if ($_SESSION['offer_id'][$i] == $offer){
+                $offer_title = $_SESSION['offer_title'][$i];
+            }
+        }
+
+        $_SESSION['chosen_offer'] = $offer;
+
+        $_SESSION['offer_data'] = load_selected_offer_array($moco_token, $_SESSION['chosen_offer']);
+
+        //////////////////////////////////
+        // renders the main frame
+        load_frame_offer_chosen();
+        //////////////////////////////////
+
+                    select_ticketIDs_from_DB();
+                    load_offer($_SESSION['offer_data']);
+    
         echo $twig->render('index.html', array(
-            'state' => 'logged_in',         
-            'superUser' => $superUser,
+            'state' => 'offer_chosen',          
         ));
     }
     else{
-        // state when login-data is not correct
         echo $twig->render('index.html', array(
             'state' => 'wrongUser',
         ));
-    }                 
+    }                    
+
+    // if ($_SESSION["state"] == "loggedIn"){
+
+    //     echo "<div class='frame frame_logged_in'>"; 
+    //     echo "<h1 class='h1_logged_in >Wilkommen '". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";   
+      
+    //         echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";    
+    //             echo "<h4 class='lbl_choose_api'>Angebot auswählen:</h4>";
+    //                 echo "<div class='projectContainer projectContainer_logged_in'>";
+    //                     echo "<div class='div_tmp1'>";
+    //                         echo "<select class='selectOffer_logged_in' name='sel_chosenOffer'>";                          
+    //                         load_offer_options($moco_token);
+    //                             echo "</select>";
+    //                     echo "</div>";
+    //     echo $twig->render('index.html', array(
+    //         'state' => 'logged_in',         
+    //         'superUser' => $superUser,
+    //     ));
+    // }
+    // else{
+    //     // state when login-data is not correct
+    //     echo $twig->render('index.html', array(
+    //         'state' => 'wrongUser',
+    //     ));
+    // }                 
 }
 
 if (isset($_POST["btn_choose_offer"])){

@@ -553,6 +553,10 @@ option:first {
 .ticket_in_db_font-color {
 	color: green;
 	font-weight: bold;
+	font-size: 1.2em;
+}
+.ticket_in_db_font-size {
+	font-size: 1.2em;
 }
 
 /* CheckBox Style */
