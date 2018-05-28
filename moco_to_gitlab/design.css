@@ -398,10 +398,9 @@ hr {
 	padding: 10px;
 	font-size: 0.7em;
 }
-.btnContainer_ticket_sent_success {
+/* .btnContainer_ticket_sent_success {
 	width: 100%;
 	display: flex;
-	/* margin-bottom: 0; */
 	margin: 0;
 
 }
@@ -409,7 +408,7 @@ hr {
 	width: 100%;
 	padding: 10px;
 	font-size: 0.7em;
-}
+} */
 /* //////////////// */
 
 /* frame manage all users*/

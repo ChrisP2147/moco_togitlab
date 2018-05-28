@@ -50,10 +50,7 @@ if (isset($_POST["login"])){
                                 echo "</select>";
                         echo "</div>";
         echo $twig->render('index.html', array(
-            //'API_response' =>  $json->avatar_url,
             'state' => 'logged_in',          
-            // 'SESSION_firstname' => $_SESSION["firstname"],
-            // 'SESSION_lastname' => $_SESSION["lastname"],
             'superUser' => $superUser,
         ));
     }
@@ -114,7 +111,7 @@ if (isset($_POST["btn_chooseAPI"])){
                         echo "<select class='selectAPI select_project' name='select_project'>";
                             load_projects();
                         echo "</select>";
-                        echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets &nbsp &#10004'/>";
+                        echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
                     echo "</div>";
                 echo "</div>";
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,7 +253,7 @@ if (isset($_POST["transfer"])){
                     echo "<select class='selectAPI select_project' name='select_project'>";
                         load_projects();
                     echo "</select>";
-                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets &nbsp &#10004'/>";
+                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
                 echo "</div>";
             echo "</div>";
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -372,7 +369,7 @@ if (isset($_POST["back"])){
                     echo "<select class='selectAPI select_project' name='select_project'>";
                         load_projects();
                     echo "</select>";
-                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets &nbsp &#10004'/>";
+                    echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
                 echo "</div>";
             echo "</div>";
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
