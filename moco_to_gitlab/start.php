@@ -6,7 +6,7 @@ require_once('api_functions.php');
 session_start();
 $_SESSION["state"] = "not_loggedIn";
 $offer_status = 'created';
-$_SESSION['saveNewUser'] = $_SESSION['saveUser'] = false;
+$_SESSION['saveNewUser'] = $_SESSION['saveUser'] = $_SESSION["notTicketsSelected"] = false;
 // $moco_token = "53a856de73a8b8b0a82aa7a604026747";
 // $gitlab_token = "Vb23WYp2KmxvPG4xVRhB";
 
@@ -62,11 +62,11 @@ if (isset($_POST["login"])){
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen();
+        load_frame_offer_chosen($offer_title, $moco_token);
         //////////////////////////////////
 
-                    select_ticketIDs_from_DB();
-                    load_offer($_SESSION['offer_data']);
+        select_ticketIDs_from_DB();
+        load_offer($_SESSION['offer_data']);
     
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -126,11 +126,11 @@ if (isset($_POST["btn_choose_offer"])){
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen();
+        load_frame_offer_chosen($offer_title, $moco_token);
         //////////////////////////////////
 
-                    select_ticketIDs_from_DB();
-                    load_offer($_SESSION['offer_data']);
+        select_ticketIDs_from_DB();
+        load_offer($_SESSION['offer_data']);
     
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -169,15 +169,47 @@ if (isset($_POST["sent_tickets"])){
 
     // transfer data to index.html ///////////////////////////////////////////////////
     if ($_SESSION["selected_tickets"] == null){
-        echo $twig->render('index.html', array(
-            'state' => 'ticket_sent_noTickets',
-            'message' => 'Du hast keine Tickets ausgewählt',
-        ));
+        $_SESSION["notTicketsSelected"] = true;
+        get_data_pdo();
+        global $moco_token;
+        if ($_SESSION["state"] == "loggedIn"){
+            // /////////////////////////////////////////
+            for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
+            {
+                if ($_SESSION['offer_id'][$i] == $_SESSION['chosen_offer_id']){
+                    $offer_title = $_SESSION['offer_title'][$i];
+                }
+            }
+    
+            $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
+    
+            //////////////////////////////////
+            // renders the main frame
+            load_frame_offer_chosen($offer_title, $moco_token);
+            //////////////////////////////////
+                    
+            select_ticketIDs_from_DB();
+            load_offer($data);
+    
+            echo $twig->render('index.html', array(
+                'state' => 'offer_chosen',    
+            ));
+        }
+        else{
+            echo $twig->render('index.html', array(
+                'state' => 'wrongUser',
+            ));
+        }   
+        
+        // echo $twig->render('index.html', array(
+        //     'state' => 'ticket_sent_noTickets',
+        //     'message' => 'Du hast keine Tickets ausgewählt',
+        // ));
     }
     else{
         $ticket_array = $_SESSION["selected_tickets"];
 
-        for ($i = 0; $i < count($ticket_array); $i++)
+        for ($i = 0; $i < count($ticket_array['id']); $i++)
         {
             for ($j = 0; $j < count($_SESSION['offer_data']['id']); $j++)
             {
@@ -186,6 +218,7 @@ if (isset($_POST["sent_tickets"])){
                 }
             }
         }
+        
         $_SESSION['description_array'] = $description_array;
 
         $_SESSION['select_project'] = str_replace("&nbsp;", '', $_SESSION['select_project']);
@@ -228,11 +261,11 @@ if (isset($_POST["transfer"])){
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen();
+        load_frame_offer_chosen($offer_title, $moco_token);
         //////////////////////////////////
                 
-                select_ticketIDs_from_DB();
-                load_offer($data);
+        select_ticketIDs_from_DB();
+        load_offer($data);
 
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -304,11 +337,11 @@ if (isset($_POST["back"])){
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen();
+        load_frame_offer_chosen($offer_title, $moco_token);
         //////////////////////////////////
                 
-                select_ticketIDs_from_DB();
-                load_offer($data);
+        select_ticketIDs_from_DB();
+        load_offer($data);
 
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          

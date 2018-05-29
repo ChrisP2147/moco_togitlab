@@ -62,12 +62,6 @@ function load_all_offers_data_array()
     return  $all_items_array;
 }
 
-
-
-
-
-
-
 function load_tickets()
 {
     global $sel_data_array, $moco_token;
@@ -85,12 +79,6 @@ function load_tickets()
             }
         }
 }
-
-
-
-
-
-
 
 function insert_offer_into_db()
 {

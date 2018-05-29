@@ -76,11 +76,8 @@ h4 {
 	cursor: pointer;
 	border-radius: 4px;
 }
-.button:hover, .btnSuperUser:hover, .btnEdit:hover, .btn_select:hover {
+.button:hover, .btnSuperUser:hover, .btnEdit:hover{
 	background: #1058cc;
-}
-.btn_select:hover {
-	background-color: rgb(19, 199, 13);
 }
 input[type='text'], input[type='password'] {
 	width: 100%;
@@ -167,7 +164,7 @@ option {
 /* //////////////// */
 
 /* frame logged_in*/
-.frame_logged_in {
+/* .frame_logged_in {
 	width: 20%;
 }
 .h1_logged_in {
@@ -251,7 +248,7 @@ option {
 	.btn_logged_in1 {
 		margin-bottom: 1em;
 	}
-}
+} */
 /* //////////////// */
 
 /* frame API_chosen*/
@@ -335,23 +332,26 @@ hr {
 	padding: 10px;
 	font-size: 0.7em;
 }
-.h2_offer_title {
-	font-size: 0.9em;
+.offer_title {
+	display: flex;
+	justify-content: center;
 }
-.btn_select {
-	margin: 0 0.5em 0 0.5em;
-	font-size: 1em;	
-	text-transform: uppercase;
-	outline: 0;
-	/* background: #2C4763; */
-	background: linear-gradient(to bottom, #2C4763, #425e7c);
-	border: 0;
-	padding: 5px 10px 5px 10px;
-	color: #FFFFFF;
-	-webkit-transition: all 0.3 ease;
-	transition: all 0.3 ease;
-	cursor: pointer;
-	border-radius: 4px;
+.h2_offer_title {
+	font-size: 1em;
+	margin: 0 2em 0 0;
+	padding: 0.3em 0 0 0;
+}
+.H2notTicketsSelected {
+	margin: 0;
+	padding: 0;
+	color: red;
+	font-size: 1.3em;
+}
+.angebotAuswählen {
+	margin: 0;
+	padding: 0;
+	color: rgb(26, 94, 240);
+	font-size: 1.3em;
 }
 @media screen and ( max-width: 1000px ) {
 	.selectAPI_chosen {

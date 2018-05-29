@@ -209,7 +209,7 @@ function load_offer($array)
 }
 
 // snippet for main Frame "frame_offer_chosen"
-function load_frame_offer_chosen()
+function load_frame_offer_chosen($offer_title, $moco_token)
 {
     echo "<div class='frame frame_offer_chosen'>";            
     echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";
@@ -252,7 +252,22 @@ function load_frame_offer_chosen()
     // render Data-Table
     echo "<table id='table_id' class='display'>";
         echo "<thead>";
-        echo "<div class='h2_offer_title'><h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
+        echo "<div class='offer_title'>";
+
+        if ($offer_title != null){
+            if ($_SESSION["notTicketsSelected"] == true){
+                echo "<h2 class='h2_offer_title'><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2><h2 class='H2notTicketsSelected'>Bitte Tickets auswählen</h2>";
+            }
+            else{
+                echo "<h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
+            }
+        }
+        else{
+            echo "<h2 class='angebotAuswählen'>Bitte Angebot auswählen</h2>";
+        }
+        
+        echo "</div";
+
             echo "<tr>";
                 echo "<th>Angebots-Positionen</th>";
                 echo "<th>als Ticket einfügen</th>";
