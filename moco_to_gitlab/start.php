@@ -41,7 +41,7 @@ if (isset($_POST["logout"])){
 
 // state when user is logged in
 if (isset($_POST["login"])){
-    get_data_pdo();
+    get_data_pdo(); // pdo_functions.php
 
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
@@ -62,11 +62,11 @@ if (isset($_POST["login"])){
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen($offer_title, $moco_token);
+        load_frame_offer_chosen($offer_title, $moco_token); // api_functions.php
         //////////////////////////////////
 
-        select_ticketIDs_from_DB();
-        load_offer($_SESSION['offer_data']);
+        select_ticketIDs_from_DB();  // pdo_functions.php
+        load_offer($_SESSION['offer_data']); // api_functions.php
     
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -106,7 +106,7 @@ if (isset($_POST["login"])){
 
 if (isset($_POST["btn_choose_offer"])){
     $_SESSION['select_project'] = $_POST['select_project'];
-    get_data_pdo();
+    get_data_pdo();  // pdo_functions.php
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
         $offer = $_POST['sel_chosenOffer'];
@@ -122,15 +122,15 @@ if (isset($_POST["btn_choose_offer"])){
 
         $_SESSION['chosen_offer'] = $offer;
 
-        $_SESSION['offer_data'] = load_selected_offer_array($moco_token, $_SESSION['chosen_offer']);
+        $_SESSION['offer_data'] = load_selected_offer_array($moco_token, $_SESSION['chosen_offer']); // api_functions.php
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen($offer_title, $moco_token);
+        load_frame_offer_chosen($offer_title, $moco_token); // api_functions.php
         //////////////////////////////////
 
-        select_ticketIDs_from_DB();
-        load_offer($_SESSION['offer_data']);
+        select_ticketIDs_from_DB(); // pdo_functions.php
+        load_offer($_SESSION['offer_data']); // api_functions.php
     
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -170,7 +170,7 @@ if (isset($_POST["sent_tickets"])){
     // transfer data to index.html ///////////////////////////////////////////////////
     if ($_SESSION["selected_tickets"] == null){
         $_SESSION["notTicketsSelected"] = true;
-        get_data_pdo();
+        get_data_pdo(); // pdo_functions.php
         global $moco_token;
         if ($_SESSION["state"] == "loggedIn"){
             // /////////////////////////////////////////
@@ -181,15 +181,15 @@ if (isset($_POST["sent_tickets"])){
                 }
             }
     
-            $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
+            $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']); // api_functions.php
     
             //////////////////////////////////
             // renders the main frame
             load_frame_offer_chosen($offer_title, $moco_token);
             //////////////////////////////////
                     
-            select_ticketIDs_from_DB();
-            load_offer($data);
+            select_ticketIDs_from_DB(); // pdo_functions.php
+            load_offer($data); // api_functions.php
     
             echo $twig->render('index.html', array(
                 'state' => 'offer_chosen',    
@@ -209,6 +209,7 @@ if (isset($_POST["sent_tickets"])){
     else{
         $ticket_array = $_SESSION["selected_tickets"];
 
+        // loop through all positions in chosen offer - puts the descriptions in $description_array for each offer
         for ($i = 0; $i < count($ticket_array['id']); $i++)
         {
             for ($j = 0; $j < count($_SESSION['offer_data']['id']); $j++)
@@ -235,6 +236,7 @@ if (isset($_POST["sent_tickets"])){
 // transfer tickets to GitLab ///////////////////////////////////////////////////////////////////////
 if (isset($_POST["transfer"])){
 
+    // functions (api_functions.php) creates projects & issues & new database entries 
     try {
         insert_project($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $gitlab_token);
         insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $_SESSION['description_array'], $gitlab_token);
@@ -246,7 +248,7 @@ if (isset($_POST["transfer"])){
     }
 
     // load frame_API_chosen ///////////////////////////////////////////////////////////////////////
-    get_data_pdo();
+    get_data_pdo(); // pdo_functions.php
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
         // /////////////////////////////////////////
@@ -257,15 +259,15 @@ if (isset($_POST["transfer"])){
             }
         }
 
-        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
+        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']); // api_functions.php
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen($offer_title, $moco_token);
+        load_frame_offer_chosen($offer_title, $moco_token); // api_functions.php
         //////////////////////////////////
                 
-        select_ticketIDs_from_DB();
-        load_offer($data);
+        select_ticketIDs_from_DB(); // pdo_functions.php
+        load_offer($data); // api_functions.php
 
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -309,7 +311,7 @@ if (isset($_POST["manageUser"])){
         </thead>
         <tbody>
 <?php
-            show_users_pdo();
+            show_users_pdo(); // pdo_functions.php
             ?>
             </tbody>
         </table>
@@ -322,7 +324,7 @@ if (isset($_POST["manageUser"])){
 }
        
 if (isset($_POST["back"])){
-    get_data_pdo();
+    get_data_pdo(); // pdo_functions.php
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
         // /////////////////////////////////////////
@@ -333,15 +335,15 @@ if (isset($_POST["back"])){
             }
         }
 
-        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']);
+        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']); // api_functions.php
 
         //////////////////////////////////
         // renders the main frame
-        load_frame_offer_chosen($offer_title, $moco_token);
+        load_frame_offer_chosen($offer_title, $moco_token); // api_functions.php
         //////////////////////////////////
                 
-        select_ticketIDs_from_DB();
-        load_offer($data);
+        select_ticketIDs_from_DB(); // pdo_functions.php
+        load_offer($data); // api_functions.php
 
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',          
@@ -377,7 +379,7 @@ if (isset($_POST["back2"])){
         </thead>
         <tbody>
 <?php
-            show_users_pdo();
+            show_users_pdo(); // pdo_functions.php
             ?>
             </tbody>
         </table>
@@ -398,7 +400,7 @@ if (isset($_POST["createUser"])){
 if (isset($_REQUEST["edit"])){
     $submitNumber_user = array_pop(array_keys($_REQUEST['edit']));
     $_SESSION["submitNumber_user"] = $submitNumber_user;
-    edit_user();
+    edit_user(); // pdo_functions.php
     $sel = $_SESSION["submitNumber_user"];
     echo $twig->render('index.html', array(
         'state' => 'editUser',
@@ -427,7 +429,7 @@ if (isset($_POST["saveNewUser"])){
     $passwdArray = ['userPasswd'];
     $passwd_hash = password_hash($passwd, PASSWORD_BCRYPT, $passwdArray);
     
-    $pdo = connect_DB_pdo();
+    $pdo = connect_DB_pdo(); // pdo_functions.php
 
     // check if username already exists
     $sql = 'SELECT * from staff';
@@ -531,7 +533,7 @@ if (isset($_POST["saveUser"])){
     $passwdArray = ['userPasswd'];
     $passwd_hash = password_hash($passwd, PASSWORD_BCRYPT, $passwdArray);
     
-    $pdo = connect_DB_pdo();
+    $pdo = connect_DB_pdo(); // pdo_functions.php
 
     $sql = 'SELECT * from staff';
     $stmt = $pdo->prepare($sql);
@@ -631,7 +633,7 @@ if (isset($_POST["saveUser"])){
 }
 
     if (isset($_POST["deleteUser"])){
-        delete_user_pdo();
+        delete_user_pdo(); // pdo_functions.php
         echo $twig->render('index.html', array(
             'state' => 'userDeleted',
             'firstname' => $firstname,

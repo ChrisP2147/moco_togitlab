@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 18. Mai 2018 um 08:34
+-- Erstellungszeit: 29. Mai 2018 um 11:14
 -- Server-Version: 10.1.31-MariaDB
 -- PHP-Version: 7.2.3
 
@@ -46,12 +46,24 @@ CREATE TABLE `staff` (
 
 INSERT INTO `staff` (`id`, `active`, `moco_token`, `gitlab_token`, `username`, `password`, `firstname`, `lastname`, `admin`) VALUES
 (1, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'admin', '$2y$10$h6ePqy//nLIoXbWPLsslHuUbmVyHj8Xbb9CDIrjgMNyGesOszEn9m', 'Admin', 'Admin', 1),
-(2, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'chrisP', '$2y$10$TmvdmLjBCy1auyUrPR0oHOJ1F6LLGzHCuzmtA3fqwYByyD5tV.T22', 'Christian', 'Pitzner', 0),
+(2, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'chrisP', '$2y$10$91qmedBv.W76PfjhCPib5OMgCB9P9rBQUvvoJBCSIbDDVopJLAJjO', 'Christian', 'Pitzner', 1),
 (3, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'justiB', '$2y$10$rVb6iIMjL4Q8IvUb4jRbOeBEHFAYrGyx0oguMkMHkBZDNPBJphxBy', 'Bieber', 'Justin', 0),
 (4, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'ladyG', '$2y$10$1/nn45J9atoo0DLnwx6L0uxEQAIzWDH322495sod2z/65T2RS0Gcq', 'Gaggason', 'Lady', 0),
-(5, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'charlyM', '$2y$10$buLLZTbkCD0Wra1Avsu0Huh.ttcD70wbwpSt5hfgNuYFPTwn/KKti', 'Manson', 'Charles', 0),
 (6, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'karleB', '$2y$10$TLyRVKRX0UpjyUX7CpGKS.BNblNmAkrk2m07Me9Wms0Xt8OapbNFO', 'Bosse', 'Karle', 1),
 (8, 1, '53a856de73a8b8b0a82aa7a604026747', 'Vb23WYp2KmxvPG4xVRhB', 'hagenB', '$2y$10$8OSR/0OHGVjfNlV4fkVyUO65VnxsTEZyzq51euZMvtGyDMisYz.sm', 'Hagen', 'Berger', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `tickets_check`
+--
+
+CREATE TABLE `tickets_check` (
+  `id` int(11) NOT NULL,
+  `ticket_id` int(11) NOT NULL,
+  `title` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `transferred` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indizes der exportierten Tabellen
@@ -64,6 +76,12 @@ ALTER TABLE `staff`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indizes für die Tabelle `tickets_check`
+--
+ALTER TABLE `tickets_check`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT für exportierte Tabellen
 --
 
@@ -72,6 +90,12 @@ ALTER TABLE `staff`
 --
 ALTER TABLE `staff`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT für Tabelle `tickets_check`
+--
+ALTER TABLE `tickets_check`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

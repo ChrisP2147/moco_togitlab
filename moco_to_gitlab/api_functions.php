@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', 300);
+ini_set('max_execution_time', 500);
 // Rest API functions MOCO & GITLAB ///////////////////////////////////////////////////////
 
 // this function loads all "accepted offers from Moco into the Dropdown-Menu"

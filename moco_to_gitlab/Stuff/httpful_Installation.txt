@@ -1,0 +1,29 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+PS D:\myroot> cd .\Rest_API\
+
+
+///// den folgenden strin zur Installation in der Eingabeaufforderung einfügen ////////////////////
+
+PS D:\myroot\Rest_API> composer require nategood/httpful Using version ^0.2.20 for nategood/httpful
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+./composer.json has been created
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Package operations: 1 install, 0 updates, 0 removals
+  - Installing nategood/httpful (0.2.20): Downloading (100%)
+Writing lock file
+Generating autoload files
+PS D:\myroot\Rest_API>
+
+
+https://api.github.com/users/nategood
+
+http://phphttpclient.com/docs/
+
+http://phphttpclient.com/
+
+https://colorlib.com/wp/

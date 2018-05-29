@@ -4,7 +4,7 @@ Willkommen bei MOCO!
 Du wurdest als Benutzer von test hinzugefügt
 
 Benutzername: christian.pitzner@gal-digital.de 
-Passwort: 6d46fba3
+Passwort: 6d46fba3 neu chris2147
 
 Unter folgender URL kannst Du von überall per Internet-Browser sicher auf MOCO zugreifen.
 https://cp.mocoapp.com/ 
