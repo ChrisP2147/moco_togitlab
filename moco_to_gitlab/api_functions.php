@@ -115,6 +115,7 @@ function insert_project_tickets($string, $ticket_array, $description_array, $git
             $project_id = $tmp_project_id_array[$i];
         }
     }
+
 // create issue in project ///////////////////////////////
     if ($project_exists == true){
         for ($i = 0; $i < count($ticket_array); $i++)
