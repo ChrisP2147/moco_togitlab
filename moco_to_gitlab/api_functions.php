@@ -147,25 +147,25 @@ function load_selected_offer_array($moco_token, $chosen_offer_id)
 
     for ($i = 0; $i < count($offer_array['items']); $i++)
     {
-        if (empty($offer_array['items'][$i]["title"])){
-            $offer_array['items'][$i]["title"] = "";
+        if (empty($offer_array['items'][$i]['title'])){
+            $offer_array['items'][$i]['title'] = "";
         }
         else{
-            $offer_array['items'][$i]["title"] = str_replace("&nbsp;", '', $offer_array['items'][$i]["title"]);
-            $offer_array['items'][$i]["title"] = strip_tags($offer_array['items'][$i]["title"]);
+            $offer_array['items'][$i]['title'] = str_replace('&nbsp;', '', $offer_array['items'][$i]['title']);
+            $offer_array['items'][$i]['title'] = strip_tags($offer_array['items'][$i]['title']);
         }
 
-        if (empty($offer_array['items'][$i]["description"])){
-            $offer_array['items'][$i]["description"] = "";
+        if (empty($offer_array['items'][$i]['description'])){
+            $offer_array['items'][$i]['description'] = "";
         }
         else{
-            $offer_array['items'][$i]["description"] = str_replace("&nbsp;", '', $offer_array['items'][$i]["description"]);
-            $offer_array['items'][$i]["description"] = strip_tags($offer_array['items'][$i]["description"]);            
+            $offer_array['items'][$i]['description'] = str_replace('&nbsp;', '', $offer_array['items'][$i]['description']);
+            $offer_array['items'][$i]['description'] = strip_tags($offer_array['items'][$i]['description']);            
         }
 
-        $all_items_array['id'][] = $offer_array['items'][$i]["id"];
-        $all_items_array['title'][] = $offer_array['items'][$i]["title"];
-        $all_items_array['description'][] = $offer_array['items'][$i]["description"];
+        $all_items_array['id'][] = $offer_array['items'][$i]['id'];
+        $all_items_array['title'][] = $offer_array['items'][$i]['title'];
+        $all_items_array['description'][] = $offer_array['items'][$i]['description'];
     }
 
     return $all_items_array;

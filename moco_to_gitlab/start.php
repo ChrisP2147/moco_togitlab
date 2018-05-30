@@ -237,21 +237,15 @@ if (isset($_POST["sent_tickets"])){
 if (isset($_POST["transfer"])){
 
     // functions (api_functions.php) creates projects & issues & new database entries 
-    try {
-        insert_project($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $gitlab_token);
-        insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $_SESSION['description_array'], $gitlab_token);
-        write_ticketIDs_in_DB($_SESSION["selected_tickets"]);
-    } catch (Exception $e) {
-        echo 'Caught exception: ',  $e->getMessage(), "\n";
-        echo 'da ist was schief gelaufen... :(';
-        echo "<input type='submit' class='btnSuperUser btnManage' name='back' value='Zurück' />";
-    }
-
+    insert_project($_SESSION['select_project'], $_SESSION['selected_tickets']['title'], $gitlab_token); // api_functions.php
+    insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $_SESSION['description_array'], $gitlab_token); // api_functions.php
+    write_ticketIDs_in_DB($_SESSION["selected_tickets"]); // pdo_functions.php
+    
     // load frame_API_chosen ///////////////////////////////////////////////////////////////////////
     get_data_pdo(); // pdo_functions.php
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
-        // /////////////////////////////////////////
+        ///////////////////////////////////////////
         for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
         {
             if ($_SESSION['offer_id'][$i] == $_SESSION['chosen_offer_id']){
@@ -281,8 +275,8 @@ if (isset($_POST["transfer"])){
 
     // $_SESSION['send_tickts'] = null;
     // echo $twig->render('index.html', array(
-    //     // 'state' => 'ticket_sent_success',
-    //     // 'message' => 'Tickets wurden übertragen',
+    //     'state' => 'ticket_sent_success',
+    //     'message' => 'Tickets wurden übertragen',
     // ));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
