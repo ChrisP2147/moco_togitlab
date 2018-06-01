@@ -38,32 +38,6 @@
     </div>
 {% endif %}
 
-{#
-{% if state == 'logged_in' %}
-
-                    <div class="div_tmp2">
-                        <input type="submit" class="button btn_choose_offer_logged_in" name="btn_choose_offer" value="wählen" />
-                    </div>
-                </div>
-
-            {% if API_check == true %}
-                {{API_response}}
-            {% endif %}
-
-            <div class="btnContainer btnContainer_loogged_in">   
-            {% if superUser == true %}
-                <input type="submit" class="btnSuperUser btn_logged_in btn_logged_in1" name="manageUser" value="Benutzer Verwalten" />
-                <input type="submit" class="button btn_logged_in" name="logout" value="Ausloggen" />
-            {% else %}
-                <input type="submit" class="button btn_logged_in" name="logout" value="Ausloggen" />  
-            {% endif %}
-            </div>
-        </form>
-    </div> 
-            
-{% endif %}
-#}
-
 {% if state == 'offer_chosen' %}        
                     
                         </tbody>
@@ -81,7 +55,7 @@
     <div class='frame frame_ticket_sent'>
         <form action={{SELF}} method='post'>
 
-            <h2 class="h2_chosen_ticket_overview">Du überträgst folgende Tickets in Projekt: <b>&#8680;</b> {{selected_project}}</h2>
+            <h2 class="h2_chosen_ticket_overview">Tickets ins Projekt: <b>&#8680;</b> {{selected_project}}</h2>
 
                 <div id='loadingContainer' class="btnContainer btnContainer_ticket_sent">
                         <input type='submit' class='button btn_ticket_sent' name='back' value='Zurück'/>
@@ -98,42 +72,6 @@
     </div>
 
 {% endif %}
-
-{#
-{% if state == 'ticket_sent_noTickets' %}
-
-    <div class='frame ticket_sent_success'>
-        <form action={{SELF}} method='post'>
-
-            <h2>{{message}}</h2>
- 
-            <div class="btnContainer btnContainer_ticket_sent_success">
-                <input type='submit' class='button btn_ticket_sent_success' name='back' value='Zurück'/>
-            </div>
-        </form>
-
-    </div>
-
-{% endif %}
-#}
-
-{#
-{% if state == 'ticket_sent_success' %}
-
-    <div class='frame ticket_sent_success'>
-        <form action={{SELF}} method='post'>
-
-            <h2>{{message}}</h2>
- 
-            <div class="btnContainer btnContainer_ticket_sent_success">
-                <input type='submit' class='button btn_ticket_sent_success' name='back' value='Zurück'/>
-            </div>
-        </form>
-
-    </div>
-
-{% endif %}
-#}
 
 {% if state == 'manage' %}
 

@@ -26,6 +26,7 @@ function get_data_pdo()
 {   
     global $id, $active, $moco_token, $gitlab_token, $username, $passwd_hash, $firstname, $lastname, $admin, $superUser;
     $pdo = connect_DB_pdo();
+    $_SESSION['loggedIn'] = false;
 
     if ($_POST["user"] != "" && $_POST["passwd"] != ""){
         $_SESSION["user"] = $_POST["user"];
@@ -59,6 +60,7 @@ function get_data_pdo()
         // verify password hash
         if (password_verify($_SESSION["passwd"], $passwd_hash)) {
             $_SESSION["state"] = "loggedIn";
+            $_SESSION['loggedIn'] = $id;
             // admin is value 1 (stored in DB)
             if ($admin == 1){
                 $superUser = true;
@@ -66,10 +68,12 @@ function get_data_pdo()
             }
         } else {
             $_SESSION["state"] = "wrongUser";
+            unset($_SESSION['loggedIn']);
         }  
     }
     else{
         $_SESSION["state"] = "wrongUser";
+        unset($_SESSION['loggedIn']);
     }
 
     return $admin;

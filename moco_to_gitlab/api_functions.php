@@ -239,7 +239,7 @@ function load_frame_offer_chosen($offer_title, $moco_token)
             echo "<select class='selectAPI selectAPI_chosen' name='sel_chosenOffer'>";
             load_offer_options($moco_token);
             echo "</select>";
-            echo "<input type='submit' class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />";
+            echo "<input type='submit' id='btn_sel_offer' class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />";
         echo "</div>";
 
         echo "<div class='tmp_div2'>";
@@ -264,7 +264,7 @@ function load_frame_offer_chosen($offer_title, $moco_token)
             }
         }
         else{
-            echo "<h2 class='angebotAuswählen'>Bitte Angebot auswählen</h2>";
+            echo "<h2 class='angebotAuswählen'>Angebot auswählen</h2>";
         }
         
         echo "</div";
@@ -276,4 +276,5 @@ function load_frame_offer_chosen($offer_title, $moco_token)
         echo "</thead>";
             echo "<tbody>";
 
+    $_SESSION['back_to_main_frame'] = 'ok';
 }

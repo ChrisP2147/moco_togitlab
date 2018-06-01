@@ -4,8 +4,9 @@ require "vendor/autoload.php";
 require_once('pdo_functions.php');
 require_once('api_functions.php');
 session_start();
-$_SESSION["state"] = "not_loggedIn";
+$_SESSION['state'] = "not_loggedIn";
 $offer_status = 'created';
+$post_check = 'deny';
 $_SESSION['saveNewUser'] = $_SESSION['saveUser'] = $_SESSION["notTicketsSelected"] = false;
 // $moco_token = "53a856de73a8b8b0a82aa7a604026747";
 // $gitlab_token = "Vb23WYp2KmxvPG4xVRhB";
@@ -23,7 +24,7 @@ $twig = new Twig_Environment($loader);
 ///////////////////////////////////////////////////////////////////
 
 // state when not logged in
-if (empty($_POST)){
+if (!isset($_SESSION['loggedIn']) && !isset($_POST["logout"]) && !isset($_POST["login"])){
     echo $twig->render('index.html', array(
         'state' => 'not_loggedIn',
     ));
@@ -31,15 +32,14 @@ if (empty($_POST)){
 
 // state when user is logged out
 if (isset($_POST["logout"])){
-    echo $twig->render('index.html', array(
-        'state' => 'not_loggedIn',
-    ));
     session_destroy();  
     $_SESSION = array();
     unset($_POST);
+    echo $twig->render('index.html', array(
+        'state' => 'not_loggedIn',
+    ));
 }
 
-// state when user is logged in
 if (isset($_POST["login"])){
     get_data_pdo(); // pdo_functions.php
 
@@ -76,32 +76,7 @@ if (isset($_POST["login"])){
         echo $twig->render('index.html', array(
             'state' => 'wrongUser',
         ));
-    }                    
-
-    // if ($_SESSION["state"] == "loggedIn"){
-
-    //     echo "<div class='frame frame_logged_in'>"; 
-    //     echo "<h1 class='h1_logged_in >Wilkommen '". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";   
-      
-    //         echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";    
-    //             echo "<h4 class='lbl_choose_api'>Angebot auswählen:</h4>";
-    //                 echo "<div class='projectContainer projectContainer_logged_in'>";
-    //                     echo "<div class='div_tmp1'>";
-    //                         echo "<select class='selectOffer_logged_in' name='sel_chosenOffer'>";                          
-    //                         load_offer_options($moco_token);
-    //                             echo "</select>";
-    //                     echo "</div>";
-    //     echo $twig->render('index.html', array(
-    //         'state' => 'logged_in',         
-    //         'superUser' => $superUser,
-    //     ));
-    // }
-    // else{
-    //     // state when login-data is not correct
-    //     echo $twig->render('index.html', array(
-    //         'state' => 'wrongUser',
-    //     ));
-    // }                 
+    }                                    
 }
 
 if (isset($_POST["btn_choose_offer"])){
@@ -200,11 +175,6 @@ if (isset($_POST["sent_tickets"])){
                 'state' => 'wrongUser',
             ));
         }   
-        
-        // echo $twig->render('index.html', array(
-        //     'state' => 'ticket_sent_noTickets',
-        //     'message' => 'Du hast keine Tickets ausgewählt',
-        // ));
     }
     else{
         $ticket_array = $_SESSION["selected_tickets"];
@@ -235,49 +205,12 @@ if (isset($_POST["sent_tickets"])){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // transfer tickets to GitLab ///////////////////////////////////////////////////////////////////////
 if (isset($_POST["transfer"])){
-
     // functions (api_functions.php) creates projects & issues & new database entries 
     insert_project($_SESSION['select_project'], $_SESSION['selected_tickets']['title'], $gitlab_token); // api_functions.php
     insert_project_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"]['title'], $_SESSION['description_array'], $gitlab_token); // api_functions.php
     write_ticketIDs_in_DB($_SESSION["selected_tickets"]); // pdo_functions.php
-    
-    // load frame_API_chosen ///////////////////////////////////////////////////////////////////////
-    get_data_pdo(); // pdo_functions.php
-    global $moco_token;
-    if ($_SESSION["state"] == "loggedIn"){
-        ///////////////////////////////////////////
-        for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
-        {
-            if ($_SESSION['offer_id'][$i] == $_SESSION['chosen_offer_id']){
-                $offer_title = $_SESSION['offer_title'][$i];
-            }
-        }
-
-        $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']); // api_functions.php
-
-        //////////////////////////////////
-        // renders the main frame
-        load_frame_offer_chosen($offer_title, $moco_token); // api_functions.php
-        //////////////////////////////////
-                
-        select_ticketIDs_from_DB(); // pdo_functions.php
-        load_offer($data); // api_functions.php
-
-        echo $twig->render('index.html', array(
-            'state' => 'offer_chosen',          
-        ));
-    }
-    else{
-        echo $twig->render('index.html', array(
-            'state' => 'wrongUser',
-        ));
-    }       
-
-    // $_SESSION['send_tickts'] = null;
-    // echo $twig->render('index.html', array(
-    //     'state' => 'ticket_sent_success',
-    //     'message' => 'Tickets wurden übertragen',
-    // ));
+    $_SESSION['back'] = "after tickets were sent";
+    header('Location: start.php');
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,8 +249,17 @@ if (isset($_POST["manageUser"])){
         'state' => 'manage',
     ));
 }
-       
-if (isset($_POST["back"])){
+
+// loop through $_POST array to check which was set
+    foreach($_POST as $key => $value)
+    {
+        if ($key[$i] != "back"){
+            $post_check = 'allow';
+        }
+    }
+
+if (isset($_POST["back"]) || isset($_SESSION['back_to_main_frame']) &&  $post_check === 'deny'){
+    $_SESSION['back'] = "reset";
     get_data_pdo(); // pdo_functions.php
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
@@ -406,7 +348,8 @@ if (isset($_REQUEST["edit"])){
         'admin' => $permission_array[$sel],
     ));
 }
-    
+
+// save new user into database
 if (isset($_POST["saveNewUser"])){
     $_SESSION['saveNewUser'] = true;
     global $id, $active, $moco_token, $gitlab_token, $username, $passwd_hash, $firstname, $lastname, $admin, $superUser, $username_invalid;
@@ -510,7 +453,8 @@ if (isset($_POST["saveNewUser"])){
         }
     $pdo = null;
 }
-    
+
+// save user into database
 if (isset($_POST["saveUser"])){
     $_SESSION['saveUser'] = true;
     global $id, $active, $moco_token, $gitlab_token, $username, $passwd_hash, $firstname, $lastname, $admin, $superUser, $username_invalid;
@@ -634,4 +578,3 @@ if (isset($_POST["saveUser"])){
             'lastname' => $lastname,       
         ));
     }
-

@@ -163,94 +163,6 @@ option {
 }
 /* //////////////// */
 
-/* frame logged_in*/
-/* .frame_logged_in {
-	width: 20%;
-}
-.h1_logged_in {
-	font-size: 1em;
-}
-.lbl_choose_api {
-	margin: 0 0 0.5em 0;
-}
-.projectContainer_logged_in {
-	display: flex;
-}
-.div_tmp1 {
-	width: 100%;
-	margin: 0 1em 0 0;
-}
-.div_tmp1 {
-	width: 100%;
-}
-.selectOffer_logged_in {
-	width: 100%;
-	padding: 13px;
-	font-size: 0.7em;
-}
-.btn_choose_offer_logged_in {
-	width: 100%;
-	padding: 13px;
-	font-size: 0.7em;
-}
-.btnContainer_loogged_in {
-	display: flex;
-	margin: 0;
-	padding: 0;
-}
-.btn_logged_in {
-	width: 100%;
-	padding: 13px;
-	font-size: 0.7em;
-}
-@media screen and ( max-width: 1350px ) {
-	.h1_logged_in {
-		font-size: 0.8em;
-		margin-bottom: 0.5em;
-	}
-	.selectOffer_logged_in {
-		font-size: 0.6em;
-	}
-	.btn_choose_offer_logged_in {
-		font-size: 0.6em;
-	}
-	.btn_logged_in {
-		font-size: 0.6em;
-
-	}
-}
-@media screen and ( max-width: 1180px ) {
-	.frame_logged_in {
-		width: 25%;
-	}
-}
-@media screen and ( max-width: 861px ) {
-	.frame_logged_in {
-		width: 30%;
-	}
-	.h1_logged_in {
-		font-size: 0.8em;
-	
-	}
-}
-@media screen and ( max-width: 700px ) {
-	.frame_logged_in {
-		width: 40%;
-	}
-}
-@media screen and ( max-width: 550px ) {
-	.frame_logged_in {
-		width: 50%;
-	}
-	.btnContainer_loogged_in {
-		display: block;
-	}
-	.btn_logged_in1 {
-		margin-bottom: 1em;
-	}
-} */
-/* //////////////// */
-
 /* frame API_chosen*/
 .frame_offer_chosen {
 	width: 50%;
@@ -259,13 +171,14 @@ option {
 	display: flex;
 }
 .headlineContainer {
-	width: 50%;
+	width: 30%;
 	flex-grow: 50%;
 	display: flex;
 	justify-content: flex-start;
 }
 .sel_btn_container {
-	width: 50%;
+	max-height: 5%;
+	width: 70%;
 	flex-grow: 50%;
 	display: flex;
 	justify-content: flex-end;
@@ -351,7 +264,7 @@ hr {
 	margin: 0;
 	padding: 0;
 	color: rgb(26, 94, 240);
-	font-size: 1.3em;
+	font-size: 1.2em;
 }
 @media screen and ( max-width: 1000px ) {
 	.selectAPI_chosen {
