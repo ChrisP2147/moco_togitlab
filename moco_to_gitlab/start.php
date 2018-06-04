@@ -142,6 +142,8 @@ if (isset($_POST["sent_tickets"])){
     // selected Project //////////////////////////////////////////////////////////////
     $_SESSION['select_project'] = $_POST['select_project'];
 
+    $result = check_gitlab_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"], $gitlab_token);
+
     // transfer data to index.html ///////////////////////////////////////////////////
     if ($_SESSION["selected_tickets"] == null){
         $_SESSION["notTicketsSelected"] = true;
@@ -167,14 +169,15 @@ if (isset($_POST["sent_tickets"])){
             load_offer($data); // api_functions.php
     
             echo $twig->render('index.html', array(
-                'state' => 'offer_chosen',    
+                'state' => 'offer_chosen',
+                'no_tickets_selected' => true,
             ));
         }
         else{
             echo $twig->render('index.html', array(
                 'state' => 'wrongUser',
             ));
-        }   
+        }
     }
     else{
         $ticket_array = $_SESSION["selected_tickets"];
@@ -196,6 +199,7 @@ if (isset($_POST["sent_tickets"])){
 
         echo $twig->render('index.html', array(
             'state' => 'ticket_sent',
+            'ticket_check' => $result,
             'selected_tickets' => $_SESSION["selected_tickets"]['title'],
             'selected_project' => $_SESSION['select_project'],
         ));

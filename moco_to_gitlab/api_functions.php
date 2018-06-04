@@ -27,7 +27,7 @@ function load_offer_options($moco_token)
     }
 }
 
-// loads all accepted project into the Dropdown-Menu
+// loads all accepted MOCO project into the Dropdown-Menu
 function load_projects()
 {
     global $project_name_array, $moco_token;
@@ -51,6 +51,60 @@ function load_projects()
     $_SESSION['project_name_array'] = $project_name_array;
 }
 
+// loads all GitLab Projects
+function load_gitlab_projects($gitlab_token)
+{
+     // all gitlab projectnames & IDs /////////////////////////
+    $url = 'https://gitlab.com/api/v3/projects';
+    $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
+
+    $projekt_array = (array)json_decode($response, true);
+    return $projekt_array;
+}
+
+// check if tickets already exist in chosen project in GitLab
+function check_gitlab_tickets($string, $ticket_array, $gitlab_token)
+{
+    $projekt_array = load_gitlab_projects($gitlab_token);
+
+    for ($i = 0; $i < count($projekt_array); $i++)
+    { 
+        $tmp_project_name_array[] = $projekt_array[$i]['name'];
+        $tmp_project_id_array[] = $projekt_array[$i]['id'];
+    }
+
+    for ($i = 0; $i < count($tmp_project_name_array); $i++)
+    { 
+        if ($tmp_project_name_array[$i] === $string){
+            $project_exists = true;
+            $project_id = $tmp_project_id_array[$i];
+        }
+    }
+    if ($project_exists === true){
+        $url = "https://gitlab.com/api/v3/projects/".$project_id."/issues";
+        $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
+        $issue_array = (array)json_decode($response, true);
+
+        for ($i = 0; $i < count($issue_array); $i++)
+        { 
+            for ($j = 0; $j < count($ticket_array['title']); $j++)
+            {
+                if ($issue_array[$i]['title'] === $ticket_array['title'][$j]){
+
+                    $ticket_double_array[] = $ticket_array['title'][$j];
+                }
+            }
+        }
+        if ($ticket_double_array != null){
+            $result = array_unique($ticket_double_array);
+            $result = implode(", ", $result);
+    
+            // echo "<script type='text/javascript'> alert('folgende tickets existieren bereits in diesem Projekt: "."<br><br>" .$result."') </script>";
+        }
+    }
+    return $result;
+}
+
 // inserts the chosen Project into GitLab if it doesn't already exist
 function insert_project($string, $ticket_array, $gitlab_token)
 {
@@ -58,11 +112,8 @@ function insert_project($string, $ticket_array, $gitlab_token)
     $tmp_project_name_array = array();
     $tmp_project_id_array = array();
     $project_id = 0;
- // all gitlab projectnames & IDs /////////////////////////
-    $url = 'https://gitlab.com/api/v3/projects';
-    $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
 
-    $projekt_array = (array)json_decode($response, true);
+    $projekt_array = load_gitlab_projects($gitlab_token);
 
     for ($i = 0; $i < count($projekt_array); $i++)
     { 
@@ -84,9 +135,6 @@ function insert_project($string, $ticket_array, $gitlab_token)
         $url = 'https://gitlab.com/api/v3/projects?name='.$string;
         $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
     }
-    else{
-        return;
-    }
 }
 
 // inserts all chosen tickets into GitLab
@@ -96,11 +144,8 @@ function insert_project_tickets($string, $ticket_array, $description_array, $git
     $tmp_project_name_array = array();
     $tmp_project_id_array = array();
     $project_id = 0;
-// all gitlab projectnames & IDs /////////////////////////
-    $url = 'https://gitlab.com/api/v3/projects';
-    $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
 
-    $projekt_array = (array)json_decode($response, true);
+    $projekt_array = load_gitlab_projects($gitlab_token);
 
     for ($i = 0; $i < count($projekt_array); $i++)
     { 
@@ -132,9 +177,6 @@ function insert_project_tickets($string, $ticket_array, $description_array, $git
             }
             $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
         }
-    }
-    else{
-        return;
     }
 }
 
@@ -246,7 +288,7 @@ function load_frame_offer_chosen($offer_title, $moco_token)
             echo "<select class='selectAPI select_project' name='select_project'>";
                 load_projects();
             echo "</select>";
-            echo "<input type='submit' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
+            echo "<input type='submit' id='send_button' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
         echo "</div>";
     echo "</div>";
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,19 +296,7 @@ function load_frame_offer_chosen($offer_title, $moco_token)
     echo "<table id='table_id' class='display'>";
         echo "<thead>";
         echo "<div class='offer_title'>";
-
-        if ($offer_title != null){
-            if ($_SESSION["notTicketsSelected"] == true){
-                echo "<h2 class='h2_offer_title'><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2><h2 class='H2notTicketsSelected'>Bitte Tickets auswählen</h2>";
-            }
-            else{
-                echo "<h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
-            }
-        }
-        else{
-            echo "<h2 class='angebotAuswählen'>Angebot auswählen</h2>";
-        }
-        
+            echo "<h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
         echo "</div";
 
             echo "<tr>";

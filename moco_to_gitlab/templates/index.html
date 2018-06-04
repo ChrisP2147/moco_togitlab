@@ -14,6 +14,10 @@
 
     <script src="javascript_functions.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="alertifyjs/css/alertify.css">
+    <link rel="stylesheet" type="text/css" href="alertifyjs/css/themes/default.css">
+    <script src="alertifyjs/alertify.js"></script>
+
   </head>
   <body>
 {% set SELF = 'start.php' %}
@@ -47,10 +51,25 @@
 
             </div>
         </form>
-    </div>         
+    </div>
+
+    {% if no_tickets_selected == true %}   
+        <script type="text/javascript">
+            alertify.alert('Ooops :(', 'Es wurden keine Tickets ausgewählt');
+        </script>
+    {% endif %}
+    
 {% endif %}
 
 {% if state == 'ticket_sent' %}
+
+    {% if ticket_check != "" %}   
+        <script type="text/javascript">
+            var ticket_check = "{{ ticket_check }}";
+            var string = ticket_check; 
+            alertify.alert('folgende tickets existieren bereits in diesem Projekt:', string);
+        </script>
+    {% endif %}
 
     <div class='frame frame_ticket_sent'>
         <form action={{SELF}} method='post'>
