@@ -54,20 +54,21 @@
     </div>
 
     {% if no_tickets_selected == true %}   
-        <script type="text/javascript">
-            alertify.alert('Ooops :(', 'Es wurden keine Tickets ausgewählt');
+        <script>
+            alertify.alert('Achtung', 'Es wurden keine Tickets ausgewählt');
         </script>
     {% endif %}
-    
+
 {% endif %}
 
 {% if state == 'ticket_sent' %}
 
     {% if ticket_check != "" %}   
-        <script type="text/javascript">
+        <script>
             var ticket_check = "{{ ticket_check }}";
-            var string = ticket_check; 
-            alertify.alert('folgende tickets existieren bereits in diesem Projekt:', string);
+            var tmp = ticket_check.split(',');
+            var res = tmp.join(" <br> ");
+            alertify.alert('Diese Tickets existieren bereits in {{selected_project}}', res);
         </script>
     {% endif %}
 

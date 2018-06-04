@@ -7,7 +7,7 @@ session_start();
 $_SESSION['state'] = "not_loggedIn";
 $offer_status = 'created';
 $post_check = 'deny';
-$_SESSION['saveNewUser'] = $_SESSION['saveUser'] = $_SESSION["notTicketsSelected"] = false;
+$_SESSION['saveNewUser'] = $_SESSION['saveUser'] = $_SESSION["notTicketsSelected"] = $_SESSION['no_tickets_selected'] = false;
 // $moco_token = "53a856de73a8b8b0a82aa7a604026747";
 // $gitlab_token = "Vb23WYp2KmxvPG4xVRhB";
 
@@ -108,7 +108,8 @@ if (isset($_POST["btn_choose_offer"])){
         load_offer($_SESSION['offer_data']); // api_functions.php
     
         echo $twig->render('index.html', array(
-            'state' => 'offer_chosen',          
+            'no_tickets_selected' => $_SESSION['no_tickets_selected'],
+            'state' => 'offer_chosen',
         ));
     }
     else{
@@ -122,31 +123,12 @@ if (isset($_POST["btn_choose_offer"])){
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_POST["sent_tickets"])){
 
-    // array of all selected checkboxes //////////////////////////////////////////////  
-    if(isset($_POST['select_ticket'])){
-        foreach($_POST['select_ticket'] as $key => $checked) {            
-            $submitNumber_ticket[] = $key;
-        }
-    }
-    // array of all selected Tickets ////////////////////////////////////////////////
-    $_SESSION["submitNumber_ticket"] = $submitNumber_ticket;
-
-    foreach ($_SESSION["submitNumber_ticket"] as $value){
-        $tmp_array['id'][] = $_SESSION['offer_data']['id'][$value];
-        $tmp_array['title'][] = $_SESSION['offer_data']['title'][$value];
-        $tmp_array['description'][] = $_SESSION['offer_data']['description'][$value];
-    }
-
-    $_SESSION["selected_tickets"] = $tmp_array;
-    
-    // selected Project //////////////////////////////////////////////////////////////
-    $_SESSION['select_project'] = $_POST['select_project'];
-
-    $result = check_gitlab_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"], $gitlab_token);
-
+    check_selected_tickets();
+    $result = check_gitlab_tickets($_SESSION['select_project'], $_SESSION["selected_tickets"], $gitlab_token); // api_functions.php
     // transfer data to index.html ///////////////////////////////////////////////////
+
     if ($_SESSION["selected_tickets"] == null){
-        $_SESSION["notTicketsSelected"] = true;
+        $_SESSION['no_tickets_selected'] = true;
         get_data_pdo(); // pdo_functions.php
         global $moco_token;
         if ($_SESSION["state"] == "loggedIn"){
@@ -157,20 +139,17 @@ if (isset($_POST["sent_tickets"])){
                     $offer_title = $_SESSION['offer_title'][$i];
                 }
             }
-    
             $data = load_selected_offer_array($moco_token, $_SESSION['chosen_offer_id']); // api_functions.php
-    
             //////////////////////////////////
             // renders the main frame
             load_frame_offer_chosen($offer_title, $moco_token);
             //////////////////////////////////
-                    
             select_ticketIDs_from_DB(); // pdo_functions.php
             load_offer($data); // api_functions.php
     
             echo $twig->render('index.html', array(
                 'state' => 'offer_chosen',
-                'no_tickets_selected' => true,
+                'no_tickets_selected' => $_SESSION['no_tickets_selected'],
             ));
         }
         else{

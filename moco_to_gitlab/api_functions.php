@@ -96,10 +96,8 @@ function check_gitlab_tickets($string, $ticket_array, $gitlab_token)
             }
         }
         if ($ticket_double_array != null){
-            $result = array_unique($ticket_double_array);
-            $result = implode(", ", $result);
-    
-            // echo "<script type='text/javascript'> alert('folgende tickets existieren bereits in diesem Projekt: "."<br><br>" .$result."') </script>";
+            $tmp = array_unique($ticket_double_array);
+            $result = implode(',', $tmp);
         }
     }
     return $result;
@@ -307,4 +305,27 @@ function load_frame_offer_chosen($offer_title, $moco_token)
             echo "<tbody>";
 
     $_SESSION['back_to_main_frame'] = 'ok';
+}
+
+function check_selected_tickets()
+{
+        // array of all selected checkboxes //////////////////////////////////////////////  
+        if(isset($_POST['select_ticket'])){
+            foreach($_POST['select_ticket'] as $key => $checked) {            
+                $submitNumber_ticket[] = $key;
+            }
+        }
+        // array of all selected Tickets ////////////////////////////////////////////////
+        $_SESSION["submitNumber_ticket"] = $submitNumber_ticket;
+    
+        foreach ($_SESSION["submitNumber_ticket"] as $value){
+            $tmp_array['id'][] = $_SESSION['offer_data']['id'][$value];
+            $tmp_array['title'][] = $_SESSION['offer_data']['title'][$value];
+            $tmp_array['description'][] = $_SESSION['offer_data']['description'][$value];
+        }
+    
+        $_SESSION["selected_tickets"] = $tmp_array;
+        
+        // selected Project //////////////////////////////////////////////////////////////
+        $_SESSION['select_project'] = $_POST['select_project'];
 }
