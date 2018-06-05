@@ -257,14 +257,14 @@ function load_frame_offer_chosen($offer_title, $moco_token)
     echo "<div class='mainframeContainer'>";
         echo "<div class='headlineContainer'><h1 class='h1_headline'>Tickets to GitLab &nbsp &#10004</h1></div>";
             echo "<div class='sel_btn_container'>";
-                echo "<h1 class='h1_offer_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
+                echo "<h1 class='h1_offer_chosen' >". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
                 // superUser has admin permissions
                 if ($_SESSION['superUser'] == true){
-                    echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzer Verwalten'/>";
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
+                    echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzerverwaltung'/>";
+                    echo "<input type='submit' class='button btn_logout' name='logout' value='logout'/>";
                 }
                 else{
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='Ausloggen'/>";
+                    echo "<input type='submit' class='button btn_logout' name='logout' value='logout'/>";
                 }
             echo "</div>";
     echo "</div>";
@@ -276,17 +276,17 @@ function load_frame_offer_chosen($offer_title, $moco_token)
     // transfer Tickts ///////////////////////////////////////////////////////////////////////////////////////////
     echo "<div class='sent_ticketsContainer'>";
         echo "<div class='tmp_div1'>";
-            echo "<select class='selectAPI selectAPI_chosen' name='sel_chosenOffer'>";
+            echo "<select class='select_offer' name='sel_chosenOffer'>";
             load_offer_options($moco_token);
             echo "</select>";
             echo "<input type='submit' id='btn_sel_offer' class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />";
         echo "</div>";
 
         echo "<div class='tmp_div2'>";
-            echo "<select class='selectAPI select_project' name='select_project'>";
+            echo "<select class='select_project' name='select_project'>";
                 load_projects();
             echo "</select>";
-            echo "<input type='submit' id='send_button' class='button btn_sent_tickets' name='sent_tickets' value='Tickets erstellen &nbsp &#10004'/>";
+            echo "<input type='submit' id='send_button' class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>";
         echo "</div>";
     echo "</div>";
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +294,12 @@ function load_frame_offer_chosen($offer_title, $moco_token)
     echo "<table id='table_id' class='display'>";
         echo "<thead>";
         echo "<div class='offer_title'>";
-            echo "<h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
+                if ($offer_title != ""){
+                    echo "<h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
+                }
+                else{
+                    echo "<h2 class='lightblue'>Angebot auswählen</h2>";  
+                }
         echo "</div";
 
             echo "<tr>";

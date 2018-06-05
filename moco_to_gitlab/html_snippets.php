@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 function create_frame_manage_users()
 {
 ?>

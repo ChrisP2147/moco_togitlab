@@ -43,7 +43,6 @@ if (isset($_POST["logout"])){
 
 if (isset($_POST["login"])){
     get_data_pdo(); // pdo_functions.php
-
     global $moco_token;
     if ($_SESSION["state"] == "loggedIn"){
         $offer = $_POST['sel_chosenOffer'];
