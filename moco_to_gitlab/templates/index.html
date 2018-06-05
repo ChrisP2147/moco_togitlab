@@ -2,18 +2,14 @@
 <html lang="de">
   <head>    
     <meta charset="UTF-8">    
-    <title>Rechte vergeben</title>
+    <title>Tickets to GitLab</title>
     
     <link rel="stylesheet" type="text/css" href="node_modules/datatables.net-dt/css/jquery.dataTables.css"/>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/datatables.net/js/jquery.dataTables.js"></script>
-
     <link rel="stylesheet" href="design.css">
-
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
-
     <script src="javascript_functions.js"></script>
-
     <link rel="stylesheet" type="text/css" href="alertifyjs/css/alertify.css">
     <link rel="stylesheet" type="text/css" href="alertifyjs/css/themes/default.css">
     <script src="alertifyjs/alertify.js"></script>
@@ -95,8 +91,12 @@
 
 {% if state == 'manage' %}
 
-<script>load_datatable();</script>  
-    
+        <script>load_datatable();</script>
+                </tbody>
+            </table>
+        </div>
+    </form>
+        
 {% endif %}
 
 {% if (state == 'editUser') or (state == 'editUserWrongPasswd') or (state == 'editUserWrongInvalidUser') or (state == 'editUserEmptyField') %}

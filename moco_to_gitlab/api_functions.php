@@ -255,7 +255,7 @@ function load_frame_offer_chosen($offer_title, $moco_token)
     echo "<div class='frame frame_offer_chosen'>";            
     echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";
     echo "<div class='mainframeContainer'>";
-        echo "<div class='headlineContainer'><h1>Tickets to GitLab &nbsp &#10004</h1></div>";
+        echo "<div class='headlineContainer'><h1 class='h1_headline'>Tickets to GitLab &nbsp &#10004</h1></div>";
             echo "<div class='sel_btn_container'>";
                 echo "<h1 class='h1_offer_chosen' >eingeloggt als ". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
                 // superUser has admin permissions

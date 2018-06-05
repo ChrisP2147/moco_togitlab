@@ -163,7 +163,7 @@ option {
 }
 /* //////////////// */
 
-/* frame API_chosen*/
+/* frame offer_chosen*/
 .frame_offer_chosen {
 	width: 50%;
 }
@@ -176,8 +176,11 @@ option {
 	display: flex;
 	justify-content: flex-start;
 }
+.h1_headline {
+	margin: 0.2em 0 0 0;
+}
 .sel_btn_container {
-	max-height: 5%;
+	max-height: 4%;
 	width: 70%;
 	flex-grow: 50%;
 	display: flex;
@@ -266,23 +269,62 @@ hr {
 	color: rgb(26, 94, 240);
 	font-size: 1.2em;
 }
-@media screen and ( max-width: 1000px ) {
-	.selectAPI_chosen {
-		margin: 0.5em 0.5em 0.5em 0.5em;
+@media screen and ( max-width: 1285px ) {
+	.h1_headline {
+		margin: 0;
+		padding: 0.5em 0 0 0;
+		font-size: 1em;
+	}
+	.h1_offer_chosen {
+		padding: 0.6em 0 0 0;
+		font-size: 0.8em;
+	}
+	body {
+		font-size: 0.8em;
+	}
+	th {
+		width: 80%;
+	}
+}
+@media screen and ( max-width: 1005px ) {
+	.h1_headline {
+		padding: 0.5em 0 0 0;
+	}
+	.h1_offer_chosen {
+		padding: 0.3em 0 0 0;
+	}
+}
+@media screen and ( max-width: 830px ) {
+	.h1_headline {
+		padding: 0.5em 0 0 0;
+		font-size: 0.9em;
+	}
+	.h1_offer_chosen {
+		padding: 0 0 0 0;
+	}
+	.btn_logout {
 		padding: 8px;
-		font-size: 8px;
-		/* width: 100%; */
+		font-size: 0.6em;
+	}
+	.btn_manageUser {
+		padding: 8px;
+		font-size: 0.6em;
+	}
+	.selectAPI_chosen {
+		padding: 8px;
+		font-size: 0.6em;
 	}
 	.btn_chosen_offer {
-		width: 15%;
-		margin: 0.5em 0.5em 0.5em 0.5em;
 		padding: 8px;
-		font-size: 8px;
+		font-size: 0.6em;
 	}
-	.btn_API {
-		margin: 0.5em 0.5em 0.5em 0.5em;
+	.select_project {
 		padding: 8px;
-		font-size: 8px;
+		font-size: 0.6em;
+	}
+	.btn_sent_tickets {
+		padding: 8px;
+		font-size: 0.6em;
 	}
 }
 /* //////////////// */

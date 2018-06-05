@@ -3,6 +3,7 @@ error_reporting(0);
 require "vendor/autoload.php";
 require_once('pdo_functions.php');
 require_once('api_functions.php');
+require_once('html_snippets.php');
 session_start();
 $_SESSION['state'] = "not_loggedIn";
 $offer_status = 'created';
@@ -199,35 +200,8 @@ if (isset($_POST["transfer"])){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 if (isset($_POST["manageUser"])){
-    echo "<div class='frame frame_mangeUsers'>";  
-    echo "<h1>Alle Benutzer</h1>";  
-    echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";
-?>
-        <div class="btnContainer btnContainer_manageUsers">
-                    <input type="submit" class="btnSuperUser btnManage" name="back" value="Zurück" />
-                    <input type="submit" class="btnSuperUser btnManage" name="createUser" value="Benutzer anlegen" />
-                    <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
-                </div>
-
-        <table id="table_id" class="display">
-        <thead>
-            <tr>
-                <th>Moco Token</th>
-                <th>GitLab Token</th>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Benutzer bearbeiten</th>
-            </tr>
-        </thead>
-        <tbody>
-<?php
-            show_users_pdo(); // pdo_functions.php
-            ?>
-            </tbody>
-        </table>
-    </div>
-</form>
-<?php
+    create_frame_manage_users(); // html_snippets.php
+    show_users_pdo(); // pdo_functions.php
     echo $twig->render('index.html', array(
         'state' => 'manage',
     ));
@@ -276,35 +250,8 @@ if (isset($_POST["back"]) || isset($_SESSION['back_to_main_frame']) &&  $post_ch
 }
 
 if (isset($_POST["back2"])){
-    echo "<div class='frame frame_mangeUsers'>";  
-    echo "<h1>Alle Benutzer</h1>";  
-    echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";
-?>
-        <div class="btnContainer btnContainer_manageUsers">
-                    <input type="submit" class="btnSuperUser btnManage" name="back" value="Zurück" />
-                    <input type="submit" class="btnSuperUser btnManage" name="createUser" value="Benutzer anlegen" />
-                    <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
-                </div>
-
-        <table id="table_id" class="display">
-        <thead>
-            <tr>
-            <th>Moco Token</th>
-                <th>GitLab Token</th>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Benutzer bearbeiten</th>
-            </tr>
-        </thead>
-        <tbody>
-<?php
-            show_users_pdo(); // pdo_functions.php
-            ?>
-            </tbody>
-        </table>
-    </div>
-</form>
-<?php
+    create_frame_manage_users(); // html_snippets.php
+    show_users_pdo(); // pdo_functions.php
     echo $twig->render('index.html', array(
         'state' => 'manage',
     ));
