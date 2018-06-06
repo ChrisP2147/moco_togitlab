@@ -160,6 +160,7 @@ if (isset($_POST["sent_tickets"])){
     }
     else{
         $ticket_array = $_SESSION["selected_tickets"];
+        $_SESSION['back_to_send_frame'] = 'ok';
 
         // loop through all positions in chosen offer - puts the descriptions in $description_array for each offer
         for ($i = 0; $i < count($ticket_array['id']); $i++)
