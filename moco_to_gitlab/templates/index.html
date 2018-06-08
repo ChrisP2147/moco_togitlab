@@ -16,19 +16,20 @@
 
   </head>
   <body>
+
 {% set SELF = 'start.php' %}
 
 {% if state == 'not_loggedIn' %}
     <div class="frame frame_not_loggedIn">
         <h1 class="h1_not_loggedIn">Tickets to GitLab &nbsp &#10004</h1>
             <form action={{SELF}} method='post'>
-            <h4>Benutzer:</h4> 
+            <h4>Moco Email-Adresse:</h4> 
                 <div class="labelTextFields labelTextFields_not_loggedIn">      
-                    <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
+                    <input type='text' class="input_not_loggedIn" name='user' value="christian.pitzner@gal-digital.de" size='20' autocomplete="off" /> 
                 </div>
             <h4>Passwort:</h4>
                 <div class="labelTextFields labelTextFields_not_loggedIn">          
-                    <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
+                    <input type='password' class="input_not_loggedIn" name='passwd' value="chris2147" size='20' autocomplete="off" />
                 </div>
             
             <div class="btnContainer btnContainer_not_LoggedIn">
@@ -38,12 +39,80 @@
     </div>
 {% endif %}
 
-{% if state == 'offer_chosen' %}        
-                    
-                        </tbody>
-                </table>
+{% if state == 'wrongUser' %}
+<div class="frame frame_not_loggedIn">
+    <h1 class="h1_not_loggedIn">Tickets to GitLab &nbsp &#10004</h1>
+        <form action={{SELF}} method='post'>
+        <h4>Moco Email-Adresse:</h4> 
+            <div class="labelTextFields labelTextFields_not_loggedIn">      
+                <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
+            </div>
+        <h4>Passwort:</h4>
+            <div class="labelTextFields labelTextFields_not_loggedIn">          
+                <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
+            </div>
+        
+        <div class="btnContainer btnContainer_not_LoggedIn">
+        <input type="submit" class="button btn_notloggedIn" name="login" value="Login" />
+        </div> 
+    </form>
+</div>
+        <h3>Email-Adresse / Passwort falsch</h3>
+{% endif %}
 
-                <script>load_datatable();</script>
+{% if state == 'offer_chosen' %}     
+
+    <div class='frame frame_offer_chosen'>          
+        <form action={{SELF}} method='post'>
+            <div class='mainframeContainer'>
+                <div class='headlineContainer'><h1 class='h1_headline'>Tickets to GitLab &nbsp &#10004</h1></div>
+                    <div class='sel_btn_container'>
+
+                            <select class='select_gitlab_token' name='sel_gitlab_token'>
+                                {{ get_gitlab_API_key() }}
+                            </select>
+                            <input type='button' id='new_key' onclick='show_key()' class='btnSuperUser btn_manageUser' name='changeKey' value='GitLab-Key hinzufügen'/>
+                            <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+
+                    </div>
+            </div>
+    
+        <div class='spacer'><hr></div>
+
+        <div class='projectContainer'>
+
+        <div class='sent_ticketsContainer'>
+            <div class='tmp_div1'>
+                <select class='select_offer' name='sel_chosenOffer'>
+                {{ load_offer_options() }}
+                </select>
+                <select class='select_project' name='select_project'>
+                    {{ loading_projects() }}
+                </select>
+                <input type='submit' id='btn_sel_offer' class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
+            </div>
+
+            <div class='tmp_div2'>
+                <input type='submit' id='send_button' class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
+            </div>
+        </div>
+
+        <table id='table_id' class='display'>
+            <thead>
+                {{ headline() }}
+
+                <tr>
+                    <th>Angebots-Positionen</th>
+                    <th>als Ticket einfügen</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {{ select_ticketIDs_from_DB() }} 
+                    {{ load_offer() }}
+                </tbody>
+        </table>
+
+            <script>load_datatable();</script>
 
             </div>
         </form>
@@ -55,7 +124,19 @@
         </script>
     {% endif %}
 
+    <div style="display:none;" >
+        <div id="dlgContent">
+            <p> GitLab eMail-Adreese </p>
+            <input class="ajs-input" id="inpOne" type="text" value="" autocomplete="off"/> 
+    
+            <p> GitLab Token </p>
+            <input class="ajs-input" id="inpTwo" type="text" value="" autocomplete="off"/> 
+        </div>
+    </div>
+    
 {% endif %}
+
+
 
 {% if state == 'ticket_sent' %}
 
@@ -86,9 +167,10 @@
         </form>
 
     </div>
-
 {% endif %}
 
+
+{#
 {% if state == 'manage' %}
 
         <script>load_datatable();</script>
@@ -216,27 +298,6 @@
     <h3>Der Benutzername existiert bereits</h3>      
 {% endif %}
 
-{% if state == 'wrongUser' %}
-<div class="frame frame_not_loggedIn">
-    <h1 class="h1_not_loggedIn">Projekte verschieben</h1>
-        <form action={{SELF}} method='post'>
-        <h4>Benutzer:</h4> 
-            <div class="labelTextFields labelTextFields_not_loggedIn">      
-                <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
-            </div>
-        <h4>Passwort:</h4>
-            <div class="labelTextFields labelTextFields_not_loggedIn">          
-                <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
-            </div>
-        
-        <div class="btnContainer btnContainer_not_LoggedIn">
-        <input type="submit" class="button btn_notloggedIn" name="login" value="Einloggen" />
-        </div> 
-    </form>
-</div>
-        <h3>Benutzername / Passwort falsch</h3>
-{% endif %}
-
 {% if state == 'dataSaved' %}
     <div class="frame frame_save_del">   
             <h1 class="h1_save_del">Der Benutzer {{firstname}} {{lastname}} wurde erfolgreich gespeichert</h1>  
@@ -262,6 +323,7 @@
         </form> 
     </div>
 {% endif %}
+#}
 
 </body>
 </html>

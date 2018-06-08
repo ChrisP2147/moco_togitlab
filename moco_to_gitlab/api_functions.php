@@ -2,6 +2,66 @@
 ini_set('max_execution_time', 500);
 // Rest API functions MOCO & GITLAB ///////////////////////////////////////////////////////
 
+
+// Authenticates User and return the needed API-Token
+function authenticate_user($email, $passwd)
+{
+    $_SESSION['loggedIn'] = false;
+    $domain_name = substr(strrchr($email, "@"), 1);
+    if ($domain_name != "gal-digital.de"){
+        $_SESSION["state"] = "wrongUser";
+        unset($_SESSION['loggedIn']);
+        return; 
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    // to DO -- link muss variabel sein, denn cp.mocoapp.com ist Benutzerdefiniert
+    //////////////////////////////////////////////////////////////////////////////
+
+    $url = "https://cp.mocoapp.com/api/v1/session?email=".$email."&password=".$passwd;
+    $response = \Httpful\Request::post($url)->withContentType("application/x-www-form-urlencoded")->expectsJson()->send();
+    $offer_array_raw = (array)json_decode($response, true);
+
+    if ($offer_array_raw['api_key'] != "") {
+        $_SESSION["moco_token"] = $offer_array_raw['api_key'];
+        $_SESSION["state"] = "loggedIn";
+        $_SESSION['loggedIn'] = true;
+
+        ///////////////////////////////
+        $moco_token = $_SESSION["moco_token"];
+        $url = 'https://cp.mocoapp.com/api/v1/offers';
+        $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
+        $offer_array_raw = (array)json_decode($response, true);
+    
+        for ($i = 0; $i < count($offer_array_raw); $i++)
+        {  
+            // only if status is accepted 
+            if ($offer_array_raw[$i]['status'] == 'accepted'){
+                $_SESSION['all_offers_array'][] = $offer_array_raw[$i]['title'];
+            }
+        }
+        ///////////////////////////////
+
+        ///////////////////////////////
+        $url = 'https://cp.mocoapp.com/api/v1/projects';
+        $response = \Httpful\Request::get($url)->withAuthorization("Token token=$moco_token")->expectsJson()->send();
+    
+        $projekt_array = (array)json_decode($response, true);
+    
+        for ($i = 0; $i < count($projekt_array); $i++)
+        { 
+            $_SESSION['all_projects_array'][] = $projekt_array[$i]['name'];
+        }
+        ///////////////////////////////
+
+        return $_SESSION["moco_token"];
+    }
+    else{
+        $_SESSION["state"] = "wrongUser";
+        unset($_SESSION['loggedIn']);
+    }
+}
+
 // this function loads all "accepted offers from Moco into the Dropdown-Menu"
 function load_offer_options($moco_token)
 {   
@@ -22,7 +82,9 @@ function load_offer_options($moco_token)
             }
             else{
                 echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . ">" . $offer_array_raw[$i]['title'] . "</option>";
+
             }
+            $_SESSION['all_offers'][] =$offer_array_raw[$i]['title'];
         }
     }
 }
@@ -55,7 +117,7 @@ function load_projects()
 function load_gitlab_projects($gitlab_token)
 {
      // all gitlab projectnames & IDs /////////////////////////
-    $url = 'https://gitlab.com/api/v3/projects';
+    $url = 'https://gitlab.com/api/v4/projects';
     $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
 
     $projekt_array = (array)json_decode($response, true);
@@ -81,7 +143,7 @@ function check_gitlab_tickets($string, $ticket_array, $gitlab_token)
         }
     }
     if ($project_exists === true){
-        $url = "https://gitlab.com/api/v3/projects/".$project_id."/issues";
+        $url = "https://gitlab.com/api/v4/projects/".$project_id."/issues";
         $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
         $issue_array = (array)json_decode($response, true);
 
@@ -130,7 +192,7 @@ function insert_project($string, $ticket_array, $gitlab_token)
     if ($project_exists == false){
         // $string = preg_replace('/\s+/', '%20', $string);
         $string = urlencode($string);
-        $url = 'https://gitlab.com/api/v3/projects?name='.$string;
+        $url = 'https://gitlab.com/api/v4/projects?name='.$string;
         $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
     }
 }
@@ -168,10 +230,10 @@ function insert_project_tickets($string, $ticket_array, $description_array, $git
             $description_array[$i] = urlencode($description_array[$i]);
             
             if (empty($description_array[$i])){
-                $url = "https://gitlab.com/api/v3/projects/". $project_id. "/issues?title=".$ticket_array[$i]; 
+                $url = "https://gitlab.com/api/v4/projects/". $project_id. "/issues?title=".$ticket_array[$i]; 
             }
             else{
-                $url = "https://gitlab.com/api/v3/projects/". $project_id. "/issues?title=".$ticket_array[$i]."&description=".$description_array[$i];
+                $url = "https://gitlab.com/api/v4/projects/". $project_id. "/issues?title=".$ticket_array[$i]."&description=".$description_array[$i];
             }
             $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
         }
@@ -247,69 +309,6 @@ function load_offer($array)
         echo "<td></td>";
         echo "</tr>"; 
     }
-}
-
-// snippet for main Frame "frame_offer_chosen"
-function load_frame_offer_chosen($offer_title, $moco_token)
-{
-    echo "<div class='frame frame_offer_chosen'>";            
-    echo "<form action=".$_SERVER["PHP_SELF"]." method='post'>";
-    echo "<div class='mainframeContainer'>";
-        echo "<div class='headlineContainer'><h1 class='h1_headline'>Tickets to GitLab &nbsp &#10004</h1></div>";
-            echo "<div class='sel_btn_container'>";
-                echo "<h1 class='h1_offer_chosen' >". $_SESSION["firstname"] ." ". $_SESSION["lastname"] . "</h1>";
-                // superUser has admin permissions
-                if ($_SESSION['superUser'] == true){
-                    echo "<input type='submit' class='btnSuperUser btn_manageUser' name='manageUser' value='Benutzerverwaltung'/>";
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='logout'/>";
-                }
-                else{
-                    echo "<input type='submit' class='button btn_logout' name='logout' value='logout'/>";
-                }
-            echo "</div>";
-    echo "</div>";
- 
-    echo "<div class='spacer'><hr></div>";
-
-    echo "<div class='projectContainer'>";
-
-    // transfer Tickts ///////////////////////////////////////////////////////////////////////////////////////////
-    echo "<div class='sent_ticketsContainer'>";
-        echo "<div class='tmp_div1'>";
-            echo "<select class='select_offer' name='sel_chosenOffer'>";
-            load_offer_options($moco_token);
-            echo "</select>";
-            echo "<input type='submit' id='btn_sel_offer' class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />";
-        echo "</div>";
-
-        echo "<div class='tmp_div2'>";
-            echo "<select class='select_project' name='select_project'>";
-                load_projects();
-            echo "</select>";
-            echo "<input type='submit' id='send_button' class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>";
-        echo "</div>";
-    echo "</div>";
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // render Data-Table
-    echo "<table id='table_id' class='display'>";
-        echo "<thead>";
-        echo "<div class='offer_title'>";
-                if ($offer_title != ""){
-                    echo "<h2><i>Angebot:&nbsp&nbsp&nbsp  </i>". $offer_title . "</h2>";
-                }
-                else{
-                    echo "<h2 class='lightblue'>Angebot auswählen</h2>";  
-                }
-        echo "</div";
-
-            echo "<tr>";
-                echo "<th>Angebots-Positionen</th>";
-                echo "<th>als Ticket einfügen</th>";
-            echo "</tr>";
-        echo "</thead>";
-            echo "<tbody>";
-
-    $_SESSION['back_to_main_frame'] = 'ok';
 }
 
 function check_selected_tickets()

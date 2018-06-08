@@ -46,9 +46,9 @@ h4 {
 	margin: 0 auto;
 	padding: 0.5em;
 }
-.projectContainer {
+/* .projectContainer {
 	margin-bottom: 1.5em;
-}
+} */
 .button {
 	text-transform: uppercase;
 	outline: 0;
@@ -185,10 +185,9 @@ option {
 	display: flex;
 	justify-content: flex-end;
 }
-.h1_offer_chosen {
-	padding: 10px;
-	font-size: 0.8em;
+.select_gitlab_token {
 	margin: 0 1em 0 0;
+	padding: 10px;
 }
 .btn_manageUser {
 	padding: 10px;
@@ -223,7 +222,7 @@ hr {
 .tmp_div2 {
 	display: flex;
 	justify-content: flex-end;
-	width: 100%;
+	width: 60%;
 }
 .select_offer {
 	width: 60%;
@@ -259,10 +258,6 @@ hr {
 		padding: 0.5em 0 0 0;
 		font-size: 1em;
 	}
-	.h1_offer_chosen {
-		padding: 0.6em 0 0 0;
-		font-size: 0.8em;
-	}
 	body {
 		font-size: 0.8em;
 	}
@@ -279,9 +274,6 @@ hr {
 	.h1_headline {
 		padding: 0.5em 0 0 0;
 		font-size: 0.9em;
-	}
-	.h1_offer_chosen {
-		padding: 0.5em 0 0 0;
 	}
 	.btn_logout {
 		padding: 8px;
@@ -455,7 +447,7 @@ table.dataTable thead td {
 }
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
 	border-bottom: 0; 
-	margin-bottom: 1.5em;
+	/* margin-bottom: 1.5em; */
 }
 table {
 	font-size: 0.8em;
