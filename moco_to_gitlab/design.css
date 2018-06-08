@@ -239,6 +239,15 @@ hr {
 	padding: 10px;
 	margin-right: 1em;
 }
+#offerInput {
+	padding: 10px;
+	margin-right: 1em;
+	box-shadow: inset 0 0 18px #c9c6c6;
+}
+#projectInput {
+	padding: 10px;
+	box-shadow: inset 0 0 18px #c9c6c6;
+}
 .btn_sent_tickets {
 	padding: 10px;
 	font-size: 0.7em;
@@ -352,91 +361,7 @@ hr {
 }
 /* //////////////// */
 
-/* frame manage all users*/
-.frame_mangeUsers {
-	width: 60%;
-}
-.btnContainer_manageUsers {
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	margin: 1.5em 0 1.5em 0;
-}
-.btnManage {
-	padding: 10px;
-	font-size: 10px;
-}
-.btnEdit {
-	margin: 0.7em;
-	font-size: 0.7em;	
-	text-transform: uppercase;
-	outline: 0;
-	background: linear-gradient(to bottom, #2C4763, #425e7c);
-	border: 0;
-	padding: 12px;
-	color: #FFFFFF;
-	-webkit-transition: all 0.3 ease;
-	transition: all 0.3 ease;
-	cursor: pointer;
-	border-radius: 4px;
-}
-/* //////////////// */
-
-/* frame manage all users*/
-.frame_create {
-	width: 60%;
-}
-.container_create_1, .container_create_2 {
-	display: flex;
-}
-.div_create {
-	margin: 0 1em 0 0;
-	width: 100%;
-}
-.div_create_last {
-	margin: 0 0 0 0;
-}
-.input_create {
-	padding: 13px;
-	font-size: 0.8em;
-}
-.btnContainer_createUser {
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	margin: 1em 0 0 0;
-}
-/* //////////////// */
-
-/* frame save / delete */
-.frame_save_del {
-	width: 18%;
-}
-.h1_save_del {
-	font-size: 0.8em;
-}
-.btnContainer_save_del {
-	display: flex;
-	justify-content: center;
-	margin: 0.5em 0 0 0;
-}
-@media screen and ( max-width: 1460px ) {
-	.h1_save_del {
-		font-size: 0.8em;
-	}
-}
-@media screen and ( max-width: 1167px ) {
-	.h1_save_del {
-		font-size: 0.7em;
-	}
-	.btnContainer_save_del {
-		display: block;
-	}
-	.btn_save_del {
-		margin: 0 0 1em 0;
-	}
-}
-/* //////////////// */
+/* DataTable */
 .dataTables_length {
 	margin-bottom: 1.8em;
 }
@@ -478,6 +403,7 @@ option:first {
 .ticket_in_db_font-size {
 	font-size: 1.2em;
 }
+/* //////////////// */
 
 /* CheckBox Style */
 /* Customize the label (the container) */

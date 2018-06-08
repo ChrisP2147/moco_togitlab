@@ -90,9 +90,9 @@ if (isset($_POST["login"])){
     
     $_SESSION["moco_token"] = authenticate_user($_POST['user'], $_POST['passwd']); // api_functions.php
 
-    // var_dump($_SESSION['all_offers_array']);
-    // echo "<br>";
-    // var_dump($_SESSION['all_projects_array']);
+    var_dump($_SESSION['all_offers_array']);
+    echo "<br>";
+    var_dump($_SESSION['all_projects_array']);
 
     $moco_token = $_SESSION["moco_token"];
     // global $moco_token;
@@ -118,7 +118,9 @@ if (isset($_POST["login"])){
         $_SESSION['back_to_main_frame'] = 'ok';
     
         echo $twig->render('index.html', array(
-            'state' => 'offer_chosen',          
+            'state' => 'offer_chosen',
+            'all_offers' => $_SESSION['all_offers_array'],
+            'all_projects' => $_SESSION['all_projects_array'],   
         ));
     }
     else{
@@ -160,6 +162,8 @@ if (isset($_POST["btn_choose_offer"])){
         echo $twig->render('index.html', array(
             'no_tickets_selected' => $_SESSION['no_tickets_selected'],
             'state' => 'offer_chosen',
+            'all_offers' => $_SESSION['all_offers_array'],
+            'all_projects' => $_SESSION['all_projects_array'], 
         ));
     }
     else{
@@ -203,6 +207,8 @@ if (isset($_POST['sent_tickets'])){
             echo $twig->render('index.html', array(
                 'state' => 'offer_chosen',
                 'no_tickets_selected' => $_SESSION['no_tickets_selected'],
+                'all_offers' => $_SESSION['all_offers_array'],
+                'all_projects' => $_SESSION['all_projects_array'],
             ));
         }
         else{
@@ -281,7 +287,9 @@ if (isset($_POST["back"]) || isset($_SESSION['back_to_main_frame']) &&  $post_ch
         $_SESSION['back_to_main_frame'] = 'ok';
 
         echo $twig->render('index.html', array(
-            'state' => 'offer_chosen',          
+            'state' => 'offer_chosen',
+            'all_offers' => $_SESSION['all_offers_array'],
+            'all_projects' => $_SESSION['all_projects_array'],        
         ));
     }
     else{
