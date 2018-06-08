@@ -13,9 +13,14 @@ function load_datatable(){
     myTable.columns.adjust();
 }
 
-// loading circle (not in use)
-function loadingFunction() {
+// loading circle 
+function loadingFunction_send_frame() {
     document.getElementById("loadingContainer").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
+}
+
+// // loading circle when clicking "send Tickets" and when offers are beeing loaded into dataTable
+function loadingFunction_main_frame() {
+    document.getElementById("table_id").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
 }
 
 // create new GitLab token via Alertify ///////////////////////////////////////////////////////////////////////////
@@ -49,3 +54,4 @@ function send_gitlab_token()
     location.reload();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

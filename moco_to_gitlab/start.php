@@ -181,9 +181,10 @@ if (isset($_POST['sent_tickets'])){
     $result = check_gitlab_tickets($_SESSION['select_project'], $_SESSION['selected_tickets'], $_SESSION['gitlab_token']); // api_functions.php
     // transfer data to index.html ///////////////////////////////////////////////////
     if ($_SESSION["selected_tickets"] == null){
+
         $_SESSION['no_tickets_selected'] = true;
         $moco_token = $_SESSION["moco_token"];
-        if ($_SESSION['loggedIn'] === true){
+        if ($_SESSION['loggedIn'] == true){
 
             // /////////////////////////////////////////
             for ($i = 0; $i < count($_SESSION['offer_id']); $i++)

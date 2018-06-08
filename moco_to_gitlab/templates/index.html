@@ -81,7 +81,7 @@
 
         <div class='projectContainer'>
 
-        <div class='sent_ticketsContainer'>
+        <div id='btnContainer' class='sent_ticketsContainer'>
             <div class='tmp_div1'>
                 <select class='select_offer' name='sel_chosenOffer'>
                 {{ load_offer_options() }}
@@ -89,11 +89,11 @@
                 <select class='select_project' name='select_project'>
                     {{ loading_projects() }}
                 </select>
-                <input type='submit' id='btn_sel_offer' class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
+                <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
             </div>
 
-            <div class='tmp_div2'>
-                <input type='submit' id='send_button' class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
+            <div id='loadingDiv' class='tmp_div2'>
+                <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
             </div>
         </div>
 
@@ -118,9 +118,12 @@
         </form>
     </div>
 
+    <div id="ajax-box"></div>
+
     {% if no_tickets_selected == true %}   
         <script>
             alertify.alert('Achtung', 'Es wurden keine Tickets ausgewählt');
+            checkbox_check();
         </script>
     {% endif %}
 
@@ -156,7 +159,7 @@
 
                 <div id='loadingContainer' class="btnContainer btnContainer_ticket_sent">
                         <input type='submit' class='button btn_ticket_sent' name='back' value='Zurück'/>
-                        <input type='submit' onclick="setTimeout(loadingFunction, 1)" class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
+                        <input type='submit' onclick="setTimeout(loadingFunction_send_frame, 1)" class='button btn_ticket_sent_end' name='transfer' value='abschicken'/>
                 </div>
 
             {% for ticket in selected_tickets %}
