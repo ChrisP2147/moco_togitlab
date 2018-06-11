@@ -4,8 +4,7 @@ require "vendor/autoload.php";
 require_once('pdo_functions.php');
 require_once('api_functions.php');
 session_start();
-// $_SESSION['state'] = "not_loggedIn";
-$offer_status = 'created';
+
 $post_check = 'deny';
 $_SESSION["notTicketsSelected"] = $_SESSION['no_tickets_selected'] = false;
 // $moco_token = "53a856de73a8b8b0a82aa7a604026747";
@@ -183,6 +182,7 @@ if (isset($_POST['sent_tickets'])){
 
     check_selected_tickets();
     $result = check_gitlab_tickets($_SESSION['select_project'], $_SESSION['selected_tickets'], $_SESSION['gitlab_token']); // api_functions.php
+
     // transfer data to index.html ///////////////////////////////////////////////////
     if ($_SESSION["selected_tickets"] == null){
 

@@ -84,7 +84,7 @@ function load_offer_options($moco_token)
                 echo "<option class='optionCenter' value=" . $offer_array_raw[$i]['id'] . ">" . $offer_array_raw[$i]['title'] . "</option>";
 
             }
-            $_SESSION['all_offers'][] =$offer_array_raw[$i]['title'];
+            $_SESSION['all_offers'][] = $offer_array_raw[$i]['title'];
         }
     }
 }
@@ -332,4 +332,11 @@ function check_selected_tickets()
         
         // selected Project //////////////////////////////////////////////////////////////
         $_SESSION['select_project'] = $_POST['select_project'];
+}
+
+function get_offer_id()
+{
+   $offer_title = $_POST['offerInput'];
+           $_SESSION['offer_id'];
+           $_SESSION['offer_title'];
 }

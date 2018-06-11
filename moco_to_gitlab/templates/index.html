@@ -7,13 +7,19 @@
     <link rel="stylesheet" type="text/css" href="node_modules/datatables.net-dt/css/jquery.dataTables.css"/>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/datatables.net/js/jquery.dataTables.js"></script>
+    <!-- <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script> -->
     <link rel="stylesheet" href="design.css">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
     <script src="javascript_functions.js"></script>
     <link rel="stylesheet" type="text/css" href="alertifyjs/css/alertify.css">
     <link rel="stylesheet" type="text/css" href="alertifyjs/css/themes/default.css">
     <script src="alertifyjs/alertify.js"></script>
-
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->   
+    <!-- AUTOCOMPLETE -->
+    <script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.css">
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.structure.min.css">
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   </head>
   <body>
 
@@ -40,90 +46,94 @@
 {% endif %}
 
 {% if state == 'wrongUser' %}
-<div class="frame frame_not_loggedIn">
-    <h1 class="h1_not_loggedIn">Tickets to GitLab &nbsp &#10004</h1>
-        <form action={{SELF}} method='post'>
-        <h4>Moco Email-Adresse:</h4> 
-            <div class="labelTextFields labelTextFields_not_loggedIn">      
-                <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
-            </div>
-        <h4>Passwort:</h4>
-            <div class="labelTextFields labelTextFields_not_loggedIn">          
-                <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
-            </div>
-        
-        <div class="btnContainer btnContainer_not_LoggedIn">
-        <input type="submit" class="button btn_notloggedIn" name="login" value="Login" />
-        </div> 
-    </form>
-</div>
-        <h3>Email-Adresse / Passwort falsch</h3>
-{% endif %}
-
-{% if state == 'offer_chosen' %}     
-
-    <div class='frame frame_offer_chosen'>          
-        <form autocomplete="off" action={{SELF}} method='post'>
-            <div class='mainframeContainer'>
-                <div class='headlineContainer'><h1 class='h1_headline'>Tickets to GitLab &nbsp &#10004</h1></div>
-                    <div class='sel_btn_container'>
-
-                            <select class='select_gitlab_token' name='sel_gitlab_token'>
-                                {{ get_gitlab_API_key() }}
-                            </select>
-                            <input type='button' id='new_key' onclick='show_key()' class='btnSuperUser btn_manageUser' name='changeKey' value='GitLab-Key hinzufügen'/>
-                            <input type='submit' class='button btn_logout' name='logout' value='logout'/>
-
-                    </div>
-            </div>
-    
-        <div class='spacer'><hr></div>
-
-        <div class='projectContainer'>
-
-        <div id='btnContainer' class='sent_ticketsContainer'>
-            <div class='tmp_div1'>
-                <select class='select_offer' name='sel_chosenOffer'>
-                {{ load_offer_options() }}
-                </select>
-                <select class='select_project' name='select_project'>
-                    {{ loading_projects() }}
-                </select>
-                <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
-            </div>
-
-            <div id='loadingDiv' class='tmp_div2'>
-                <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
-            </div>
-        </div>
-
-            <div class='sent_ticketsContainer'>
-                            <input id="offerInput" type="text" name="offerInput" placeholder="Angebot auswählen">
-                            <input id="projectInput" type="text" name="offerInput" placeholder="Projekt auswählen">
-            </div>
-
-
-        <table id='table_id' class='display'>
-            <thead>
-                {{ headline() }}
-
-                <tr>
-                    <th>Angebots-Positionen</th>
-                    <th>als Ticket einfügen</th>
-                </tr>
-            </thead>
-                <tbody>
-                    {{ select_ticketIDs_from_DB() }} 
-                    {{ load_offer() }}
-                </tbody>
-        </table>
-
-            <script>load_datatable();</script>
-
-            </div>
+    <div class="frame frame_not_loggedIn">
+        <h1 class="h1_not_loggedIn">Tickets to GitLab &nbsp &#10004</h1>
+            <form action={{SELF}} method='post'>
+            <h4>Moco Email-Adresse:</h4> 
+                <div class="labelTextFields labelTextFields_not_loggedIn">      
+                    <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
+                </div>
+            <h4>Passwort:</h4>
+                <div class="labelTextFields labelTextFields_not_loggedIn">          
+                    <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
+                </div>
+            
+            <div class="btnContainer btnContainer_not_LoggedIn">
+            <input type="submit" class="button btn_notloggedIn" name="login" value="Login" />
+            </div> 
         </form>
     </div>
+            <h3>Email-Adresse / Passwort falsch</h3>
+    {% endif %}
 
+    {% if state == 'offer_chosen' %}     
+
+        <div class='frame frame_offer_chosen'>          
+            <form autocomplete="off" action={{SELF}} method='post'>
+                <div class='mainframeContainer'>
+                    <div class='headlineContainer'><h1 class='h1_headline'>Tickets to GitLab &nbsp &#10004</h1></div>
+                        <div class='sel_btn_container'>
+
+                                <select class='select_gitlab_token' name='sel_gitlab_token'>
+                                    {{ get_gitlab_API_key() }}
+                                </select>
+                                <input type='button' id='new_key' onclick='show_key()' class='btnSuperUser btn_manageUser' name='changeKey' value='GitLab-Key hinzufügen'/>
+                                <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+
+                        </div>
+                </div>
+        
+            <div class='spacer'><hr></div>
+
+            <div class='projectContainer'>
+
+            <div id='btnContainer' class='sent_ticketsContainer'>
+                <div class='tmp_div1'>
+                    <select class='select_offer' name='sel_chosenOffer'>
+                    {{ load_offer_options() }}
+                    </select>
+                    <select class='select_project' name='select_project'>
+                        {{ loading_projects() }}
+                    </select>
+                    <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
+                </div>
+
+                <div id='loadingDiv' class='tmp_div2'>
+                    <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
+                </div>
+            </div>
+
+            <div class='sent_ticketsContainer'>
+                <div class="autocomplete" >
+                    <div class="ui-widget">
+                        <input id="offerInput" type="text" name="offerInput" placeholder="Angebot auswählen">
+                    </div>
+                </div>
+                <div class="autocomplete" >
+                    <div class="ui-widget">
+                        <input id="projectInput" type="text" name="offerInput" placeholder="Projekt auswählen">
+                    </div>
+                </div>
+            </div>
+            <div id='loadingContainer'>
+                    <table id='table_id' class='display'>
+                        <thead>
+                            {{ headline() }}
+                            <tr>
+                                <th>Angebots-Positionen</th>
+                                <th>als Ticket einfügen</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                                {{ select_ticketIDs_from_DB() }} 
+                                {{ load_offer() }}
+                            </tbody>
+                    </table>
+                <script>load_datatable();</script>
+            </div>
+            </form>
+        </div>
+    </div>
     <div id="ajax-box"></div>
 
     {% if no_tickets_selected == true %}   
@@ -142,114 +152,35 @@
             <input class="ajs-input" id="inpTwo" type="text" value="" autocomplete="off"/> 
         </div>
     </div>
+        <script>
+            var all_offers = new Array;
+            var all_projects = new Array;
+        </script>
+        {% for offer in all_offers %}
+        <script>
+            all_offers.push("{{ offer|e('js') }}");
+        </script>
+        {% endfor %}
 
-    <script>
-        function autocomplete(inp, arr) {
-              /*the autocomplete function takes two arguments,
-              the text field element and an array of possible autocompleted values:*/
-              var currentFocus;
-              /*execute a function when someone writes in the text field:*/
-              inp.addEventListener("input", function(e) {
-                  var a, b, i, val = this.value;
-                  /*close any already open lists of autocompleted values*/
-                  closeAllLists();
-                  if (!val) { return false;}
-                  currentFocus = -1;
-                  /*create a DIV element that will contain the items (values):*/
-                  a = document.createElement("DIV");
-                  a.setAttribute("id", this.id + "autocomplete-list");
-                  a.setAttribute("class", "autocomplete-items");
-                  /*append the DIV element as a child of the autocomplete container:*/
-                  this.parentNode.appendChild(a);
-                  /*for each item in the array...*/
-                  for (i = 0; i < arr.length; i++) {
-                    /*check if the item starts with the same letters as the text field value:*/
-                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                      /*create a DIV element for each matching element:*/
-                      b = document.createElement("DIV");
-                      /*make the matching letters bold:*/
-                      b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                      b.innerHTML += arr[i].substr(val.length);
-                      /*insert a input field that will hold the current array item's value:*/
-                      b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                      /*execute a function when someone clicks on the item value (DIV element):*/
-                      b.addEventListener("click", function(e) {
-                          /*insert the value for the autocomplete text field:*/
-                          inp.value = this.getElementsByTagName("input")[0].value;
-                          /*close the list of autocompleted values,
-                          (or any other open lists of autocompleted values:*/
-                          closeAllLists();
-                      });
-                      a.appendChild(b);
-                    }
-                  }
-              });
-              /*execute a function presses a key on the keyboard:*/
-              inp.addEventListener("keydown", function(e) {
-                  var x = document.getElementById(this.id + "autocomplete-list");
-                  if (x) x = x.getElementsByTagName("div");
-                  if (e.keyCode == 40) {
-                    /*If the arrow DOWN key is pressed,
-                    increase the currentFocus variable:*/
-                    currentFocus++;
-                    /*and and make the current item more visible:*/
-                    addActive(x);
-                  } else if (e.keyCode == 38) { //up
-                    /*If the arrow UP key is pressed,
-                    decrease the currentFocus variable:*/
-                    currentFocus--;
-                    /*and and make the current item more visible:*/
-                    addActive(x);
-                  } else if (e.keyCode == 13) {
-                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
-                    e.preventDefault();
-                    if (currentFocus > -1) {
-                      /*and simulate a click on the "active" item:*/
-                      if (x) x[currentFocus].click();
-                    }
-                  }
-              });
-              function addActive(x) {
-                /*a function to classify an item as "active":*/
-                if (!x) return false;
-                /*start by removing the "active" class on all items:*/
-                removeActive(x);
-                if (currentFocus >= x.length) currentFocus = 0;
-                if (currentFocus < 0) currentFocus = (x.length - 1);
-                /*add class "autocomplete-active":*/
-                x[currentFocus].classList.add("autocomplete-active");
-              }
-              function removeActive(x) {
-                /*a function to remove the "active" class from all autocomplete items:*/
-                for (var i = 0; i < x.length; i++) {
-                  x[i].classList.remove("autocomplete-active");
-                }
-              }
-              function closeAllLists(elmnt) {
-                /*close all autocomplete lists in the document,
-                except the one passed as an argument:*/
-                var x = document.getElementsByClassName("autocomplete-items");
-                for (var i = 0; i < x.length; i++) {
-                  if (elmnt != x[i] && elmnt != inp) {
-                    x[i].parentNode.removeChild(x[i]);
-                  }
-                }
-              }
-          }
-            /*An array containing all Data*/
-            var all_offers = '{{ all_offers }}';
-            var all_projects = '{{ all_projects }}';
-            /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-            autocomplete(document.getElementById("offerInput"), all_offers );
-            autocomplete(document.getElementById("projectInput"), all_projects );
-    </script>
-      {{ all_offers }}
-      {{ all_projects }}
-      
-      
+        {% for project in all_projects %}
+        <script>
+            all_projects.push("{{ project|e('js') }}");
+        </script>
+        {% endfor %}
+        <script>
+            $( function() {
+                $( "#offerInput" ).autocomplete({
+                    source: all_offers
+                });
+                } );
+
+                $( function() {
+                $( "#projectInput" ).autocomplete({
+                    source: all_projects
+                });
+                } );
+        </script>         
 {% endif %}
-
-
 
 {% if state == 'ticket_sent' %}
 
