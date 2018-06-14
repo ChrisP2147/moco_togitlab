@@ -192,7 +192,9 @@ function insert_project($string, $ticket_array, $gitlab_token)
     if ($project_exists == false){
         // $string = preg_replace('/\s+/', '%20', $string);
         $string = urlencode($string);
-        $url = 'https://gitlab.com/api/v4/projects?name='.$string;
+        $desc = "das ist die project description";
+        $desc = urlencode($desc);
+        $url = 'https://gitlab.com/api/v4/projects?name='.$string.'&description='.$desc;
         $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
     }
 }
@@ -331,12 +333,23 @@ function check_selected_tickets()
         $_SESSION["selected_tickets"] = $tmp_array;
         
         // selected Project //////////////////////////////////////////////////////////////
-        $_SESSION['select_project'] = $_POST['select_project'];
+        // $_SESSION['select_project'] = $_POST['select_project'];
+        $_SESSION['select_project'] = $_POST['projectInput'];
 }
 
 function get_offer_id()
 {
    $offer_title = $_POST['offerInput'];
-           $_SESSION['offer_id'];
-           $_SESSION['offer_title'];
+        //    $_SESSION['offer_id'];
+        //    $_SESSION['offer_title'];
+    
+    for ($i = 0; $i < count($_SESSION['offer_id']); $i++)
+    {
+        if ($_SESSION['offer_title'][$i] == $offer_title){
+            $_SESSION['chosen_offer_id'] = $_SESSION['offer_id'][$i];
+            $_SESSION['offer_title_input'] = $_SESSION['offer_title'][$i];
+        }
+
+    }
+    return $_SESSION['chosen_offer_id'];
 }

@@ -115,8 +115,8 @@
 	position: relative;
 	padding: 3px 1em 3px .4em;
 	background: #FFFFFF;
-	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-	border-radius: 4px;
+	/* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+	border-radius: 4px; */
 }
 .ui-menu .ui-menu-divider {
 	margin: 5px 0;

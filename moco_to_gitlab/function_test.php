@@ -1,4 +1,19 @@
 <?php
+require "vendor/autoload.php";
+
+
+$token = get_gitlab_token();
+var_dump($token);
+
+function get_gitlab_token()
+{
+    $url = 'https://gitlab.com/api/v4/user';
+    $response = \Httpful\Request::post($url)->addHeader('Bearer', 'Vb23WYp2KmxvPG4xVRhB')->expectsJson()->send();
+    $projekt_array = (array)json_decode($response, true);
+    return $projekt_array;
+}
+
+
 
 function insert_project($string, $ticket_array, $gitlab_token)
 {

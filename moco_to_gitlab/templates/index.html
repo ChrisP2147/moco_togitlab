@@ -85,7 +85,7 @@
         
             <div class='spacer'><hr></div>
 
-            <div class='projectContainer'>
+            <!-- <div class='projectContainer'>
 
             <div id='btnContainer' class='sent_ticketsContainer'>
                 <div class='tmp_div1'>
@@ -94,25 +94,30 @@
                     </select>
                     <select class='select_project' name='select_project'>
                         {{ loading_projects() }}
-                    </select>
-                    <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
-                </div>
+                    </select> -->
+                    <!-- <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' /> -->
+                <!-- </div> -->
 
-                <div id='loadingDiv' class='tmp_div2'>
-                    <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
-                </div>
-            </div>
+                <!-- <div id='loadingDiv' class='tmp_div2'> -->
+                    <!-- <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/> -->
+                <!-- </div> -->
+            <!-- </div> -->
 
             <div class='sent_ticketsContainer'>
                 <div class="autocomplete" >
                     <div class="ui-widget">
+
                         <input id="offerInput" type="text" name="offerInput" placeholder="Angebot auswählen">
                     </div>
                 </div>
                 <div class="autocomplete" >
                     <div class="ui-widget">
-                        <input id="projectInput" type="text" name="offerInput" placeholder="Projekt auswählen">
+                        <input id="projectInput" type="text" name="projectInput" placeholder="Projekt auswählen">
                     </div>
+                </div>
+                <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
+                <div id='loadingDiv' class='tmp_div2'>
+                    <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
                 </div>
             </div>
             <div id='loadingContainer'>
@@ -136,22 +141,31 @@
     </div>
     <div id="ajax-box"></div>
 
-    {% if no_tickets_selected == true %}   
-        <script>
-            alertify.alert('Achtung', 'Es wurden keine Tickets ausgewählt');
-            checkbox_check();
-        </script>
-    {% endif %}
+        {% if no_tickets_selected == true %}   
+            <script>
+                alertify.alert('Achtung', 'Es wurden keine Tickets ausgewählt');
+                checkbox_check();
+            </script>
+        {% endif %}
 
-    <div style="display:none;" >
-        <div id="dlgContent">
-            <p> GitLab eMail-Adreese </p>
-            <input class="ajs-input" id="inpOne" type="text" value="" autocomplete="off"/> 
-    
-            <p> GitLab Token </p>
-            <input class="ajs-input" id="inpTwo" type="text" value="" autocomplete="off"/> 
-        </div>
-    </div>
+        {% if no_input == true %}   
+        <script>
+            alertify.alert('Achtung', 'Projekt & Angebot angeben!');
+        </script>
+        {% endif %}
+
+        {% if offer_title_input != "" %} 
+            <script>
+                    document.getElementById("offerInput").value = "{{offer_title_input}}";
+            </script>
+        {% endif %}
+
+        {% if project_title_input != "" %} 
+            <script>
+                    document.getElementById("projectInput").value = "{{project_title_input}}";
+            </script>
+        {% endif %}
+
         <script>
             var all_offers = new Array;
             var all_projects = new Array;
@@ -179,7 +193,17 @@
                     source: all_projects
                 });
                 } );
-        </script>         
+        </script> 
+      
+        <div style="display:none;" >
+                <div id="dlgContent">
+                    <p> GitLab eMail-Adreese </p>
+                    <input class="ajs-input" id="inpOne" type="text" value="" autocomplete="off"/> 
+            
+                    <p> GitLab Token </p>
+                    <input class="ajs-input" id="inpTwo" type="text" value="" autocomplete="off"/> 
+                </div>
+            </div>
 {% endif %}
 
 {% if state == 'ticket_sent' %}
