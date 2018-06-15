@@ -116,11 +116,14 @@ if (isset($_POST["login"])){
         $_SESSION['offer_data'] = load_selected_offer_array($moco_token, $_SESSION['chosen_offer']);
 
         $_SESSION['back_to_main_frame'] = 'ok';
+
+        $all_offers = array_unique($_SESSION['all_offers_array']);
+        $all_projects = array_unique($_SESSION['all_projects_array']);
     
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',
-            'all_offers' => $_SESSION['all_offers_array'],
-            'all_projects' => $_SESSION['all_projects_array'],   
+            'all_offers' => $all_offers,
+            'all_projects' => $all_projects,
         ));
     }
     else{
@@ -160,12 +163,14 @@ if (isset($_POST["btn_choose_offer"])){
 
         $_SESSION['back_to_main_frame'] = 'ok';
 
-    
+        $all_offers = array_unique($_SESSION['all_offers_array']);
+        $all_projects = array_unique($_SESSION['all_projects_array']);
+
         echo $twig->render('index.html', array(
             'no_tickets_selected' => $_SESSION['no_tickets_selected'],
             'state' => 'offer_chosen',
-            'all_offers' => $_SESSION['all_offers_array'],
-            'all_projects' => $_SESSION['all_projects_array'],
+            'all_offers' => $all_offers,
+            'all_projects' => $all_projects,
             'offer_title_input' => $_SESSION['offer_title_input'],
             'project_title_input' => $_SESSION['select_project'],
 
@@ -184,12 +189,15 @@ if (isset($_POST['sent_tickets'])){
 
     $_SESSION['select_project'] = $_POST['projectInput'];
 
+    $all_offers = array_unique($_SESSION['all_offers_array']);
+    $all_projects = array_unique($_SESSION['all_projects_array']);
+
     if ($_POST['projectInput'] == "" || $_POST['offerInput'] == ""){
         echo $twig->render('index.html', array(
             'no_tickets_selected' => $_SESSION['no_tickets_selected'],
             'state' => 'offer_chosen',
-            'all_offers' => $_SESSION['all_offers_array'],
-            'all_projects' => $_SESSION['all_projects_array'],
+            'all_offers' => $all_offers,
+            'all_projects' => $all_projects,
             'offer_title_input' => $_SESSION['offer_title_input'],
             'project_title_input' => $_SESSION['select_project'],
             'no_input' => true,
@@ -225,11 +233,14 @@ if (isset($_POST['sent_tickets'])){
 
                 $_SESSION['back_to_main_frame'] = 'ok';
 
+                $all_offers = array_unique($_SESSION['all_offers_array']);
+                $all_projects = array_unique($_SESSION['all_projects_array']);
+
                 echo $twig->render('index.html', array(
                     'state' => 'offer_chosen',
                     'no_tickets_selected' => $_SESSION['no_tickets_selected'],
-                    'all_offers' => $_SESSION['all_offers_array'],
-                    'all_projects' => $_SESSION['all_projects_array'],
+                    'all_offers' => $all_offers,
+                    'all_projects' => $all_projects,
                 ));
             }
             else{
@@ -308,10 +319,13 @@ if (isset($_POST["back"]) || isset($_SESSION['back_to_main_frame']) &&  $post_ch
 
         $_SESSION['back_to_main_frame'] = 'ok';
 
+        $all_offers = array_unique($_SESSION['all_offers_array']);
+        $all_projects = array_unique($_SESSION['all_projects_array']);
+
         echo $twig->render('index.html', array(
             'state' => 'offer_chosen',
-            'all_offers' => $_SESSION['all_offers_array'],
-            'all_projects' => $_SESSION['all_projects_array'],
+            'all_offers' => $all_offers,
+            'all_projects' => $all_projects,
             'offer_title_input' => $_SESSION['offer_title_input'],
             'project_title_input' => $_SESSION['select_project'],      
         ));
