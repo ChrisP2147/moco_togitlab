@@ -3,6 +3,7 @@ error_reporting(0);
 require "vendor/autoload.php";
 require_once('pdo_functions.php');
 require_once('api_functions.php');
+require_once('conn.inc.php'); // in "conn.inc.php" is stored the connection data
 session_start();
 
 $post_check = 'deny';
@@ -61,6 +62,11 @@ $twig = new Twig_Environment($loader);
             load_offer($_SESSION['offer_data']); // api_functions.php
         });
         $twig->addFunction($load_offer);
+
+        $show_token_pdo = new Twig_SimpleFunction('show_token_pdo', function() {
+            show_token_pdo(); // pdo_functions.php
+        });
+        $twig->addFunction($show_token_pdo);
 
         ///////////////////////////////////////////////////////////////////////////
 
@@ -337,4 +343,84 @@ if (isset($_POST["back"]) || isset($_SESSION['back_to_main_frame']) &&  $post_ch
     }       
 }
 
+///////////////////////////////////////////////////////////////
 
+if (isset($_POST['manage_gitlab_token']) || isset($_POST["back_to_edit"])){
+    echo $twig->render('index.html', array(
+        'state' => 'manage_gitlab_token',
+    ));
+}
+
+
+if (isset($_REQUEST["edit"])){
+    global $gitlab_token_array, $gitlab_email_array;
+    $submitNumber_token = array_pop(array_keys($_REQUEST['edit']));
+    $_SESSION["submitNumber_token"] = $submitNumber_token;
+    edit_token(); // pdo_functions.php
+    $sel = $_SESSION["submitNumber_token"];
+    echo $twig->render('index.html', array(
+        'state' => 'editToken',
+        'gitlab_email' => $gitlab_email_array[$sel],
+        'gitlab_token' => $gitlab_token_array[$sel],
+    ));
+}
+
+// save edited token into database
+if (isset($_POST["saveToken"])){
+
+    save_token_pdo();
+
+    $gitlab_email = $_POST["gitlab_email"];
+    $gitlab_token = $_POST["gitlab_token"];
+
+    if (empty($gitlab_email) || empty($gitlab_token)){
+        echo $twig->render('index.html', array(
+            'state' => 'editTokenEmptyField',
+            'gitlab_email' => $gitlab_email,
+            'gitlab_token' => $gitlab_token,
+            // 'button_check' => true,
+        ));
+    }
+    elseif ($username_invalid == true){
+        echo $twig->render('index.html', array(
+            'state' => 'editUserWrongInvalidUser',
+            'lastname' => $_POST["lastname"],
+            'firstname' => $_POST["firstname"],
+            'username' => $_POST["username"],
+            'moco_token' => $_POST['moco_token'],
+            'gitlab_token' => $_POST['gitlab_token'],
+            'passwd' => $_POST["passwd"],
+            'admin' => $_POST["admin"],
+            // 'button_check' => true,
+        ));
+    }         
+    else{
+            // update user in database
+            $id = $id_array[$_SESSION["submitNumber_user"]];
+
+            $sql = 'UPDATE staff SET moco_token = ?, gitlab_token = ?, username = ?, password = ?, firstname = ?, lastname = ?, admin = ? WHERE id = ?';
+
+            $lastname = $_POST["lastname"];
+            $firstname = $_POST["firstname"];
+            $username = $_POST["username"];
+            $moco_token = $_POST['moco_token'];
+            $gitlab_token = $_POST['gitlab_token'];
+            $passwd = $_POST["passwd"];
+            $admin = $_POST["admin"];
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$moco_token, $gitlab_token, $username, $passwd_hash, $firstname, $lastname, $admin, $id]);
+            
+            echo $twig->render('index.html', array(
+                'state' => 'manage_gitlab_token',              
+            ));
+    }
+    $pdo = null;   
+}
+
+    if (isset($_POST["deleteToken"])){
+        delete_token_pdo(); // pdo_functions.php
+        echo $twig->render('index.html', array(
+            'state' => 'manage_gitlab_token',     
+        ));
+    }

@@ -14,27 +14,30 @@
     <link rel="stylesheet" type="text/css" href="alertifyjs/css/alertify.css">
     <link rel="stylesheet" type="text/css" href="alertifyjs/css/themes/default.css">
     <script src="alertifyjs/alertify.js"></script>
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->   
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->   
     <!-- AUTOCOMPLETE -->
     <script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.css">
     <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.structure.min.css">
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
   </head>
   <body>
 
 {% set SELF = 'start.php' %}
 
 {% if state == 'not_loggedIn' %}
-    <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+<div class="mainContainer_not_loggedIn">
+    <div class="logoContainer">
+        <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+    </div>    
         <div class="frame frame_not_loggedIn">
-            <h1 class="h1_not_loggedIn">Moco<strong>2</strong>GitLab&nbsp &#10004</h1>
                 <form action={{SELF}} method='post'>
-                <h4>Moco Email-Adresse:</h4> 
+                <h4>Moco Email</h4> 
                     <div class="labelTextFields labelTextFields_not_loggedIn">      
                         <input type='text' class="input_not_loggedIn" name='user' value="christian.pitzner@gal-digital.de" size='20' autocomplete="off" /> 
                     </div>
-                <h4>Passwort:</h4>
+                <h4>Passwort</h4>
                     <div class="labelTextFields labelTextFields_not_loggedIn">          
                         <input type='password' class="input_not_loggedIn" name='passwd' value="chris2147" size='20' autocomplete="off" />
                     </div>
@@ -44,15 +47,19 @@
                 </div> 
             </form>
         </div>
+        <h1 class="h1_not_loggedIn">Moco2GitLab&nbsp &#10004</h1> 
+    </div>
 {% endif %}
 
 {% if state == 'wrongUser' %}
-    <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+<div class="mainContainer_not_loggedIn">
+    <div class="logoContainer">
+        <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+    </div>    
         <div class="frame frame_not_loggedIn">
-            <h1 class="h1_not_loggedIn">Moco<strong>2</strong>GitLab &nbsp &#10004</h1>
                 <form action={{SELF}} method='post'>
-                <h4>Moco Email-Adresse:</h4> 
-                    <div class="labelTextFields labelTextFields_not_loggedIn">      
+                <h4>Moco Email</h4> 
+                    <div class="labelTextFields labelTextFields_not_loggedIn">     
                         <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
                     </div>
                 <h4>Passwort:</h4>
@@ -62,154 +69,169 @@
                 
                 <div class="btnContainer btnContainer_not_LoggedIn">
                 <input type="submit" class="button btn_notloggedIn" name="login" value="Login" />
-                </div> 
-            </form>
+            </div> 
+        </form>
+    </div>
+    <h1 class="h1_not_loggedIn">Moco2GitLab&nbsp &#10004</h1> 
+</div>
+<h3>Email-Adresse / Passwort falsch</h3>
+{% endif %}
+
+{% if state == 'offer_chosen' %}
+<form action={{SELF}} method='post'>
+    <div class="logoContainer logoContainer_main_frame"> 
+        <div class="logo">
+            <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
         </div>
-                <h3>Email-Adresse / Passwort falsch</h3>
-    {% endif %}
+        <div class="top_btnContainer">         
+            <!-- <input type='button' id='new_key' onclick='show_key()' class='button btn_gitlab_key' name='changeKey' value='GitLab-Key bearbeiten'/> -->
+            <input type='submit' class='button btn_logout' name='manage_gitlab_token' value='GitLab-Key bearbeiten'/>
+            <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+        </div>
+    </div> 
+</form>
+    
+    <div class='frame frame_offer_chosen'>          
+        <form autocomplete="off" action={{SELF}} method='post'>
+            <div class='mainframeContainer'>
+                <div class='headlineContainer'><h1 class='h1_headline'>Moco<strong>2</strong>GitLab &nbsp &#10004</h1></div>
+                    <div class='sel_btn_container'>
 
-    {% if state == 'offer_chosen' %}     
-    <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
-        <div class='frame frame_offer_chosen'>          
-            <form autocomplete="off" action={{SELF}} method='post'>
-                <div class='mainframeContainer'>
-                    <div class='headlineContainer'><h1 class='h1_headline'>Moco<strong>2</strong>GitLab &nbsp &#10004</h1></div>
-                        <div class='sel_btn_container'>
+                            <select class='select_gitlab_token' name='sel_gitlab_token'>
+                                {{ get_gitlab_API_key() }}
+                            </select>
+                            <!-- <input type='button' id='new_key' onclick='show_key()' class='button btn_gitlab_key' name='changeKey' value='GitLab-Key bearbeiten'/> -->
+                            <!-- <input type='submit' class='button btn_logout' name='logout' value='logout'/> -->
 
-                                <select class='select_gitlab_token' name='sel_gitlab_token'>
-                                    {{ get_gitlab_API_key() }}
-                                </select>
-                                <input type='button' id='new_key' onclick='show_key()' class='btnSuperUser btn_manageUser' name='changeKey' value='GitLab-Key hinzufügen'/>
-                                <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+                    </div>
+            </div>
+    
+        <div class='spacer'><hr></div>
 
-                        </div>
-                </div>
-        
-            <div class='spacer'><hr></div>
+        <!-- <div class='projectContainer'>
 
-            <!-- <div class='projectContainer'>
-
-            <div id='btnContainer' class='sent_ticketsContainer'>
-                <div class='tmp_div1'>
-                    <select class='select_offer' name='sel_chosenOffer'>
-                    {{ load_offer_options() }}
-                    </select>
-                    <select class='select_project' name='select_project'>
-                        {{ loading_projects() }}
-                    </select> -->
-                    <!-- <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' /> -->
-                <!-- </div> -->
-
-                <!-- <div id='loadingDiv' class='tmp_div2'> -->
-                    <!-- <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/> -->
-                <!-- </div> -->
+        <div id='btnContainer' class='sent_ticketsContainer'>
+            <div class='tmp_div1'>
+                <select class='select_offer' name='sel_chosenOffer'>
+                {{ load_offer_options() }}
+                </select>
+                <select class='select_project' name='select_project'>
+                    {{ loading_projects() }}
+                </select> -->
+                <!-- <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' /> -->
             <!-- </div> -->
 
-            <div class='sent_ticketsContainer'>
-                <div class="autocomplete" >
-                    <div class="ui-widget">
+            <!-- <div id='loadingDiv' class='tmp_div2'> -->
+                <!-- <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/> -->
+            <!-- </div> -->
+        <!-- </div> -->
 
-                        <input id="offerInput" type="text" name="offerInput" placeholder="Angebot auswählen">
-                    </div>
-                </div>
-                <div class="autocomplete" >
-                    <div class="ui-widget">
-                        <input id="projectInput" type="text" name="projectInput" placeholder="Projekt auswählen">
-                    </div>
-                </div>
-                <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
-                <div id='loadingDiv' class='tmp_div2'>
-                    <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
+        <div class='sent_ticketsContainer'>
+            <div class="autocomplete" >
+                <div class="ui-widget">
+
+                    <input id="offerInput" type="text" name="offerInput" placeholder="Angebot auswählen">
                 </div>
             </div>
-            <div id='loadingContainer'>
-                    <table id='table_id' class='display'>
-                        <thead>
-                            {{ headline() }}
-                            <tr>
-                                <th>Angebots-Positionen</th>
-                                <th>als Ticket einfügen</th>
-                            </tr>
-                        </thead>
-                            <tbody>
-                                {{ select_ticketIDs_from_DB() }} 
-                                {{ load_offer() }}
-                            </tbody>
-                    </table>
-                <script>load_datatable();</script>
+            <div class="autocomplete" >
+                <div class="ui-widget">
+                    <input id="projectInput" type="text" name="projectInput" placeholder="Projekt auswählen">
+                </div>
             </div>
-            </form>
+            <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
+            <div id='loadingDiv' class='tmp_div2'>
+                <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
+            </div>
         </div>
+        <div id='loadingContainer'>
+                <table id='table_id' class='display'>
+                    <thead>
+                        {{ headline() }}
+                        <tr>
+                            <th>Angebots-Positionen</th>
+                            <th>als Ticket einfügen</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {{ select_ticketIDs_from_DB() }} 
+                            {{ load_offer() }}
+                        </tbody>
+                </table>
+            <script>load_datatable();</script>
+        </div>
+        </form>
     </div>
-    <div id="ajax-box"></div>
+</div>
+<div id="ajax-box"></div>
 
-        {% if no_tickets_selected == true %}   
-            <script>
-                alertify.alert('Achtung', 'Es wurden keine Tickets ausgewählt');
-                checkbox_check();
-            </script>
-        {% endif %}
-
-        {% if no_input == true %}   
+    {% if no_tickets_selected == true %}   
         <script>
-            alertify.alert('Achtung', 'Projekt & Angebot angeben!');
+            alertify.alert('Achtung', 'Es wurden keine Tickets ausgewählt');
+            checkbox_check();
         </script>
-        {% endif %}
+    {% endif %}
 
-        {% if offer_title_input != "" %} 
-            <script>
-                    document.getElementById("offerInput").value = "{{offer_title_input}}";
-            </script>
-        {% endif %}
+    {% if no_input == true %}   
+    <script>
+        alertify.alert('Achtung', 'Projekt & Angebot angeben!');
+    </script>
+    {% endif %}
 
-        {% if project_title_input != "" %} 
-            <script>
-                    document.getElementById("projectInput").value = "{{project_title_input}}";
-            </script>
-        {% endif %}
-
+    {% if offer_title_input != "" %} 
         <script>
-            var all_offers = new Array;
-            var all_projects = new Array;
+                document.getElementById("offerInput").value = "{{offer_title_input}}";
         </script>
-        {% for offer in all_offers %}
-        <script>
-            all_offers.push("{{ offer|e('js') }}");
-        </script>
-        {% endfor %}
+    {% endif %}
 
-        {% for project in all_projects %}
+    {% if project_title_input != "" %} 
         <script>
-            all_projects.push("{{ project|e('js') }}");
+                document.getElementById("projectInput").value = "{{project_title_input}}";
         </script>
-        {% endfor %}
-        <script>
+    {% endif %}
+
+    <script>
+        var all_offers = new Array;
+        var all_projects = new Array;
+    </script>
+    {% for offer in all_offers %}
+    <script>
+        all_offers.push("{{ offer|e('js') }}");
+    </script>
+    {% endfor %}
+
+    {% for project in all_projects %}
+    <script>
+        all_projects.push("{{ project|e('js') }}");
+    </script>
+    {% endfor %}
+    <script>
+        $( function() {
+            $( "#offerInput" ).autocomplete({
+                source: all_offers
+            });
+            } );
+
             $( function() {
-                $( "#offerInput" ).autocomplete({
-                    source: all_offers
-                });
-                } );
-
-                $( function() {
-                $( "#projectInput" ).autocomplete({
-                    source: all_projects
-                });
-                } );
-        </script> 
-      
-        <div style="display:none;" >
-                <div id="dlgContent">
-                    <p> GitLab eMail-Adreese </p>
-                    <input class="ajs-input" id="inpOne" type="text" value="" autocomplete="off"/> 
-            
-                    <p> GitLab Token </p>
-                    <input class="ajs-input" id="inpTwo" type="text" value="" autocomplete="off"/> 
-                </div>
-            </div>
+            $( "#projectInput" ).autocomplete({
+                source: all_projects
+            });
+            } );
+    </script> 
 {% endif %}
 
 {% if state == 'ticket_sent' %}
-    <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+<form action={{SELF}} method='post'>
+    <div class="logoContainer logoContainer_main_frame"> 
+        <div class="logo">
+            <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+        </div>
+        <div class="top_btnContainer">         
+            <!-- <input type='button' id='new_key' onclick='show_key()' class='button btn_gitlab_key' name='changeKey' value='GitLab-Key bearbeiten'/> -->
+            <input type='submit' class='button btn_logout' name='manage_gitlab_token' value='GitLab-Key bearbeiten'/>
+            <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+        </div>
+    </div> 
+</form>
         {% if ticket_check != "" %}   
             <script>
                 var ticket_check = "{{ ticket_check }}";
@@ -235,9 +257,226 @@
 
                 {% endfor %}
             </form>
-
         </div>
 {% endif %}
+
+{% if state == 'manage_gitlab_token' %}
+
+    <form action={{SELF}} method='post'>
+        <div class="logoContainer logoContainer_main_frame"> 
+            <div class="logo">
+                    <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+            </div>
+            <div class="top_btnContainer">         
+                    <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+            </div>
+        </div> 
+    </form>
+
+    <div class='frame frame_offer_chosen'>  
+        <form action={{SELF}} method="post">
+            <div class="btnContainer_gitlab_token">
+                <div class="tmpContainer_gitlab_token1">
+                    <input type="submit" class=" button btn_gitlab_key" name="back" value="Zurück" />
+                </div>
+                <div class="tmpContainer_gitlab_token2">
+                    <input type='button' class="button btn_gitlab_key" id='new_key' onclick='show_key()' name='changeKey' value='GitLab-Key hinzufügen'/>
+                </div>
+            </div>
+            <div id='loadingContainer'>
+                <table id="table_id" class="display">
+                    <thead>
+                        <tr>
+                            <th>GitLab E-Mail</th>
+                            <th>GitLab Token</th>
+                            <th>Bearbeiten</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ show_token_pdo() }}
+                    </tbody>
+                </table>
+                <script>load_datatable();</script>
+        </div>
+        </form>
+    </div>
+
+    <div style="display:none;" >
+            <div id="dlgContent">
+                <p> GitLab eMail-Adreese </p>
+                <input class="ajs-input" id="inpOne" type="text" value="" autocomplete="off"/> 
+        
+                <p> GitLab Token </p>
+                <input class="ajs-input" id="inpTwo" type="text" value="" autocomplete="off"/> 
+            </div>
+    </div>
+{% endif %}
+
+
+{% if (state == 'editToken') %}
+    <form action={{SELF}} method='post'>
+        <div class="logoContainer logoContainer_main_frame"> 
+            <div class="logo">
+                    <img src="gal-logo-kurz.svg" alt="Gal-Digitl_logo" style="width:70px;">
+            </div>
+            <div class="top_btnContainer">         
+                    <input type='submit' class='button btn_logout' name='logout' value='logout'/>
+            </div>
+        </div> 
+    </form>
+
+    <div class="frame frame_create">
+            <h1>GitLab Token bearbeiten</h1> 
+            <form action={{SELF}} method='post'>
+                <div class= "container_create_1">
+                    <div class="div_create1"><input type="text" class="input_create" name="gitlab_email" value={{gitlab_email}} size="20" autocomplete="off" /></div>
+                    <div class="div_create2"><input type='text' class="input_create" name='gitlab_token' value={{gitlab_token}} size='20' autocomplete="off" /></div>
+                </div>                   
+
+            <div class="btnContainer btnContainer_createToken">
+                    <input type="submit" class="button btn_edit_token" name="back_to_edit" value="Zurück" />
+                    <input type="submit" class="button btn_edit_token" name="saveToken" value="Speichern" />
+                    <input type="submit" class="button btn_edit_token" name="deleteToken" value="Löschen" />
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+
+{% if state == 'editTokenEmptyField' %}
+    <h3>Alle Felder müssen ausgefüllt sein</h3>      
+{% endif %}
+
+
+{#
+{% if state == 'editUserWrongPasswd' %}
+    <h3>Passwort stimmt nicht überein</h3>      
+{% endif %}
+
+{% if state == 'editUserWrongInvalidUser' %}
+    <h3>Der Benutzername existiert bereits</h3>      
+{% endif %}
+
+{% if state == 'createUser' %}
+    <div class="frame frame_create">
+        <h1>Neuen Benutzer anlegen</h1> 
+        <form action={{SELF}} method='post'>
+            <div class= "container_create_1">
+                <div class="div_create"><h4>Nachname:</h4> <input type="text" class="input_create" name="lastname" placeholder="Nachname..." size="20" autocomplete="off" /></div>
+                <div class="div_create"><h4>Vorname:</h4> <input type='text' class="input_create" name='firstname' placeholder="Vorname..." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Benutzername:</h4> <input type='text' class="input_create" name='username' placeholder="Benutzername..." size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Moco Token:</h4> <input type='text' class="input_create" name='moco_token' placeholder="Moco Token..." size='20' autocomplete="off" /></div>
+            </div>
+            <div class= "container_create_2">
+                <div class="div_create"><h4>GitLab Token:</h4> <input type='text' class="input_create" name='gitlab_token' placeholder="GitLab Token...." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort:</h4> <input type='password' class="input_create" name='passwd' placeholder="Passwort..." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort wiederholen:</h4> <input type='password' class="input_create" name='passwdRepeat' placeholder="Passwort wiederholen..." size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Rechte wählen:</h4>    
+                <select name="admin" class="input_create">
+                    <option value="0">keine Adminrechte</option>
+                    <option value="1">Adminrechte</option>
+                </select>
+                </div>
+            </div>                    
+            <div class="btnContainer btnContainer_createUser">
+                <input type="submit" class="btnSuperUser btnManage" name="back2" value="Zurück" />
+                <input type="submit" class="btnSuperUser btnManage" name="saveNewUser" value="Speichern" />
+                <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+{% if (state == 'UserWrongPasswd') or (state == 'UserWrongInvalidUser') or (state == 'UserEmptyField') %}
+<div class="frame frame_create">
+        <h1>Neuen Benutzer anlegen</h1> 
+        <form action={{SELF}} method='post'>
+            <div class= "container_create_1">
+                <div class="div_create"><h4>Nachname:</h4> <input type="text" class="input_create" name="lastname" value={{lastname}} size="20" autocomplete="off" /></div>
+                <div class="div_create"><h4>Vorname:</h4> <input type='text' class="input_create" name='firstname' value={{firstname}} size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Benutzername:</h4> <input type='text' class="input_create" name='username' value={{username}} size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Moco Token:</h4><input type='text' class="input_create" name='moco_token' value={{moco_token}} size='20' autocomplete="off" /></div>
+            </div>
+            <div class= "container_create_2">
+                <div class="div_create"><h4>GitLab Token</h4> <input type='text' class="input_create" name='gitlab_token' value={{gitlab_token}} size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort:</h4> <input type='password' class="input_create" name='passwd' placeholder="Passwort..." size='20' autocomplete="off" /></div>
+                <div class="div_create"><h4>Passwort wiederholen:</h4> <input type='password' class="input_create" name='passwdRepeat' placeholder="Passwort wiederholen..." size='20' autocomplete="off" /></div>
+                <div class="div_create div_create_last"><h4>Rechte wählen:</h4>    
+                <select name="admin" class="input_create">
+                    <option value="0">keine Adminrechte</option>
+                    <option value="1">Adminrechte</option>
+                </select>
+                </div>
+            </div>                    
+
+        <div class="btnContainer btnContainer_createUser">
+                <input type="submit" class="btnSuperUser btnManage" name="back2" value="Zurück" />
+                <input type="submit" class="btnSuperUser btnManage" name="saveNewUser" value="Speichern" />
+                <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+        </div>
+    </form>
+</div>
+{% endif %}
+
+{% if state == 'UserEmptyField' %}
+    <h3>Alle Felder müssen ausgefüllt sein</h3>      
+{% endif %}
+
+{% if state == 'UserWrongPasswd' %}
+    <h3>Passwort stimmt nicht überein</h3>      
+{% endif %}
+
+{% if state == 'UserWrongInvalidUser' %}
+    <h3>Der Benutzername existiert bereits</h3>      
+{% endif %}
+
+{% if state == 'wrongUser' %}
+<div class="frame frame_not_loggedIn">
+    <h1 class="h1_not_loggedIn">Projekte verschieben</h1>
+        <form action={{SELF}} method='post'>
+        <h4>Benutzer:</h4> 
+            <div class="labelTextFields labelTextFields_not_loggedIn">      
+                <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
+            </div>
+        <h4>Passwort:</h4>
+            <div class="labelTextFields labelTextFields_not_loggedIn">          
+                <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
+            </div>
+        
+        <div class="btnContainer btnContainer_not_LoggedIn">
+        <input type="submit" class="button btn_notloggedIn" name="login" value="Einloggen" />
+        </div> 
+    </form>
+</div>
+        <h3>Benutzername / Passwort falsch</h3>
+{% endif %}
+
+{% if state == 'dataSaved' %}
+    <div class="frame frame_save_del">   
+            <h1 class="h1_save_del">Der Benutzer {{firstname}} {{lastname}} wurde erfolgreich gespeichert</h1>  
+            <form action={{SELF}} method='post'>
+                <div class="btnContainer btnContainer_save_del">
+                <input type="submit" class="btnSuperUser btnManage btn_save_del" name="back2" value="Zurück" />
+                <input type="submit" class="btnSuperUser btnManage btn_save_del" name="createUser" value="Benutzer anlegen" />
+                <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+                </div>
+            </form>
+    </div>
+{% endif %}
+
+{% if state == 'userDeleted' %}
+    <div class="frame frame_save_del">   
+        <h1 class="h1_save_del">Nutzer {{firstname}} {{lastname}} wurde erfolgreich gelöscht</h1>  
+        <form action={{SELF}} method='post'>
+            <div class="btnContainer btnContainer_save_del">
+            <input type="submit" class="btnSuperUser btnManage btn_save_del" name="back2" value="Zurück" />
+            <input type="submit" class="btnSuperUser btnManage btn_save_del" name="createUser" value="Benutzer anlegen" />
+            <input type="submit" class="button btnManage" name="logout" value="Ausloggen" />
+            </div>
+        </form> 
+    </div>
+{% endif %}
+#}
 
 </body>
 </html>

@@ -50,7 +50,7 @@ function send_gitlab_token()
     else{
         alert('Eingabefelder müssen ausgefüllt werden');
     }
-    // always reload the page, otherwise Alertify doesn't wor a second time!
+    // always reload the page, otherwise Alertify doesn't work a second time!
     location.reload();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
