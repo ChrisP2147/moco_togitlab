@@ -15,17 +15,18 @@ function load_datatable(){
 
 // loading circle 
 function loadingFunction_send_frame() {
-    document.getElementById("loadingContainer").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
+    document.getElementById("loadingContainer_ticket_sent").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
 }
 
 // // loading circle when clicking "send Tickets" and when offers are beeing loaded into dataTable
 function loadingFunction_main_frame() {
-    document.getElementById("loadingContainer").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
+    document.getElementById("loadingContainer_main_frame").innerHTML = "<img src='Preloader_3.gif' alt='laden'>";
 }
 
 // create new GitLab token via Alertify ///////////////////////////////////////////////////////////////////////////
 var inpOneVal;
-var inpTwoVal
+var inpTwoVal;
+var inpThreeVal;
 function show_key()
 {
     var dlgContentHTML = $('#dlgContent').html();
@@ -36,6 +37,7 @@ function show_key()
     alertify.confirm(dlgContentHTML).set('onok', function(closeevent, value) { 
         inpOneVal = $('#inpOne').val();
         inpTwoVal = $('#inpTwo').val();
+        inpThreeVal = $('#inpThree').val();
         send_gitlab_token();	
     }).set('title',"GitLab-Token hinzufügen")
     .set({onshow:null, onclose:function(){ location.reload()}});
@@ -44,8 +46,8 @@ function show_key()
 function send_gitlab_token()
 {
     // to DO noch mehr Plausibilität
-    if (inpOneVal != "" || inpOneVal != ""){
-        $.post("set_new_key.php", { mail: inpOneVal,  token: inpTwoVal} ).done(function() { alertify.success('Daten wurden gespeichert'); console.log('Done', data)});
+    if (inpOneVal != "" && inpTwoVal != "" && inpThreeVal != ""){
+        $.post("set_new_key.php", { mail: inpOneVal,  user_name: inpTwoVal, token: inpThreeVal} ).done(function() { alertify.success('Daten wurden gespeichert'); console.log('Done', data)});
     }
     else{
         alert('Eingabefelder müssen ausgefüllt werden');
@@ -53,4 +55,3 @@ function send_gitlab_token()
     // always reload the page, otherwise Alertify doesn't work a second time!
     location.reload();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

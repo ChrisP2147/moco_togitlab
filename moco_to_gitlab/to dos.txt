@@ -1,7 +1,0 @@
-
-
-1. link muss variabel sein, denn cp.mocoapp.com ist Benutzerdefiniert (api_functions.php / authenticate_user())
-
-2. noch mehr Plausibilität (javascript_functions.js / send_gitlab_token())
-
-3.  Plausibilität für Eingabefelder.... (set_new_key.php)
