@@ -20,6 +20,11 @@ $twig = new Twig_Environment($loader);
         // Functions for TWIG /////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////
 
+        $get_gitlab_groups = new Twig_SimpleFunction('get_gitlab_groups', function() {
+            get_gitlab_groups();
+        });
+        $twig->addFunction($get_gitlab_groups);
+
         $get_gitlab_API_key = new Twig_SimpleFunction('get_gitlab_API_key', function() {
             get_gitlab_API_key();
         });
@@ -113,6 +118,12 @@ if (isset($_POST["login"])){
 }
 
 if (isset($_POST["btn_choose_offer"])){
+
+    //////////////////////////////////////////
+    $_SESSION['gitlab_token'] = $_POST['sel_gitlab_token'];
+    $_SESSION['sel_group'] = $_POST['sel_group'];
+    //////////////////////////////////////////
+
     $moco_token = $_SESSION["moco_token"];
     $check_offer_exists = false;
     $_SESSION['select_project'] = $_POST['projectInput'];
@@ -177,6 +188,7 @@ if (isset($_POST['sent_tickets'])){
 
     //////////////////////////////////////////
     $_SESSION['gitlab_token'] = $_POST['sel_gitlab_token'];
+    $_SESSION['sel_group'] = $_POST['sel_group'];
     //////////////////////////////////////////
     $_SESSION['select_project'] = $_POST['projectInput'];
 
@@ -244,7 +256,7 @@ if (isset($_POST['sent_tickets'])){
 // transfer tickets to GitLab ///////////////////////////////////////////////////////////////////////
 if (isset($_POST["transfer"])){
     // functions (api_functions.php) creates projects & issues & new database entries 
-    insert_project($_SESSION['select_project'], $_SESSION['selected_tickets']['title'], $_SESSION['gitlab_token']); // api_functions.php
+    insert_project($_SESSION['select_project'], $_SESSION['selected_tickets']['title'], $_SESSION['gitlab_token'], $_SESSION['sel_group']); // api_functions.php
     insert_project_tickets($_SESSION['select_project'], $_SESSION['selected_tickets']['title'], $_SESSION['description_array'], $_SESSION['gitlab_token']); // api_functions.php
     write_ticketIDs_in_DB($_SESSION["selected_tickets"]); // pdo_functions.php
     $_SESSION['back'] = "after tickets were sent";

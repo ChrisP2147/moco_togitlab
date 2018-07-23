@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>    
-    <meta charset="UTF-8">    
+    <meta charset="UTF-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
     <title>Tickets to GitLab</title>
     
     <link rel="stylesheet" type="text/css" href="node_modules/datatables.net-dt/css/jquery.dataTables.css"/>
@@ -33,11 +34,11 @@
     </div>    
         <div class="frame frame_not_loggedIn">
                 <form action={{SELF}} method='post'>
-                <h4>Moco Email</h4> 
+                    <h4 id='emailLabel'>Moco Email</h4> 
                     <div class="labelTextFields labelTextFields_not_loggedIn">      
                         <input type='text' class="input_not_loggedIn" name='user' value="christian.pitzner@gal-digital.de" size='20' autocomplete="off" /> 
                     </div>
-                <h4>Passwort</h4>
+                    <h4 id='passwdLabel'>Passwort</h4>
                     <div class="labelTextFields labelTextFields_not_loggedIn">          
                         <input type='password' class="input_not_loggedIn" name='passwd' value="chris2147" size='20' autocomplete="off" />
                     </div>
@@ -47,7 +48,7 @@
                 </div> 
             </form>
         </div>
-        <h1 class="h1_not_loggedIn">Moco2GitLab&nbsp &#10004</h1> 
+        <h1 class="h1_not_loggedIn" >Moco2GitLab&nbsp &#10004;&#xFE0E;</h1> 
     </div>
 {% endif %}
 
@@ -58,11 +59,11 @@
     </div>    
         <div class="frame frame_not_loggedIn">
                 <form action={{SELF}} method='post'>
-                <h4>Moco Email</h4> 
+                <h4 id='emailLabel'>Moco Email</h4> 
                     <div class="labelTextFields labelTextFields_not_loggedIn">     
                         <input type='text' class="input_not_loggedIn" name='user' placeholder="Benutzername.." size='20' autocomplete="off" /> 
                     </div>
-                <h4>Passwort:</h4>
+                <h4 id='passwdLabel'>Passwort</h4>
                     <div class="labelTextFields labelTextFields_not_loggedIn">          
                         <input type='password' class="input_not_loggedIn" name='passwd' placeholder="Passwort.." size='20' autocomplete="off" />
                     </div>
@@ -72,7 +73,7 @@
             </div> 
         </form>
     </div>
-    <h1 class="h1_not_loggedIn">Moco2GitLab&nbsp &#10004</h1> 
+    <h1 class="h1_not_loggedIn">Moco2GitLab&nbsp &#10004;&#xFE0E;</h1> 
 </div>
 <h3>Email-Adresse / Passwort falsch</h3>
 {% endif %}
@@ -93,37 +94,45 @@
     
     <div class='frame frame_offer_chosen'>          
         <form id="form_main_frame "autocomplete="off" action={{SELF}} method='post'>
-            <div class='mainframeContainer'>
-                <div class='headlineContainer'><h1 class='h1_headline'>Moco<strong>2</strong>GitLab &nbsp &#10004</h1></div>
-                    <div class='sel_btn_container'>
+            <div class='headContainer'>
 
-                            <select class='select_gitlab_token' name='sel_gitlab_token'>
-                                {{ get_gitlab_API_key() }}
-                            </select>
-                            <!-- <input type='button' id='new_key' onclick='show_key()' class='button btn_gitlab_key' name='changeKey' value='GitLab-Key bearbeiten'/> -->
-                            <!-- <input type='submit' class='button btn_logout' name='logout' value='logout'/> -->
+                <div class='gitContainer'>
+                    <h4 class='head_label'>GitLab Gruppe</h4>
+                    <select class='select_group' name='sel_group'>
+                            {{ get_gitlab_groups() }}       
+                    </select>
+
+                    <h4 class='head_label'>GitLab Account</h4>
+                    <select class='select_gitlab_token' name='sel_gitlab_token'>
+                        {{ get_gitlab_API_key() }}
+                    </select>
+                </div>
+
+                <div class='sendContainer'>
+                    <div class='tmpContainer'>
+                        <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden&nbsp;&nbsp;&nbsp;&#9992;'/>
                     </div>
+                </div>
+
             </div>
     
         <div class='spacer'><hr></div>
 
-        <div class='sent_ticketsContainer'>
+        <div class='offerContainer'>
             <div class="autocomplete" >
-                <div class="ui-widget">
+                <div class="ui-widget main_inputContainer">
 
                     <input id="offerInput" type="text" name="offerInput" placeholder="Angebot auswählen">
                 </div>
             </div>
             <div class="autocomplete" >
-                <div class="ui-widget">
+                <div class="ui-widget main_inputContainer">
                     <input id="projectInput" type="text" name="projectInput" placeholder="Projekt auswählen">
                 </div>
             </div>
             <input type='submit' id='btn_sel_offer' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_chosen_offer' name='btn_choose_offer' value='wählen' />
-            <div class='tmp_div2'>
-                <input type='submit' id='send_button' onclick="setTimeout(loadingFunction_main_frame, 1)" class='button btn_sent_tickets' name='sent_tickets' value='Tickets senden &nbsp &#10004'/>
-            </div>
         </div>
+
         <div id='loadingContainer_main_frame'>
                 <table id='table_id' class='display'>
                     <thead>
@@ -284,7 +293,6 @@
                         <tr>
                             <th>GitLab E-Mail</th>
                             <th>GitLab Token</th>
-                            <th>GitLab User Name</th>
                             <th>Bearbeiten</th>
                         </tr>
                     </thead>
@@ -329,7 +337,6 @@
             <form action={{SELF}} method='post'>
                 <div class= "container_create_1">
                     <div class="div_create1"><input type="text" class="input_create" name="gitlab_email" value={{gitlab_email}} size="20" autocomplete="off" /></div>
-                    <div class="div_create1"><input type='text' class="input_create" name='gitlab_user_name' value={{gitlab_user_name}} size='20' autocomplete="off" /></div>
                     <div class="div_create2"><input type='text' class="input_create" name='gitlab_token' value={{gitlab_token}} size='20' autocomplete="off" /></div>
                 </div>                   
 

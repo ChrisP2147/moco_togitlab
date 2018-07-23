@@ -1,10 +1,13 @@
 
 
-1. link muss variabel sein, denn cp.mocoapp.com ist Benutzerdefiniert (api_functions.php / authenticate_user()) https://galdigital.mocoapp.com/
+.  link muss variabel sein, denn cp.mocoapp.com ist Benutzerdefiniert (api_functions.php / authenticate_user()) https://galdigital.mocoapp.com/
 
-2. noch mehr Plausibilität (javascript_functions.js / send_gitlab_token())
+.  noch mehr Plausibilität (javascript_functions.js / send_gitlab_token())
 
-3.  Plausibilität für Eingabefelder.... (set_new_key.php)
+.  Plausibilität für Eingabefelder.... (set_new_key.php)
 
-4.  Plausibilität für Eingabefelder in GitLab Key bearbeiten.
+.  Plausibilität für Eingabefelder in GitLab Key bearbeiten.
 
+.  Favicons einbauen
+
+.  get_gitlab_groups() in api_functions.php --> gitlab-api-key muss variabel werden

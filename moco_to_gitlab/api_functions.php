@@ -85,22 +85,23 @@ function load_offer_options($moco_token)
 // loads all Project of User
 function load_gitlab_projects($gitlab_token)
 {
-    $user_id = get_user_id($gitlab_token);
-    $url = 'https://gitlab.com/api/v4/users/'.$user_id.'/projects';
+    // $user_id = get_user_id($gitlab_token);
+    // $url = 'https://gitlab.com/api/v4/users/'.$user_id.'/projects';
+    $url = 'https://gitlab.com/api/v4/projects?membership=true';
     // $url = 'https://gitlab.com/api/v4/projects';
     $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
     $gitlab_projekt_array = (array)json_decode($response, true);
     return $gitlab_projekt_array;
 }
-function get_user_id($gitlab_token)
-{
-    $userName = get_gitlab_user_name_pdo();
-    $url = 'https://gitlab.com/api/v4/users?username='.$userName;
-    $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
-    $user_array = (array)json_decode($response, true);
-    $user_id = $user_array[0]['id'];
-    return $user_id;
-}
+// function get_user_id($gitlab_token)
+// {
+//     $userName = get_gitlab_user_name_pdo();
+//     $url = 'https://gitlab.com/api/v4/users?username='.$userName;
+//     $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
+//     $user_array = (array)json_decode($response, true);
+//     $user_id = $user_array[0]['id'];
+//     return $user_id;
+// }
 
 // check if tickets already exist in chosen project in GitLab
 function check_gitlab_tickets($project_string, $ticket_array, $gitlab_token)
@@ -108,7 +109,7 @@ function check_gitlab_tickets($project_string, $ticket_array, $gitlab_token)
     $project_exists = false;
     $result = '';
     $project_array = load_gitlab_projects($gitlab_token);
-    $tmp_project_name_array = $tmp_project_id_array = array();
+    $tmp_project_name_array = $tmp_project_id_array = $ticket_double_array = array();
 
     for ($i = 0; $i < count($project_array); $i++)
     { 
@@ -198,7 +199,7 @@ function load_gitlab_project_description($gitlab_token, $chosen_project_title)
 }
 
 // inserts the chosen Project into GitLab if it doesn't already exist
-function insert_project($string, $ticket_array, $gitlab_token)
+function insert_project($string, $ticket_array, $gitlab_token, $group_id)
 {
     $project_exists = false;
     $project_array = load_gitlab_projects($gitlab_token);
@@ -216,7 +217,8 @@ function insert_project($string, $ticket_array, $gitlab_token)
         $string = urlencode($string);
         $desc = $_POST['project_description'];
         $desc = urlencode($desc);
-        $url = 'https://gitlab.com/api/v4/projects?name='.$string.'&description='.$desc.'&visibility=private';
+        // $url = 'https://gitlab.com/api/v4/projects?name='.$string.'&description='.$desc;
+        $url = 'https://gitlab.com/api/v4/projects?name='.$string.'&description='.$desc.'&namespace_id='.$group_id;
         $response = \Httpful\Request::post($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
 
         // $desc = $_POST['project_description'];
@@ -229,16 +231,10 @@ function insert_project($string, $ticket_array, $gitlab_token)
     else{
         $desc = $_POST['project_description'];
         $desc = urlencode($desc);
+        // $url = 'https://gitlab.com/api/v4/projects/'.$project_id.'?description='.$desc;
         $url = 'https://gitlab.com/api/v4/projects/'.$project_id.'?description='.$desc;
         $response = \Httpful\Request::put($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
     }
-}
-
-function update_project_description($desc, $project_id, $gitlab_token)
-{
-    $desc = urlencode($desc);
-    $url = 'https://gitlab.com/api/v4/projects/'.$project_id.'?description='.$desc;
-    $response = \Httpful\Request::put($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
 }
 
 // inserts all chosen tickets into GitLab
@@ -381,4 +377,29 @@ function check_offer_exists($offer_title)
         }
     }
     return $check_offer_exists;
+}
+
+function get_gitlab_groups()
+{
+    $gitlab_token = 'Vb23WYp2KmxvPG4xVRhB';
+
+    $url = 'https://gitlab.com/api/v4/namespaces';
+    $response = \Httpful\Request::get($url)->addHeader('Private-Token', $gitlab_token)->expectsJson()->send();
+    $group_array = (array)json_decode($response, true);
+
+    for ($i = 0; $i < count($group_array); $i++)
+    {
+        if ($group_array[$i]['kind'] === 'group'){
+            if ($_SESSION['sel_group'] == $group_array[$i]['id']){
+
+                echo "<option class='optionCenter' value='" . $group_array[$i]['id'] . "'selected>" . $group_array[$i]['name'] . "</option>";
+            }
+            else{
+                echo "<option class='optionCenter' value='" . $group_array[$i]['id'] . "'>" . $group_array[$i]['name'] . "</option>";
+             }
+        }
+
+
+    }
+
 }

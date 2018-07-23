@@ -29,15 +29,11 @@ h3 {
 	margin-top: 1em;
 }
 h4 {
-	font-size: 0.7em;
+	font-size: 0.8em;
 	color: white;
 	text-align: left;
 	text-transform: uppercase;
-	margin: 0 0 0.3em 0;
 	font-weight: lighter;
-}
-h4:nth-of-type(2) {
-	margin: 0.6em 0 0.3em 0;
 }
 .frame {
 	margin: auto;
@@ -64,10 +60,14 @@ h4:nth-of-type(2) {
 	outline: 0;
 	border: 0;
 	color: #FFFFFF;
+	/* transition: all 0.3 ease;
 	-webkit-transition: all 0.3 ease;
-	transition: all 0.3 ease;
+	-moz-transition: all 0.3 ease;
+	-o-transition: all 0.3 ease; */
 	cursor: pointer;
 	/* border-radius: 4px; */
+	border-radius: 0;
+	-webkit-appearance: none;
 }
 
 .button:hover {
@@ -75,16 +75,18 @@ h4:nth-of-type(2) {
 	color: white;
 }
 input[type='text'], input[type='password'] {
-	width: 100%;
+	/* width: 100%; */
 	outline: 0;
 	background: #f2f2f2;
 	border: 0;
-	/* margin: 0 0 15px; */
-	box-sizing: border-box;
-	/* border-radius: 4px; */
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+	-webkit-box-sizing:border-box; /* Safari */
+	border-radius: 0;
 }
 input[type=checkbox] {
   /* Double-sized Checkboxes */
+  transform: scale(2);
   -ms-transform: scale(2); /* IE */
   -moz-transform: scale(2); /* FF */
   -webkit-transform: scale(2); /* Safari and Chrome */
@@ -100,9 +102,15 @@ select {
 	/* box-shadow: inset 0 0 18px #c9c6c6; */
 	/* border-radius: 4px; */
 	border: none;
+	border-radius: 0;
+	-webkit-appearance: none;
 }
 option {
 	font-size: 1.3em;
+	height: 2em;
+	margin:2em;
+	line-height:2em;
+	padding:2em;
 }
 /* //////////////// */
 
@@ -114,10 +122,9 @@ option {
     height: 100%;
     left: 0;
     top: 0;
-
 }
 .frame_not_loggedIn {
-	width: 14%;
+	width: 20%;
 	background-color: #254665;
 }
 .h1_not_loggedIn {
@@ -126,6 +133,12 @@ option {
 	font-size: 1.2em;
 	font-weight: bold;
 	margin: 0.8em 0 0 0;
+}
+#emailLabel {
+	margin: 0 0 0.3em 0;	
+}
+#passwdLabel {
+	margin: 0.6em 0 0.3em 0;
 }
 .labelTextFields_not_loggedIn {
 	display: flex;
@@ -136,8 +149,8 @@ option {
 .input_not_loggedIn {
 	width: 100%;
 	margin: 0;
-	padding: 13px;
-	font-size: 0.8em;
+	padding: 1em;
+	font-size: 1em;
 }
 .btnContainer_not_LoggedIn {
 	display: flex;
@@ -149,30 +162,22 @@ option {
 	font-weight: bold;
 	width: 100%;
 	margin-top: 1em;
-	padding: 13px;
-	font-size: 12px;
+	padding: 1em;
+	font-size: 1em;
 	background-color: #FCBE00;
 }
 .btn_notloggedIn:hover {
 	background-color: #1f334e;
 	color: white;
 }
-@media screen and ( max-width: 700px ) {
+@media ( max-width: 1250px ) {
 	.frame_not_loggedIn {
 		width: 30%;
 	}
-	.h1_not_loggedIn {
-		font-size: 1em;
-		margin-bottom: 0.5em;
-	}
-	.input_not_loggedIn {
-		margin: 0;
-		padding: 13px;
-		font-size:0.6em;
-	}
-	.btn_notloggedIn {
-		padding: 11px;
-		font-size: 8px;
+}
+@media ( max-width: 900px ) {
+	.frame_not_loggedIn {
+		width: 70%;
 	}
 }
 /* //////////////// */
@@ -212,31 +217,49 @@ option {
 .frame_offer_chosen {
 	width: 50%;
 }
-.mainframeContainer {
+.headContainer {
 	display: flex;
 }
-.headlineContainer {
-	width: 30%;
-	flex-grow: 50%;
-	display: flex;
-	justify-content: flex-start;
-}
-.h1_headline {
-	margin: 0.2em 0 0 0;
-}
-.sel_btn_container {
-	/* max-height: 4%; */
+.gitContainer {
 	width: 70%;
-	flex-grow: 50%;
+	display: flex;
+}
+.sendContainer {
+	width: 30%;
 	display: flex;
 	justify-content: flex-end;
 }
+.head_label {
+	font-weight: bold;
+	color: #254665;
+	margin: 0.9em 1em 0 0;
+}
+.head_label:nth-of-type(2) {
+	margin-left: 3em;
+}
+.select_group {
+	width: 20%;
+	padding: 11px;
+	font-size: 0.8em;
+}
 .select_gitlab_token {
-	padding: 8px;
-	font-size: 0.7em;
+	width: 20%;
+	padding: 11px;
+	font-size: 0.8em;
+}
+/* .tmpContainer {
+	align-self: flex-end;
+} */
+.btn_sent_tickets {
+	/* align-self: flex-end; */
+	padding: 11px;
+	font-size: 0.8em;
+	font-weight: bold;
+	background-color: #757575;
+	color: white;
 }
 .spacer {
-	margin: 0.5em 0 1.5em 0;
+	margin: 0.7em 0 0.7em 0;
 }
 hr {
 	border: 0;
@@ -246,63 +269,32 @@ hr {
 	#1f334e,
 	rgba(0,0,0,0));
 }
-.sent_ticketsContainer {
+.offerContainer {
 	display: flex;
 	width: 100%;
 	margin: 0 0 1em 0;
 }
-.autocomplete {
-	width: 35%;
+.ui-widget {
+	/* width: 60%; */
+	margin-right: 1em;
 }
 #offerInput {
-	padding: 11px;
+	padding: 12px;
 	margin-bottom: 0;
 	color: #1f334e;
-	/* box-shadow: inset 0 0 18px #c9c6c6; */
 }
 #projectInput {
-	padding: 11px;
+	padding: 12px;
 	color: #1f334e;
-	/* box-shadow: inset 0 0 18px #c9c6c6; */
 	margin-bottom: 0;
 }
-.ui-widget {
-	margin-right: 1em;
+li {
+	font-size: 1.1em;
 }
-/* .tmp_div1 {
-	display: flex;
-	justify-content: flex-start;
-	width: 100%;
-} */
-.tmp_div2 {
-	display: flex;
-	justify-content: flex-end;
-	width: 60%;
-}
-/* .select_offer {
-	width: 60%;
-	padding: 10px;
-	margin-right: 1em;
-} */
 .btn_chosen_offer {
-	margin-right: 1em;
 	padding: 10px;
 	font-size: 0.8em;
 	font-weight: bold;
-	background-color: #757575;
-	color: white;
-}
-/* .select_project {
-	width: 50%;
-	padding: 10px;
-	margin-right: 1em;
-} */
-.btn_sent_tickets {
-	padding: 10px;
-	font-size: 0.8em;
-	font-weight: bold;
-	/* color: #1f334e;
-	background-color: #b9b6b6; */
 	background-color: #757575;
 	color: white;
 }
@@ -315,53 +307,103 @@ hr {
 	margin: 0 2em 0 0;
 	padding: 0.3em 0 0 0;
 }
-@media screen and ( max-width: 1285px ) {
-	.h1_headline {
-		margin: 0;
-		padding: 0.5em 0 0 0;
+@media ( max-width: 1420px ) {
+	.frame_offer_chosen {
+		width: 70%;
+	}
+}
+@media ( max-width: 900px ) {
+	.frame_offer_chosen {
+		width: 85%;
+	}
+	/* .headlineContainer {
+		display: none;	
+	} */
+	.logo {
+		justify-content: flex-start;
+		margin-left: 1.2em;
+	}
+	img {
+		width: 50%;
+	}
+	.headContainer {
+		display: block;
+	}
+	.gitContainer {
+		display: block;
+		margin-bottom: 1em;
+		width: 100%;
+	}
+	.select_group {
+		width: 100%;
+		padding: 1em;
 		font-size: 1em;
 	}
-	body {
-		font-size: 0.8em;
+	.head_label {
+		margin: 0 0 0.5em 0;
 	}
-	th {
-		width: 80%;
+	.head_label:nth-of-type(2) {
+		margin-left: 0;
+		margin-top: 1em;
 	}
-}
-@media screen and ( max-width: 1005px ) {
-	.h1_headline {
-		padding: 0.5em 0 0 0;
+	.sendContainer {
+		width: 100%;
+		justify-content: flex-start;
 	}
-}
-@media screen and ( max-width: 830px ) {
-	.h1_headline {
-		padding: 0.5em 0 0 0;
-		font-size: 0.9em;
+	.tmpContainer {
+		width: 100%;
 	}
-	.btn_logout {
-		padding: 8px;
-		font-size: 0.6em;
+
+	.offerContainer {
+		display: block;
 	}
-	.btn_manageUser {
-		padding: 8px;
-		font-size: 0.6em;
-	}
-	/* .select_offer {
-		padding: 8px;
-		font-size: 0.6em;
+	/* .head_label {
+		margin-right: 0;
+		text-align: center;
 	} */
-	.btn_chosen_offer {
-		padding: 8px;
-		font-size: 0.6em;
+	.select_gitlab_token {
+		width: 100%;
 	}
-	/* .select_project {
-		padding: 8px;
-		font-size: 0.6em;
+	/* .sel_btn_container {
+		width: 100%;
+	} */
+	.select_gitlab_token {
+		padding: 1em;
+		font-size: 1em;
+	}
+	.autocomplete {
+		width: 100%;
+	}
+	.main_inputContainer {
+		width: 100%;
+	}
+	#offerInput {
+		width: 100%;
+		padding: 1em;
+		font-size: 1em;
+		margin-bottom: 1em;
+	}
+	#projectInput {
+		width: 100%;
+		padding: 1em;
+		font-size: 1em;
+		margin-bottom: 1em;
+	}
+	.btn_chosen_offer {
+		width: 100%;
+		padding: 1em;
+		font-size: 1em;
+		margin-bottom: 1em;
+	}
+	/* .tmp_div2 {
+		width: 100%;
 	} */
 	.btn_sent_tickets {
-		padding: 8px;
-		font-size: 0.6em;
+		width: 100%;
+		padding: 1em;
+		font-size: 1em;
 	}
+
 }
 /* //////////////// */
 
@@ -373,9 +415,6 @@ hr {
 .frame_ticket_sent {
 	width: 25%;
 }
-/* .ticket_sent_success {
-	width: 10%;
-} */
 .project_description {
 	display: flex;
 	margin: 0 0 1em 0;
@@ -398,16 +437,8 @@ textarea {
 .chosen_ticket_overview {
 	padding: 10px;
 	font-size: 1em;
-	/* font-weight: bold; */
 	margin: 0 0 0.4em 0;
-	/* -moz-box-shadow: inset 0 0 15px 5px #425e7c;
-	-webkit-box-shadow: inset 0 0 15px 5px #ffffff;
-	box-shadow: inset 0 0 18px #425e7c; */
 	background-color: #eeeeee;
-	/* color: white; */
-	/* border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px; */
 }
 .btnContainer_ticket_sent {
 	display: flex;
@@ -424,8 +455,6 @@ textarea {
 	justify-content: flex-end;
 }
 .btn_ticket_sent {
-	/* background-color: #b9b6b6;
-	color: #1f334e; */
 	background-color: #757575;
 	color: white;
 	margin: 0 0 0 0;
@@ -434,8 +463,6 @@ textarea {
 	font-weight: bold;
 }
 .btn_ticket_sent_end {
-	/* background-color: #b9b6b6;
-	color: #1f334e; */
 	background-color: #757575;
 	color: white;
 	margin: 0 0 0 0;
@@ -443,18 +470,16 @@ textarea {
 	font-size: 0.8em;
 	font-weight: bold;
 }
-	/* flex-grow: 2; */
-
-/* .btnContainer_ticket_sent_success {
-	width: 100%;
-	display: flex;
-	margin: 0;
-} */
-/* .btn_ticket_sent_success {
-	width: 100%;
-	padding: 10px;
-	font-size: 0.7em;
-} */
+@media ( max-width: 1420px ) {
+	.frame_ticket_sent {
+		width: 60%;
+	}
+}
+@media ( max-width: 900px ) {
+	.frame_ticket_sent {
+		width: 85%;
+	}
+}
 /* //////////////// */
 
 /* manage GitLab token */
@@ -503,6 +528,14 @@ textarea {
 }
 .btnContainer_createToken {
 	margin-bottom: 0;
+}
+@media ( max-width: 1420px ) {
+
+}
+@media ( max-width: 900px ) {
+	.frame_create {
+		width: 85%;
+	}
 }
 /* //////////////// */
 
